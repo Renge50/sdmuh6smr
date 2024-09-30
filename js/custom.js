@@ -218,7 +218,7 @@
           slider3Image: 'images/vaksin (3).JPG',
           date: '27 / 9 / 2024',
           name: 'Kegiatan 27 September',
-          title: 'Vaksinisasi Siswa Siswi SD Muhammadiyah 6 Samarinda',
+          title: 'Lomba Adzan 17 Agustus ke 79',
           description: 'Lomba Adzan 17 Agustus 2024: Mengumandangkan panggilan suci dengan semangat kemerdekaan.'
       }
   ];

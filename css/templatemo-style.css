@@ -707,8 +707,8 @@
   }
 
   #ppdb .section-btn {
-    font-size: 30px;        /* Mengatur ukuran teks */
-    padding: 7.3px 35.9px;        /* Mengatur padding yang lebih besar untuk memperbesar tombol */
+    font-size: 20px;        /* Mengatur ukuran teks */
+    padding: 5.3px 34.4px;        /* Mengatur padding yang lebih besar untuk memperbesar tombol */
     border-radius: 75px;       /* Mengatur sudut tombol menjadi melengkung */
     box-shadow: 0 4px 6px rgba(255, 230, 0, 0.1); /* Memberikan bayangan */
     text-transform: uppercase; /* Mengubah teks menjadi huruf kapital */
@@ -720,8 +720,8 @@
     text-align: center;        /* Menyelaraskan teks di tengah tombol */
     display: flex;     /* Membuat tombol hanya sebesar teksnya */
     position: absolute;        /* Menetapkan posisi absolut */
-    top: 77.68%;                /* Posisi dari atas */
-    left: 22.7%;                 /* Posisi dari kiri */
+    top: 77.58%;                /* Posisi dari atas */
+    left: 43.2%;                 /* Posisi dari kiri */
     transform: translate(-50%, -50%); /* Menyelaraskan posisi secara vertikal dan horizontal */
     box-sizing: border-box;    /* Pastikan padding dan border diperhitungkan */
   }
@@ -778,7 +778,7 @@
     border-radius: 4px; /* Sudut border melengkung */
     padding: 8px;
     margin-bottom: 5px; /* Jarak antara label dan input */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bayangan abu-abu gelap dengan transparansi */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bayangan abu-abu gbtnimageelap dengan transparansi */
     font-size: 1.2rem; /* Ukuran font lebih kecil dari default (14px) */
     width: 150px; /* Lebar tetap untuk label */
     text-align: center;
@@ -860,7 +860,7 @@
 }
 
 #ppdb .image-highlight img.img-fluid {
-  max-width: 395%;
+  max-width: 250%;
   height: 105%; /* Mempertahankan aspek rasio */
   border: 8px solid #29ca8e;
   border-radius: 15px;
@@ -1127,7 +1127,7 @@
   }
 
   .Saparwadi img {
-    width: 83% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97.0% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
@@ -1218,6 +1218,31 @@
   }
   .Kusmiati img{
     width: 95.7% !important; /* Ubah sesuai dengan kebutuhan */
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Putri img{
+    width: 96.7% !important; /* Ubah sesuai dengan kebutuhan */
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Dewi img{
+    max-width: 108.7% !important; /* Ubah sesuai dengan kebutuhan */
+    width: auto;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Pipit img{
+    width: 79.4% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Angela img{
+    width: 90.4% !important;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
@@ -1617,17 +1642,22 @@
 }
 
 .achievements-image {
-  height: 350px; /* Fixed height for consistency */
-  width: 350px;
-  overflow: hidden;
+  display: flex; /* Enable flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 350px; /* Fixed height */
+  width: 350px; /* Fixed width */
+  overflow: hidden; /* Hide overflow */
 }
 
 .achievements-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* This ensures the image covers the area without distortion */
-  transition: all 0.3s ease;
+  max-width: 100%; /* Limit width */
+  max-height: 100%; /* Limit height */
+  object-fit: contain; /* Maintain aspect ratio */
+  transition: all 0.3s ease; /* Animation effect */
 }
+
+
 
 .achievements-thumb:hover .achievements-image img {
   transform: scale(1.1);
@@ -1683,9 +1713,15 @@
   }
 
   .achievements-image {
-      height: 325px;
+    height: 200px;
+    width: 100%;
   }
 
+  .achievements-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
   .achievements-date {
       padding: 10px 15px;
   }
@@ -1701,7 +1737,12 @@
   .achievements-detail h3 {
       font-size: 16px;
   }
+
+  .achievements-thumb {
+      margin-bottom: 20px; /* Reduce margin to save space */
+  }
 }
+
 
 /*---------------------------------------
      Galeri Kegiatan   
@@ -1767,38 +1808,55 @@
   overflow: hidden;
 }
 
+/* Image styles for .image-slider */
 .image-slider img {
   position: absolute;
   width: 100%;
-  height: 100%; /* Pastikan gambar memenuhi area */
-  object-fit: cover; /* Menjaga proporsi gambar */
-  opacity: 0;
-  transition: 1s ease-out;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
 }
 
 .image-slider img.active {
-  opacity: 1;
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
 }
+
+/* Image styles for .image-slider-1 */
 .image-slider-1 img {
   position: absolute;
   width: 100%;
-  height: 100%; /* Pastikan gambar memenuhi area */
-  object-fit: cover; /* Menjaga proporsi gambar */
-  opacity: 0;
-  transition: 1s ease-out;
-}
-.image-slider-1 img.active {
-  opacity: 1;
-}
-.image-slider img,
-.image-slider-1 img {
-    display: none; /* Menyembunyikan semua gambar secara default */
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
 }
 
-.image-slider img.active,
 .image-slider-1 img.active {
-    display: block; /* Menampilkan gambar aktif */
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
 }
+
+/* Image styles for .image-slider-1 */
+.image-slider-2 img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
+}
+
+.image-slider-2 img.active {
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
+}
+
+
 
 .activities-thumb:hover .activities-image img {
     transform: scale(1.1);

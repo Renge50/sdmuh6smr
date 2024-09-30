@@ -1154,38 +1154,7 @@ http://www.templatemo.com/tm-516-known
           </div>
         </section>               
         <!--VIDEO HIGHLIGHT YOUTUBE-->   
-        <script src="https://www.youtube.com/iframe_api"></script>
-        <script>
-          var videoIds = ['XRXYKDB2rPg']; // Ganti dengan ID video Anda
-          var currentVideoIndex = 0; // Mulai dari video pertama
-          var player;
-        
-          // Fungsi ini dipanggil ketika YouTube IFrame API siap
-          function onYouTubeIframeAPIReady() {
-            player = new YT.Player('video-player', {
-              height: '315',
-              width: '100%',
-              videoId: videoIds[currentVideoIndex],
-              events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-              }
-            });
-          }
-        
-          function onPlayerReady(event) {
-            event.target.playVideo();
-          }
-        
-          function onPlayerStateChange(event) {
-            // Jika video selesai diputar (status 0)
-            if (event.data === YT.PlayerState.ENDED) {
-              currentVideoIndex = (currentVideoIndex + 1) % videoIds.length; // Pindah ke video berikutnya dan loop kembali ke awal
-              player.loadVideoById(videoIds[currentVideoIndex]);
-            }
-          }
-        </script>
-<!--VIDEO HIGHLIGHT YOUTUBE-->   
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
     var videoIds = ['XRXYKDB2rPg']; // Ganti dengan ID video Anda
     var currentVideoIndex = 0; // Mulai dari video pertama
@@ -1205,7 +1174,8 @@ http://www.templatemo.com/tm-516-known
     }
 
     function onPlayerReady(event) {
-        event.target.playVideo(); // Memulai video saat pemain sudah siap
+        // Hapus baris di bawah ini untuk menonaktifkan autoplay
+        // event.target.playVideo(); // Memulai video saat pemain sudah siap
     }
 
     function onPlayerStateChange(event) {
@@ -1216,6 +1186,7 @@ http://www.templatemo.com/tm-516-known
         }
     }
 </script>
+<!--VIDEO HIGHLIGHT YOUTUBE-->   
 <!-- Footer Section -->
 <footer id="footer" style="background-color: #333; color: white; padding: 50px 0;">
     <div class="container">

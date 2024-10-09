@@ -1229,22 +1229,13 @@
     margin: 0 auto; /* Center image horizontally */
   }
   .Dewi img{
-<<<<<<< HEAD
     width: 90.4% !important;
-=======
-    max-width: 108.7% !important; /* Ubah sesuai dengan kebutuhan */
-    width: auto;
->>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Pipit img{
-<<<<<<< HEAD
     width: 90.4% !important;
-=======
-    width: 79.4% !important;
->>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
@@ -1255,15 +1246,12 @@
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
-<<<<<<< HEAD
   .Tiwi img{
     width: 90.4% !important;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
-=======
->>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   .team-info {
     padding: 20px 30px;
   }
@@ -1857,11 +1845,7 @@
   z-index: 2; /* Ensure the active image is in front */
 }
 
-<<<<<<< HEAD
 /* Image styles for .image-slider-2 */
-=======
-/* Image styles for .image-slider-1 */
->>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
 .image-slider-2 img {
   position: absolute;
   width: 100%;
@@ -1876,7 +1860,6 @@
   opacity: 1; /* Show the active image */
   z-index: 2; /* Ensure the active image is in front */
 }
-<<<<<<< HEAD
 /* Image styles for .image-slider-3 */
 .image-slider-3 img {
   position: absolute;
@@ -1892,9 +1875,6 @@
   opacity: 1; /* Show the active image */
   z-index: 2; /* Ensure the active image is in front */
 }
-=======
-
->>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
 
 
 .activities-thumb:hover .activities-image img {

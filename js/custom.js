@@ -188,13 +188,17 @@
   const slider1Images = document.querySelectorAll('.image-slider img');
   const slider2Images = document.querySelectorAll('.image-slider-1 img');
   const slider3Images = document.querySelectorAll('.image-slider-2 img');
+<<<<<<< HEAD
   const slider4Images = document.querySelectorAll('.image-slider-3 img');
+=======
+>>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   const eventDate = document.getElementById('event-date');
   const eventName = document.getElementById('event-name');
   const eventTitle = document.getElementById('event-title');
   const eventDescription = document.getElementById('event-description');
   
   const events = [
+<<<<<<< HEAD
     {
         slider1Image: 'images/P BALAP BOSSSSSSSSSS.jpg',
         slider2Image: 'images/Puskesmas Lempake (1).jpeg',
@@ -229,11 +233,44 @@
     }
 ];
 
+=======
+      {
+          slider1Image: 'images/P BALAP BOSSSSSSSSSS.jpg',
+          slider2Image: 'images/Puskesmas Lempake (1).jpeg',
+          slider3Image: 'images/vaksin (1).JPG',
+          date: '25 / 9 / 2024',
+          name: 'Kegiatan 17 Agustus ke 79',
+          title: 'Lomba Balap Karung',
+          description: 'Lomba Karung ini memperingati Kemerdekaan Indonesia ke 79.'
+      },
+      {
+          slider1Image: 'images/Lomba Kaligrafi.JPG',
+          slider2Image: 'images/Puskesmas Lempake (2).jpeg',
+          slider3Image: 'images/vaksin (2).JPG',
+          date: '26 / 9 / 2024',
+          name: 'Kegiatan 26 September',
+          title: 'Lomba Kaligrafi',
+          description: 'Lomba Kaligrafi 17 Agustus 2024: Mengukir keindahan seni tulisan dengan semangat kemerdekaan.'
+      },
+      {
+          slider1Image: 'images/1723688608717 (1).JPG',
+          slider2Image: 'images/Puskesmas Lempake (3).jpeg', // Misalnya jika tidak ada gambar kedua
+          slider3Image: 'images/vaksin (3).JPG',
+          date: '27 / 9 / 2024',
+          name: 'Kegiatan 27 September',
+          title: 'Lomba Adzan 17 Agustus ke 79',
+          description: 'Lomba Adzan 17 Agustus 2024: Mengumandangkan panggilan suci dengan semangat kemerdekaan.'
+      }
+  ];
+>>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   
   let currentIndexSlider1 = 0;
   let currentIndexSlider2 = 0;
   let currentIndexSlider3 = 0;
+<<<<<<< HEAD
   let currentIndexSlider4 = 0; 
+=======
+>>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   
   // Function to change images in the first slider
   function changeSlider1Images() {
@@ -279,6 +316,7 @@
           }
       });
   }
+<<<<<<< HEAD
   function changeSlider4Images() {
     const totalImages = slider4Images.length; // Total number of images (6 in this case)
     
@@ -290,6 +328,9 @@
     slider4Images[currentIndexSlider4].classList.add('active'); // Add 'active' class to the current image
 }
 
+=======
+  
+>>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   // Update event details (date, name, title, description)
   function updateEventDetails() {
       eventDate.textContent = events[currentIndexSlider1].date; // Use the current index of the first slider
@@ -302,7 +343,10 @@
   changeSlider1Images();
   changeSlider2Images();
   changeSlider3Images();
+<<<<<<< HEAD
   changeSlider4Images();
+=======
+>>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   updateEventDetails();
   
   // Set intervals for each slider to change at different times
@@ -313,6 +357,9 @@
   
   setInterval(changeSlider2Images, 6000); // Change every 6 seconds for slider 2
   setInterval(changeSlider3Images, 8000); // Change every 8 seconds for slider 3
+<<<<<<< HEAD
   setInterval(changeSlider4Images, 3000); // Change every 3 seconds for slider 4
+=======
+>>>>>>> 27722a3a9e1b2f78c187c20f0787e5512c3f1e0c
   
 })(jQuery);

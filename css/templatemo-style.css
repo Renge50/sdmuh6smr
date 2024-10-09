@@ -482,7 +482,7 @@
     text-decoration: none;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: 0.7s;
   }
 
   .custom-navbar .nav li a::before {
@@ -496,15 +496,11 @@
     z-index: -1;
     transform: scaleX(0); /* Start with scaleX(0) */
     transform-origin: top;
-    transition: transform 0.7s ease;
   }
   .custom-navbar .navbar-nav > li > a:hover,
   .custom-navbar .navbar-nav > li > a:focus {
     background-color: transparent;
   }
-  .custom-navbar .nav li a:hover::before {
-    transform: scaleX(1); /* Expand to full width on hover */
-  } 
   .custom-navbar .nav li a:hover {
     background-color: #ba066c;
     color: #ffffff;
@@ -584,6 +580,25 @@
   /*---------------------------------------
       HOME  & SLIDER            
   -----------------------------------------*/
+  .home-btn {
+  background: transparent; /* Example of a custom color */
+  border-color: #ffffff; /* Match the background color */
+  color: rgb(255, 255, 255); /* White text for contrast */
+  font-size: 16px; /* Adjust font size */
+  padding: 10px 20px; /* Adjust padding for better look */
+  text-transform: uppercase; /* Make text uppercase */
+  border-radius: 50px; /* Add rounded corners */
+  transition: all 0.3s ease; /* Smooth hover effect */
+  font-weight: bold;
+  margin-top: -30px;
+  }
+
+  .home-btn:hover {
+  background-color: #FFF; /* Slightly darker color on hover */
+  border-color: #FFF; /* Match border to background on hover */
+  color: #fff; /* Ensure text remains white */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add subtle shadow on hover */
+  }
 
   #home {
     padding: 0;
@@ -690,10 +705,10 @@
     font-size: 14px;
     color: #777;
   }
-  /* CSS */
-  .section-btn {
-    font-size: inherit;        /* Mengatur ukuran teks */
-    padding: 10px 48.4px;        /* Mengatur padding yang lebih besar untuk memperbesar tombol */
+
+  #ppdb .section-btn {
+    font-size: 20px;        /* Mengatur ukuran teks */
+    padding: 5.3px 34.4px;        /* Mengatur padding yang lebih besar untuk memperbesar tombol */
     border-radius: 75px;       /* Mengatur sudut tombol menjadi melengkung */
     box-shadow: 0 4px 6px rgba(255, 230, 0, 0.1); /* Memberikan bayangan */
     text-transform: uppercase; /* Mengubah teks menjadi huruf kapital */
@@ -703,24 +718,35 @@
     font-weight: bold;
     transition: 0.5s;
     text-align: center;        /* Menyelaraskan teks di tengah tombol */
-    display: inline-block;     /* Membuat tombol hanya sebesar teksnya */
+    display: flex;     /* Membuat tombol hanya sebesar teksnya */
     position: absolute;        /* Menetapkan posisi absolut */
-    top: 77.6%;                /* Posisi dari atas */
-    left: 43%;                 /* Posisi dari kiri */
+    top: 77.58%;                /* Posisi dari atas */
+    left: 43.2%;                 /* Posisi dari kiri */
     transform: translate(-50%, -50%); /* Menyelaraskan posisi secara vertikal dan horizontal */
+    box-sizing: border-box;    /* Pastikan padding dan border diperhitungkan */
   }
   
-  .section-btn:hover {
+  #ppdb .section-btn:hover {
     background-color: #ffffff;
+    color: #000000;
+    border: 3px solid #000000; /* Ukuran border tetap 1px */
   }
   
-  .section-btn:focus {
+  #ppdb .section-btn:focus {
     outline: none;          /* Menghapus garis outline saat tombol fokus */
   }
+  
+  #ppdb .section-btn:hover {
+    background-color: #ffffff;   /* Background putih saat hover */
+  }
+  
+  #ppdb .section-btn:focus {
+    outline: none;               /* Menghapus outline saat fokus */
+  }
   @media (max-width: 768px){
-  .section-btn {
-    font-size: 12px !important;
-    padding: 5px 26px !important;
+    #ppdb .section-btn {
+    font-size: 18px !important;
+    padding: 2px 18.3px !important;
     border-radius: 75px;
     box-shadow: 0 4px 6px rgba(255, 230, 0, 0.1);
     text-transform: uppercase;
@@ -730,17 +756,17 @@
     font-weight: bold;
     transition: 0.5s;
     text-align: center;
-    display: inline-block;
+    display: flex;
     position: absolute;
     top: 81.7%;
-    left: 53.15%;
+    left: 55.45%;
     transform: translate(-50%, -50%);
   }    
-  .section-btn:hover {
+  #ppdb .section-btn:hover {
     background-color: #ffffff;
   }
   
-  .section-btn:focus {
+  #ppdb .section-btn:focus {
     outline: none;          /* Menghapus garis outline saat tombol fokus */
   }
 }
@@ -752,7 +778,7 @@
     border-radius: 4px; /* Sudut border melengkung */
     padding: 8px;
     margin-bottom: 5px; /* Jarak antara label dan input */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bayangan abu-abu gelap dengan transparansi */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bayangan abu-abu gbtnimageelap dengan transparansi */
     font-size: 1.2rem; /* Ukuran font lebih kecil dari default (14px) */
     width: 150px; /* Lebar tetap untuk label */
     text-align: center;
@@ -834,13 +860,13 @@
 }
 
 #ppdb .image-highlight img.img-fluid {
-  max-width: 240%; /* Gambar mengisi maksimal 100% dari parent container */
-  height: auto; /* Mempertahankan aspek rasio */
+  max-width: 250%;
+  height: 105%; /* Mempertahankan aspek rasio */
   border: 8px solid #29ca8e;
   border-radius: 15px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
-  margin-left: 100%;
+  margin-left: 105%;
 }
 
 #ppdb .image-container {
@@ -1101,7 +1127,7 @@
   }
 
   .Saparwadi img {
-    width: 83% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97.0% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
@@ -1184,6 +1210,48 @@
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
+  .Ika img{
+    width: 95% !important; /* Ubah sesuai dengan kebutuhan */
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Kusmiati img{
+    width: 95.7% !important; /* Ubah sesuai dengan kebutuhan */
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Putri img{
+    width: 96.7% !important; /* Ubah sesuai dengan kebutuhan */
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Dewi img{
+    width: 90.4% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Pipit img{
+    width: 90.4% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Angela img{
+    width: 90.4% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
+  .Tiwi img{
+    width: 90.4% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
   .team-info {
     padding: 20px 30px;
   }
@@ -1216,6 +1284,135 @@
           margin-left: 50px;
         }
   }
+  /*---------------------------------------
+      FASILITAS V2
+  -----------------------------------------*/
+  #fasilitas.facilities-section {
+    padding: 100px 0;
+    background-color: #f6f6f6c7;
+}
+
+#fasilitas .section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#fasilitas .section-title h2 {
+    font-size: 30px;
+    margin-top: -50px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#fasilitas .section-title h2 small {
+    display: block;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: -30px
+}
+
+#fasilitas .owl-carousel.owl-theme.owl-facilities {
+    position: relative;
+}
+.facilities-thumb {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.facilities-top {
+    position: relative;
+}
+
+.facilities-image {
+    height: 350px; /* Fixed height for consistency */
+    width: 350px;
+    overflow: hidden;
+}
+
+.facilities-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This ensures the image covers the area without distortion */
+    transition: all 0.3s ease;
+}
+
+.facilities-thumb:hover .facilities-image img {
+    transform: scale(1.1);
+}
+
+.facilities-date {
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    padding: 15px 20px;
+}
+
+.facilities-date span {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.facilities-date i {
+    color: #ffffff;
+    margin-right: 5px;
+}
+
+.facilities-detail {
+    padding: 20px;
+}
+
+.facilities-detail h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.facilities-detail h3 a {
+    color: #252525;
+    transition: all 0.3s ease;
+}
+
+.facilities-detail h3 a:hover {
+    color: #29ca8e;
+}
+@media (max-width: 768px) {
+    #fasilitas .section-title h2 {
+        font-size: 24px;
+        margin-top: 0;
+    }
+
+    #fasilitas .section-title h2 small {
+        font-size: 16px;
+    }
+
+    .facilities-image {
+        height: 200px;
+    }
+
+    .facilities-date {
+        padding: 10px 15px;
+    }
+
+    .facilities-date span {
+        font-size: 12px;
+    }
+
+    .facilities-detail {
+        padding: 15px;
+    }
+
+    .facilities-detail h3 {
+        font-size: 16px;
+    }
+}
+
   /*---------------------------------------
       FASILITAS         
   -----------------------------------------*/
@@ -1405,9 +1602,381 @@
         background: #3f51b5;
     }
 }
+/*----------------------------
+        Prestasi
+----------------------------*/
+#prestasi.achievements-section {
+  padding: 100px 0;
+  background-color: #f9f9f9;
+}
+
+#prestasi .section-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+#prestasi .section-title h2 {
+  font-size: 30px;
+  margin-top: -70px;
+  margin-bottom: 20px;
+  font-weight: bolder;
+}
+
+#prestasi .section-title h2 small {
+  display: block;
+  font-size: 18px;
+  margin-top: 10px;
+  margin-bottom: -80px;
+}
+
+#prestasi .owl-carousel.owl-theme.owl-achievements {
+  position: relative;
+}
+
+.achievements-thumb {
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  border-radius: 5px;
+}
+
+.achievements-top {
+  position: relative;
+}
+
+.achievements-image {
+  display: flex; /* Enable flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 350px; /* Fixed height */
+  width: 350px; /* Fixed width */
+  overflow: hidden; /* Hide overflow */
+}
+
+.achievements-image img {
+  max-width: 100%; /* Limit width */
+  max-height: 100%; /* Limit height */
+  object-fit: contain; /* Maintain aspect ratio */
+  transition: all 0.3s ease; /* Animation effect */
+}
 
 
 
+.achievements-thumb:hover .achievements-image img {
+  transform: scale(1.1);
+}
+
+.achievements-date {
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 15px 20px;
+}
+
+.achievements-date span {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.achievements-date i {
+  color: #ffffff;
+  margin-right: 5px;
+}
+
+.achievements-detail {
+  padding: 20px;
+}
+
+.achievements-detail h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.achievements-detail h3 a {
+  color: #252525;
+  transition: all 0.3s ease;
+}
+
+.achievements-detail h3 a:hover {
+  color: #29ca8e;
+}
+
+@media (max-width: 768px) {
+  #prestasi .section-title h2 {
+      font-size: 24px;
+      margin-top: 0;
+  }
+
+  #prestasi .section-title h2 small {
+      font-size: 16px;
+  }
+
+  .achievements-image {
+    height: 200px;
+    width: 100%;
+  }
+
+  .achievements-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .achievements-date {
+      padding: 10px 15px;
+  }
+
+  .achievements-date span {
+      font-size: 12px;
+  }
+
+  .achievements-detail {
+      padding: 15px;
+  }
+
+  .achievements-detail h3 {
+      font-size: 16px;
+  }
+
+  .achievements-thumb {
+      margin-bottom: 20px; /* Reduce margin to save space */
+  }
+}
+
+
+/*---------------------------------------
+     Galeri Kegiatan   
+  -----------------------------------------*/
+  #kegiatan-sekolah.activities-section {
+    padding: 100px 0;
+    background-color: #f6f6f6c7;
+}
+
+#kegiatan-sekolah .section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#kegiatan-sekolah .section-title h2 {
+    font-size: 30px;
+    margin-top: -50px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#kegiatan-sekolah .section-title h2 small {
+    display: block;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: -30px;
+}
+
+#kegiatan-sekolah .owl-carousel.owl-theme.owl-activities {
+    position: relative;
+}
+
+.activities-thumb {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.activities-top {
+    position: relative;
+}
+
+.activities-image {
+  position: relative;
+  height: 350px; /* Sesuaikan tinggi */
+  width: 100%;
+  overflow: hidden;
+}
+
+.activities-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This ensures the image covers the area without distortion */
+    transition: all 0.3s ease;
+}
+.image-slider {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Sesuaikan tinggi elemen */
+  overflow: hidden;
+}
+
+/* Image styles for .image-slider */
+.image-slider img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
+}
+
+.image-slider img.active {
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
+}
+
+/* Image styles for .image-slider-1 */
+.image-slider-1 img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
+}
+
+.image-slider-1 img.active {
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
+}
+
+/* Image styles for .image-slider-2 */
+.image-slider-2 img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
+}
+
+.image-slider-2 img.active {
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
+}
+/* Image styles for .image-slider-3 */
+.image-slider-3 img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 1s ease-in-out;
+  z-index: 1; /* Non-active images behind */
+}
+
+.image-slider-3 img.active {
+  opacity: 1; /* Show the active image */
+  z-index: 2; /* Ensure the active image is in front */
+}
+
+
+.activities-thumb:hover .activities-image img {
+    transform: scale(1.1);
+}
+
+.activities-date {
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    padding: 15px 20px;
+}
+
+.activities-date span {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.activities-date i {
+    color: #ffffff;
+    margin-right: 5px;
+}
+
+.activities-detail {
+    padding: 20px;
+}
+
+.activities-detail h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.activities-detail h3 a {
+    color: #252525;
+    transition: all 0.3s ease;
+}
+
+.activities-detail h3 a:hover {
+    color: #29ca8e;
+}
+.custom-carousel .owl-item {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.custom-carousel .owl-item.active {
+  opacity: 1;
+}
+
+.custom-carousel .owl-item .item {
+  position: relative;
+  animation: slideAnimation 1s ease-in-out forwards;
+}
+
+/* Keyframes untuk animasi slide */
+@keyframes slideAnimation {
+  0% {
+      transform: translateX(-50%);
+      opacity: 0;
+  }
+  100% {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+    #kegiatan-sekolah .section-title h2 {
+        font-size: 24px;
+        margin-top: 0;
+    }
+
+    #kegiatan-sekolah .section-title h2 small {
+        font-size: 16px;
+    }
+
+    .activities-image {
+        height: 200px;
+        max-width: 500px;
+    }
+
+    .activities-date {
+        padding: 10px 15px;
+    }
+
+    .activities-date span {
+        font-size: 12px;
+    }
+
+    .activities-detail {
+        padding: 15px;
+    }
+
+    .activities-detail h3 {
+        font-size: 16px;
+    }
+  }
+   
   /*---------------------------------------
      NEWS              
   -----------------------------------------*/
@@ -1438,70 +2007,131 @@
 
 
   /*---------------------------------------
-      TESTIMONIAL             
+      Kegiatan-Sekolah         
   -----------------------------------------*/
-  #testimonial .item {
-    background: #ffffff;
-    margin: 20px 0;
-    padding: 4em 3em;
-    text-align: left;
-  }
+  #kegiatan-sekolah {
+    padding: 100px 350px;
+}
 
-  #courses .col-md-4,
-  #testimonial .col-md-4 {
-    display: block;
-    width: 100%;
-  }
-  #testimonial .container .row .section-title h2{
-    margin-top: -95px;
-    margin-left: 15px;
-  }
+#kegiatan-sekolah .section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
 
-  #testimonial .item > p {
-    font-size: 16px;
-    line-height: 26px;
-  }
-
-  .tst-rating {
-    margin-bottom: 15px;
-  }
-
-  .tst-rating .fa {
-    color: #3f51b5;
-  }
-
-  .tst-image,
-  .tst-author {
-    display: inline-block;
-    vertical-align: middle;
-    margin-bottom: 20px;
-    text-align: left;
-  }
-
-  .tst-image img {
-    border-radius: 50px;
-    width: 60px !important;
-    height: 60px;
-    margin-right: 15px;
-  }
-
-  .tst-author h4 {
+#kegiatan-sekolah .section-title h2 {
+    font-size: 30px;
     margin: 0;
-  }
+}
 
-  .tst-author span {
-    color: #808080;
+#kegiatan-sekolah .section-title h2 small {
+    display: block;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+#kegiatan-sekolah .owl-carousel.owl-theme.owl-kegiatan {
+    position: relative;
+}
+
+.kegiatan-thumb {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.kegiatan-top {
+    position: relative;
+}
+
+.kegiatan-image {
+    height: 350px; /* Fixed height for consistency */
+    overflow: hidden;
+}
+
+.kegiatan-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This ensures the image covers the area without distortion */
+    transition: transform 0.3s ease;
+}
+
+.kegiatan-thumb:hover .kegiatan-image img {
+    transform: scale(1.1);
+}
+
+.kegiatan-date {
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.kegiatan-date span {
+    color: #ffffff;
     font-size: 14px;
-  }
-  @media (max-width: 768px) {
-    #testimonial .container .row .section-title h2{
-      margin-left: 95px;
-    }
-    #testimonial .container .row .section-title h2{
-      margin-right: 85px;
-    }
-  }
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
 
+.kegiatan-date i {
+    color: #ffffff;
+    margin-right: 5px;
+}
+
+.kegiatan-detail {
+    padding: 15px;
+    background: #f9f9f9;
+}
+
+.kegiatan-detail h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.kegiatan-detail h3 a {
+    color: #252525;
+    transition: color 0.3s ease;
+}
+
+.kegiatan-detail h3 a:hover {
+    color: #29ca8e;
+}
+
+@media (max-width: 768px) {
+    #kegiatan-sekolah .section-title h2 {
+        font-size: 24px;
+    }
+
+    #kegiatan-sekolah .section-title h2 small {
+        font-size: 16px;
+    }
+
+    .kegiatan-image {
+        height: 200px;
+    }
+
+    .kegiatan-date {
+        padding: 10px 15px;
+    }
+
+    .kegiatan-date span {
+        font-size: 12px;
+    }
+
+    .kegiatan-detail {
+        padding: 15px;
+    }
+
+    .kegiatan-detail h3 {
+        font-size: 16px;
+    }
+}
 
   /*---------------------------------------
       CONTACT             
@@ -1840,4 +2470,5 @@
       height: inherit;
     }
   }
+
   

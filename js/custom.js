@@ -198,10 +198,10 @@
     {
         slider1Image: 'images/P BALAP BOSSSSSSSSSS.jpg',
         slider2Image: 'images/Puskesmas Lempake (1).jpeg',
-        slider3Image: 'images/vaksin (1).JPG',
-        slider4Image: ['images/IMG_4224.JPG', // New image for slider 4
-        'images/20241005083904_IMG_4342.JPG',
-        'images/20241005084049_IMG_4343.JPG'],
+        slider3Image: 'images/vaksin (1).jpg',
+        slider4Image: ['images/IMG_4224.jpg', // New image for slider 4
+        'images/20241005083904_IMG_4342.jpg',
+        'images/20241005084049_IMG_4343.jpg'],
         date: '25 / 9 / 2024',
         name: 'Kegiatan 17 Agustus ke 79',
         title: 'Lomba Balap Karung',
@@ -210,7 +210,7 @@
     {
         slider1Image: 'images/Lomba Kaligrafi.jpg',
         slider2Image: 'images/Puskesmas Lempake (2).jpeg',
-        slider3Image: 'images/vaksin (2).JPG',
+        slider3Image: 'images/vaksin (2).jpg',
         slider4Image: 'images/IMG_4066.JPG', // New image for slider 4
         date: '26 / 9 / 2024',
         name: 'Kegiatan 26 September',
@@ -220,8 +220,8 @@
     {
         slider1Image: 'images/1723688608717 (1).jpg',
         slider2Image: 'images/Puskesmas Lempake (3).jpeg',
-        slider3Image: 'images/vaksin (3).JPG',
-        slider4Image: 'images/20241005094333_IMG_4415.JPG', // New image for slider 4
+        slider3Image: 'images/vaksin (3).jpg',
+        slider4Image: 'images/20241005094333_IMG_4415.jpg', // New image for slider 4
         date: '27 / 9 / 2024',
         name: 'Kegiatan 27 September',
         title: 'Lomba Adzan 17 Agustus ke 79',

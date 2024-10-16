@@ -328,8 +328,8 @@
     }
   
     .navbar-brand .navbar-logo {
-      width: 70px; /* Mengecilkan ukuran logo */
-      left: 50%; /* Menempatkan logo di tengah secara horizontal */
+      width: 65px; /* Mengecilkan ukuran logo */
+      left: 30%; /* Menempatkan logo di tengah secara horizontal */
       transform: translate(-50%, -50%); /* Menyesuaikan posisi */
       top: 10px; /* Menurunkan posisi logo */
     }
@@ -590,7 +590,7 @@
   border-radius: 50px; /* Add rounded corners */
   transition: all 0.3s ease; /* Smooth hover effect */
   font-weight: bold;
-  margin-top: -30px;
+  margin-top: -10px;
   }
 
   .home-btn:hover {
@@ -610,7 +610,7 @@
 
   #home h3 {
     color: #f9f9f9;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 300;
     margin: 0;
     padding: 5px 0 40px 0;
@@ -642,12 +642,68 @@
     padding: 20px; /* Menambah jarak di sekeliling konten */
     color: #fff;
   }
-
-  @media (min-width: 768px) {
-    .home-slider .col-md-6 {
-      padding-left: 0;
+  @media (max-width: 768px) {
+    /* Button customization */
+    .home-btn {
+      font-size: 14px; /* Lebih kecil di mobile */
+      padding: 8px 16px; /* Sesuaikan padding */
+      border-radius: 40px; /* Sedikit lebih kecil untuk tampilan mobile */
+    }
+  
+    /* Slider height adjustment for mobile */
+    .home-slider .item {
+      height: 450px; /* Kurangi tinggi untuk layar mobile */
+      background-size: cover;
+      background-position: center; /* Atur posisi gambar */
+    }
+  
+    /* Adjust caption positioning */
+    .home-slider .caption {
+      bottom: 10px; /* Beri sedikit ruang di bawah pada tampilan mobile */
+      left: 10px;
+      right: 10px;
+      padding: 15px; /* Sedikit kurangi padding */
+      font-size: 14px; /* Kurangi ukuran font untuk keterbacaan */
+    }
+  
+    /* Text adjustments */
+    #home h1 {
+      font-size: 28px; /* Ukuran judul lebih kecil di mobile */
+    }
+  
+    #home h3 {
+      font-size: 14px; /* Kurangi ukuran font deskripsi */
+      padding: 5px 0 20px 0; /* Sesuaikan padding */
     }
   }
+  
+  @media (max-width: 480px) {
+    /* More compact styling for very small screens */
+    .home-btn {
+      font-size: 12px; /* Lebih kecil untuk layar sangat kecil */
+      padding: 6px 12px; /* Sesuaikan padding */
+      border-radius: 30px; /* Lebih kecil di layar kecil */
+    }
+  
+    .home-slider .item {
+      height: 350px; /* Kurangi tinggi lebih lanjut untuk layar kecil */
+    }
+  
+    .home-slider .caption {
+      bottom: 5px; /* Lebih dekat ke bawah */
+      padding: 10px; /* Kurangi padding */
+      font-size: 12px; /* Ukuran font lebih kecil */
+    }
+  
+    #home h1 {
+      font-size: 24px; /* Judul lebih kecil untuk layar kecil */
+    }
+  
+    #home h3 {
+      font-size: 12px; /* Deskripsi lebih kecil */
+    }
+  }
+  
 
   .home-slider .caption {
     display: flex;
@@ -745,8 +801,8 @@
   }
   @media (max-width: 768px){
     #ppdb .section-btn {
-    font-size: 18px !important;
-    padding: 2px 18.3px !important;
+    font-size: 15px !important;
+    padding: 1px 14.3px !important;
     border-radius: 75px;
     box-shadow: 0 4px 6px rgba(255, 230, 0, 0.1);
     text-transform: uppercase;
@@ -1223,7 +1279,7 @@
     margin: 0 auto; /* Center image horizontally */
   }
   .Putri img{
-    width: 96.7% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 96.4% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
@@ -2189,7 +2245,24 @@
     border-color: #ffffff;
     color: #ffffff;
   }
+  @media (max-width: 768px) {
+    #contact {
+      padding: 15px; /* Adjust padding for smaller screens */
+    }
   
+    #contact h2 {
+      font-size: 20px; /* Adjust heading size further for small screens */
+    }
+  
+    #contact .section-title h2 {
+      font-size: 18px; /* Further reduce font size */
+      margin-right: 0; /* Remove margin */
+    }
+  
+    #contact-form input[type='submit'] {
+      font-size: 16px; /* Adjust font size for mobile */
+    }
+  }
 
 
 
@@ -2343,132 +2416,3 @@
   /*---------------------------------------
      RESPONSIVE STYLES              
   -----------------------------------------*/
-
-  @media screen and (max-width: 1170px) {
-    .custom-navbar .navbar-nav.navbar-nav-first {
-      margin-left: inherit;
-    }
-  }
-
-  @media only screen and (max-width: 992px) {
-    section,
-    footer {
-      padding: 60px 0;
-    }
-
-    .home-slider .item {
-      background-position: center center;
-    }
-
-    .feature-thumb,
-    .about-info,
-    .team-thumb,
-    .footer-info {
-      margin-bottom: 50px;
-    }
-
-    .contact-image {
-      margin-top: 50px;
-    }
-  }
-
-
-  @media only screen and (min-width: 768px) and (max-width: 991px) {
-    .custom-navbar .nav li a {
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-  }
-
-  @media only screen and (max-width: 767px) {
-    h1 {
-      font-size: 2.5em;
-    }
-
-    h1,h2,h3 {
-      line-height: normal;
-      text-align: center;
-    }
-
-    .custom-navbar {
-      background: #ffffff;
-      -webkit-box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-      -moz-box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-      box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-      padding: 10px 0;
-      text-align: center;
-    }
-
-    .custom-navbar .navbar-brand,
-    .custom-navbar .nav li a {
-      line-height: normal;
-    }
-
-    .custom-navbar .nav li a {
-      padding: 10px;
-    }
-
-    .custom-navbar .navbar-brand,
-    .top-nav-collapse .navbar-brand {
-      color: #252525;
-      font-weight: 600;
-    }
-
-    .custom-navbar .nav li a,
-    .top-nav-collapse .nav li a {
-      color: #575757;
-    }
-
-    .custom-navbar .navbar-nav.navbar-right li {
-      display: inline-block;
-    }
-
-    .footer-info {
-      margin-right: 0;
-    }
-
-    .footer-info.newsletter-form {
-      margin-bottom: 0;
-    }
-
-    .entry-form {
-      display: block;
-      margin: 0 auto;
-    }
-  }
-
-
-  @media only screen and (max-width: 580px) {
-    h2 {
-      font-size: 1.8em;
-    }
-
-    #testimonial .item {
-      padding: 2em;
-    }
-
-    .contact-image {
-      margin-top: 0;
-    }
-  }
-
-  @media only screen and (max-width: 480px) {
-    h1 {
-      font-size: 2em;
-    }
-
-    #home h3 {
-      font-size: 14px;
-    }
-
-    .entry-form {
-      border-radius: 0;
-      padding: 2em;
-      max-width: 100%;
-      max-height: 100%;
-      width: inherit;
-      height: inherit;
-    }
-  }
-
-  

@@ -195,45 +195,42 @@
   const eventDescription = document.getElementById('event-description');
   
   const events = [
-    {
-        slider1Image: 'images/P BALAP BOSSSSSSSSSS.jpg',
-        slider2Image: 'images/Puskesmas Lempake (1).jpeg',
-        slider3Image: 'images/vaksin (1).JPG',
-        slider4Image: ['images/IMG_4224.JPG', // New image for slider 4
-        'images/20241005083904_IMG_4342.JPG',
-        'images/20241005084049_IMG_4343.JPG'],
-        date: '25 / 9 / 2024',
-        name: 'Kegiatan 17 Agustus ke 79',
-        title: 'Lomba Balap Karung',
-        description: 'Lomba Karung ini memperingati Kemerdekaan Indonesia ke 79.'
-    },
-    {
-        slider1Image: 'images/Lomba Kaligrafi.JPG',
-        slider2Image: 'images/Puskesmas Lempake (2).jpeg',
-        slider3Image: 'images/vaksin (2).JPG',
-        slider4Image: 'images/IMG_4066.JPG', // New image for slider 4
-        date: '26 / 9 / 2024',
-        name: 'Kegiatan 26 September',
-        title: 'Lomba Kaligrafi',
-        description: 'Lomba Kaligrafi 17 Agustus 2024: Mengukir keindahan seni tulisan dengan semangat kemerdekaan.'
-    },
-    {
-        slider1Image: 'images/1723688608717 (1).JPG',
-        slider2Image: 'images/Puskesmas Lempake (3).jpeg',
-        slider3Image: 'images/vaksin (3).JPG',
-        slider4Image: 'images/20241005094333_IMG_4415.JPG', // New image for slider 4
-        date: '27 / 9 / 2024',
-        name: 'Kegiatan 27 September',
-        title: 'Lomba Adzan 17 Agustus ke 79',
-        description: 'Lomba Adzan 17 Agustus 2024: Mengumandangkan panggilan suci dengan semangat kemerdekaan.'
-    }
-];
-
+      {
+          slider1Image: 'images/P BALAP BOSSSSSSSSSS.jpg',
+          slider2Image: 'images/Puskesmas Lempake (1).jpeg',
+          slider3Image: 'images/vaksin (1).JPG',
+          slider4Image: 'images/anbk1.jpg',
+          date: '25 / 9 / 2024',
+          name: 'Kegiatan 17 Agustus ke 79',
+          title: 'Lomba Balap Karung',
+          description: 'Lomba Karung ini memperingati Kemerdekaan Indonesia ke 79.'
+      },
+      {
+          slider1Image: 'images/Lomba Kaligrafi.jpg',
+          slider2Image: 'images/Puskesmas Lempake (2).jpeg',
+          slider3Image: 'images/vaksin (2).JPG',
+          slider4Image: 'images/anbk2.jpg',
+          date: '26 / 9 / 2024',
+          name: 'Kegiatan 26 September',
+          title: 'Lomba Kaligrafi',
+          description: 'Lomba Kaligrafi 17 Agustus 2024: Mengukir keindahan seni tulisan dengan semangat kemerdekaan.'
+      },
+      {
+          slider1Image: 'images/1723688608717 (1).jpg',
+          slider2Image: 'images/Puskesmas Lempake (3).jpeg', // Misalnya jika tidak ada gambar kedua
+          slider3Image: 'images/vaksin (3).JPG',
+          slider4Image: 'images/anbk3.jpg',
+          date: '27 / 9 / 2024',
+          name: 'Kegiatan 27 September',
+          title: 'Lomba Adzan 17 Agustus ke 79',
+          description: 'Lomba Adzan 17 Agustus 2024: Mengumandangkan panggilan suci dengan semangat kemerdekaan.'
+      }
+  ];
   
   let currentIndexSlider1 = 0;
   let currentIndexSlider2 = 0;
   let currentIndexSlider3 = 0;
-  let currentIndexSlider4 = 0; 
+  let currentIndexSlider4 = 0;
   
   // Function to change images in the first slider
   function changeSlider1Images() {
@@ -279,17 +276,21 @@
           }
       });
   }
+  
+  // Function to change images in the third slider
   function changeSlider4Images() {
-    const totalImages = slider4Images.length; // Total number of images (6 in this case)
-    
-    // Remove 'active' class from all images
-    slider4Images.forEach(img => img.classList.remove('active'));
+    const prevIndex = currentIndexSlider4; // Track the previous image index
+    currentIndexSlider4 = (currentIndexSlider4 + 1) % events.length;
 
-    // Update to the next image and add 'active' class
-    currentIndexSlider4 = (currentIndexSlider4 + 1) % totalImages;
-    slider4Images[currentIndexSlider4].classList.add('active'); // Add 'active' class to the current image
+    // Update images for slider 4
+    slider4Images.forEach((img, index) => {
+        img.classList.remove('active'); // Fade out all images
+        if (index === currentIndexSlider4) {
+            img.src = events[currentIndexSlider4].slider4Image; // Update source for slider 3
+            img.classList.add('active'); // Fade in the new image
+        }
+    });
 }
-
   // Update event details (date, name, title, description)
   function updateEventDetails() {
       eventDate.textContent = events[currentIndexSlider1].date; // Use the current index of the first slider
@@ -313,6 +314,6 @@
   
   setInterval(changeSlider2Images, 6000); // Change every 6 seconds for slider 2
   setInterval(changeSlider3Images, 8000); // Change every 8 seconds for slider 3
-  setInterval(changeSlider4Images, 3000); // Change every 3 seconds for slider 4
+  setInterval(changeSlider4Images, 7000); // Change every 8 seconds for slider 4
   
 })(jQuery);

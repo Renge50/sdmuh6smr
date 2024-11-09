@@ -206,7 +206,7 @@
           description: 'Lomba Karung ini memperingati Kemerdekaan Indonesia ke 79.'
       },
       {
-          slider1Image: 'images/Lomba Kaligrafi.jpg',
+          slider1Image: 'images/Lomba Kaligrafi.JPG',
           slider2Image: 'images/Puskesmas Lempake (2).jpeg',
           slider3Image: 'images/vaksin (2).JPG',
           slider4Image: 'images/anbk2.jpg',
@@ -216,7 +216,7 @@
           description: 'Lomba Kaligrafi 17 Agustus 2024: Mengukir keindahan seni tulisan dengan semangat kemerdekaan.'
       },
       {
-          slider1Image: 'images/1723688608717 (1).jpg',
+          slider1Image: 'images/1723688608717 (1).JPG',
           slider2Image: 'images/Puskesmas Lempake (3).jpeg', // Misalnya jika tidak ada gambar kedua
           slider3Image: 'images/vaksin (3).JPG',
           slider4Image: 'images/anbk3.jpg',

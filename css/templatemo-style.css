@@ -1229,14 +1229,14 @@
     margin: 0 auto; /* Center image horizontally */
   }
   .Dewi img{
-    max-width: 108.7% !important; /* Ubah sesuai dengan kebutuhan */
+    max-width: 90.9% !important; /* Ubah sesuai dengan kebutuhan */
     width: auto;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Pipit img{
-    width: 79.4% !important;
+    width: 90.4% !important;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */

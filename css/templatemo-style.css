@@ -1247,6 +1247,12 @@
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
+  .Fauzan img{
+    width: 90.4% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    margin: 0 auto; /* Center image horizontally */
+  }
   .team-info {
     padding: 20px 30px;
   }

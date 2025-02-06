@@ -191,6 +191,7 @@
   const slider4Images = document.querySelectorAll('.image-slider-3 img');
   const slider5Images = document.querySelectorAll('.image-slider-4 img');
   const slider6Images = document.querySelectorAll('.image-slider-5 img');
+  const slider7Images = document.querySelectorAll('.image-slider-6 img');
   const eventDate = document.getElementById('event-date');
   const eventName = document.getElementById('event-name');
   const eventTitle = document.getElementById('event-title');
@@ -204,6 +205,7 @@
           slider4Image: 'images/anbk1.jpg',
           slider5Image: 'images/upacara3.JPG',
           slider6Image: 'images/olymp1.JPG',
+          slider7Image: 'images/outclass.JPG',
           date: '25 / 9 / 2024',
           name: 'Kegiatan 17 Agustus ke 79',
           title: 'Lomba Balap Karung',
@@ -216,6 +218,7 @@
           slider4Image: 'images/anbk2.jpg',
           slider5Image: 'images/upacara1.JPG',
           slider6Image: 'images/olymp2.JPG',
+          slider7Image: 'images/outclass2.JPG',
           date: '26 / 9 / 2024',
           name: 'Kegiatan 26 September',
           title: 'Lomba Kaligrafi',
@@ -228,6 +231,7 @@
           slider4Image: 'images/anbk3.jpg',
           slider5Image: 'images/upacara2.JPG',
           slider6Image: 'images/olymp3.JPG',
+          slider7Image: 'images/outclass3.JPG',
           date: '27 / 9 / 2024',
           name: 'Kegiatan 27 September',
           title: 'Lomba Adzan 17 Agustus ke 79',
@@ -241,6 +245,7 @@
   let currentIndexSlider4 = 0;
   let currentIndexSlider5 = 0;
   let currentIndexSlider6 = 0;
+  let currentIndexSlider7 = 0;
   
   // Function to change images in the first slider
   function changeSlider1Images() {
@@ -330,6 +335,20 @@ function changeSlider6Images() {
       }
   });
 }
+
+function changeSlider7Images() {
+  const prevIndex = currentIndexSlider7; // Track the previous image index
+  currentIndexSlider7 = (currentIndexSlider7 + 1) % events.length;
+
+  // Update images for slider 4
+  slider7Images.forEach((img, index) => {
+      img.classList.remove('active'); // Fade out all images
+      if (index === currentIndexSlider7) {
+          img.src = events[currentIndexSlider6].slider7Image; // Update source for slider 3
+          img.classList.add('active'); // Fade in the new image
+      }
+  });
+}
   // Update event details (date, name, title, description)
   function updateEventDetails() {
       eventDate.textContent = events[currentIndexSlider1].date; // Use the current index of the first slider
@@ -345,6 +364,7 @@ function changeSlider6Images() {
   changeSlider4Images();
   changeSlider5Images();
   changeSlider6Images();
+  changeSlider7Images();
   updateEventDetails();
   
   // Set intervals for each slider to change at different times
@@ -358,5 +378,5 @@ function changeSlider6Images() {
   setInterval(changeSlider4Images, 7000); // Change every 8 seconds for slider 4
   setInterval(changeSlider5Images, 5000); // Change every 8 seconds for slider 4
   setInterval(changeSlider6Images, 7000); // Change every 8 seconds for slider 4
-  
+  setInterval(changeSlider7Images, 7000); // Change every 8 seconds for slider 4
 })(jQuery);

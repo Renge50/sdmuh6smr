@@ -30,7 +30,7 @@
   }
 
   h3 {
-    font-size: 1.5em;
+    font-size: 1.5em !important;
     margin-bottom: 0;
   }
 
@@ -41,7 +41,7 @@
 
   p {
     color: #757575;
-    font-size: 14px;
+    font-size: 14px !important;
     font-weight: normal;
     line-height: 24px;
   }
@@ -923,6 +923,7 @@
   .feature-thumb {
     position: relative;
     background-image: url('path/to/your/image.jpg'); /* Replace with the correct path */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-size: cover; /* Cover the entire container */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
@@ -1151,108 +1152,109 @@
     margin: 0 auto; /* Center image horizontally */
   }
   .Sitti img{
-    width: 99% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Elliana img{
-    width: 89% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Sartika img{
-    width: 94% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
-  .Machmuda img{
-    width: 91% !important; /* Ubah sesuai dengan kebutuhan */
+  .Ren img{
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Abdul img{
-    width: 95.7% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Nur img{
-    width: 95% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Anggi img{
-    width: 90% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Ina img{
-    width: 95% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Fahreza img{
-    width: 90% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Lilik img{
-    width: 95% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Ika img{
-    width: 95% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Kusmiati img{
-    width: 95.7% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Putri img{
-    width: 96.7% !important; /* Ubah sesuai dengan kebutuhan */
+    width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Dewi img{
-    max-width: 90.9% !important; /* Ubah sesuai dengan kebutuhan */
+    max-width: 97% !important; /* Ubah sesuai dengan kebutuhan */
     width: auto;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
-  .Pipit img{
-    width: 90.4% !important;
+  .Salsa img{
+    width: 97% !important;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Angela img{
-    width: 90.4% !important;
+    width: 97% !important;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
   .Fauzan img{
-    width: 90.4% !important;
+    width: 97% !important;
     height: auto !important;
     object-fit: cover !important;
     margin: 0 auto; /* Center image horizontally */
   }
+
   .team-info {
     padding: 20px 30px;
   }

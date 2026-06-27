@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SISPA - SD Muhammadiyah 6 Samarinda</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --primary:#1a56db;--primary-dark:#1045b4;--primary-light:#e8f0fe;
+  --success:#0e9f6e;--success-light:#e8f8f3;
+  --warning:#c27803;--warning-light:#fdf6e3;
+  --danger:#e02424;--danger-light:#fde8e8;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;
+  --g800:#1f2937;--g900:#111827;--white:#fff;
+  --sw:240px;--hh:60px;--r:8px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;color:var(--g800);background:var(--g50);display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sw);background:var(--g900);color:#fff;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-logo{padding:16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;flex-shrink:0}
+.logo-text{font-weight:700;font-size:15px;line-height:1.2}
+.logo-sub{font-size:11px;color:var(--g400);font-weight:400}
+.sidebar-section{padding:12px 8px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--g500)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:1px 8px;border-radius:6px;cursor:pointer;color:var(--g400);font-size:13px;font-weight:500;transition:.15s}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-item.active{background:var(--primary);color:#fff}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.sidebar-bottom{margin-top:auto;padding:12px 8px;border-top:1px solid rgba(255,255,255,.08)}
+.school-chip{padding:10px 12px;background:rgba(255,255,255,.05);border-radius:6px}
+.school-chip-name{font-size:12px;font-weight:600;color:#fff}
+.school-chip-sub{font-size:11px;color:var(--g400);margin-top:2px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:var(--hh);background:#fff;border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
+.page-title{font-size:16px;font-weight:700;color:var(--g900);flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s;white-space:nowrap}
+.btn svg{width:14px;height:14px;flex-shrink:0}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#0c8a61}
+.btn-outline{background:#fff;color:var(--g700);border:1px solid var(--g300)}.btn-outline:hover{background:var(--g50)}
+.btn-warning{background:#d97706;color:#fff}.btn-warning:hover{background:#b45309}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#c81e1e}
+.btn-whatsapp{background:#25d366;color:#fff}.btn-whatsapp:hover{background:#1ebe5d}
+.btn-sm{padding:5px 10px;font-size:12px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-success{background:var(--success-light);color:#065f46}
+.badge-warning{background:var(--warning-light);color:#92400e}
+.badge-danger{background:var(--danger-light);color:#991b1b}
+.badge-blue{background:var(--primary-light);color:#1e40af}
+.badge-gray{background:var(--g100);color:var(--g600)}
+.badge-wa{background:#dcfce7;color:#166534}
+.content{flex:1;overflow-y:auto;padding:24px}
+.page{display:none}.page.active{display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border:1px solid var(--g200);border-radius:10px;padding:16px 20px;box-shadow:var(--sh)}
+.stat-label{font-size:11px;color:var(--g500);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat-value{font-size:22px;font-weight:700;color:var(--g900)}
+.stat-sub{font-size:11px;color:var(--g500);margin-top:4px}
+.stat-icon{float:right;width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.stat-icon svg{width:18px;height:18px}
+.si-blue{background:var(--primary-light);color:var(--primary)}
+.si-green{background:var(--success-light);color:var(--success)}
+.si-yellow{background:var(--warning-light);color:var(--warning)}
+.si-red{background:var(--danger-light);color:var(--danger)}
+.card{background:#fff;border:1px solid var(--g200);border-radius:10px;box-shadow:var(--sh);overflow:hidden}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card-title{font-size:14px;font-weight:700;color:var(--g900);flex:1}
+.search-box{position:relative}
+.search-box input{padding:7px 10px 7px 30px;border:1px solid var(--g300);border-radius:6px;font-size:13px;width:190px;outline:none}
+.search-box input:focus{border-color:var(--primary)}
+.search-box svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--g400)}
+.sel{padding:7px 10px;border:1px solid var(--g300);border-radius:6px;font-size:13px;outline:none;cursor:pointer}
+.sel:focus{border-color:var(--primary)}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g500);background:var(--g50);border-bottom:1px solid var(--g200)}
+td{padding:10px 14px;border-bottom:1px solid var(--g100);font-size:13px;color:var(--g700);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--g50)}
+.abtns{display:flex;gap:5px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-header{padding:18px 22px 14px;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:12px}
+.modal-title{font-size:15px;font-weight:700;flex:1}
+.modal-close{width:28px;height:28px;border:none;background:var(--g100);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-close svg{width:13px;height:13px}
+.modal-body{padding:18px 22px}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--g100);display:flex;justify-content:flex-end;gap:10px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.full{grid-column:1/-1}
+label{font-size:12px;font-weight:600;color:var(--g600)}
+input,select,textarea{padding:8px 11px;border:1px solid var(--g300);border-radius:6px;font-size:13px;outline:none;width:100%;font-family:inherit}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
+.cb-item{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:400}
+.cb-item input[type=checkbox]{width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.nota-preview{background:#fff;border:2px dashed var(--g300);border-radius:8px;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;white-space:pre;overflow-x:auto}
+.nota-preview.landscape{font-size:11px;line-height:1.35;max-height:420px;overflow:auto}
+.progress-bar{height:6px;background:var(--g200);border-radius:3px;overflow:hidden;margin-top:5px}
+.progress-fill{height:100%;border-radius:3px}
+.alert{padding:11px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:9px}
+.alert svg{width:15px;height:15px;flex-shrink:0;margin-top:1px}
+.alert-success{background:var(--success-light);color:#065f46;border:1px solid #a7f3d0}
+.alert-warning{background:var(--warning-light);color:#92400e;border:1px solid #fcd34d}
+.alert-info{background:var(--primary-light);color:#1e40af;border:1px solid #bfdbfe}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--g400)}
+.empty-state svg{width:40px;height:40px;margin:0 auto 10px;display:block;opacity:.35}
+.empty-state p{font-size:13px}
+.qris-box{background:linear-gradient(135deg,#1a56db 0%,#6366f1 100%);color:#fff;border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.qris-img{width:160px;height:160px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:8px}
+.qris-img svg{width:100%;height:100%}
+.qris-img img{width:100%;height:100%;object-fit:contain;border-radius:6px}
+.qris-meta{font-size:11px;opacity:.82;text-align:center;line-height:1.5}
+.qris-note{font-size:11px;color:var(--g500);text-align:center;line-height:1.6}
+.wa-preview{background:#e7ffdb;border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.7;white-space:pre-wrap;font-family:'Segoe UI',sans-serif;border:1px solid #c3f0a0;max-height:300px;overflow-y:auto}
+.tab-bar{display:flex;border-bottom:2px solid var(--g200);margin-bottom:18px;gap:0}
+.tab-btn{padding:9px 18px;font-size:13px;font-weight:600;color:var(--g500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.setting-section{background:#fff;border:1px solid var(--g200);border-radius:10px;padding:20px;margin-bottom:18px}
+.setting-section h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--g800)}
+.db-info{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:14px;font-size:13px;line-height:2}
+.db-info strong{color:var(--g900)}
+.import-drop{border:2px dashed var(--g300);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:.15s}
+.import-drop:hover{border-color:var(--primary);background:var(--primary-light)}
+.import-drop svg{width:36px;height:36px;color:var(--g400);margin:0 auto 10px;display:block}
+.import-drop p{font-size:13px;color:var(--g500)}
+.import-drop input{display:none}
+@page{size:landscape;margin:7mm}
+
+#toast-container{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:3000;pointer-events:none}
+.toast-notif{min-width:260px;max-width:360px;background:#fff;border:1px solid var(--g200);border-left:4px solid var(--success);border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.16);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:600;color:var(--g800);opacity:0;transform:translateY(8px);transition:.22s ease;pointer-events:auto}
+.toast-notif.show{opacity:1;transform:translateY(0)}
+.toast-notif.warning{border-left-color:var(--warning)}
+.toast-notif.error{border-left-color:var(--danger)}
+.toast-notif.info{border-left-color:var(--primary)}
+.toast-dot{width:10px;height:10px;border-radius:50%;background:var(--success);margin-top:4px;flex-shrink:0}
+.toast-notif.warning .toast-dot{background:var(--warning)}
+.toast-notif.error .toast-dot{background:var(--danger)}
+.toast-notif.info .toast-dot{background:var(--primary)}
+.sound-setting{display:flex;align-items:center;gap:9px;background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--g700)}
+.sound-setting input{width:16px;height:16px;flex-shrink:0}
+
+.bulk-student-list{border:1px solid var(--g200);border-radius:10px;max-height:320px;overflow:auto;background:#fff}
+.bulk-student-row{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-bottom:1px solid var(--g100);font-size:13px;line-height:1.45;cursor:pointer}
+.bulk-student-row:last-child{border-bottom:none}
+.bulk-student-row:hover{background:var(--g50)}
+.bulk-student-row input{width:16px;height:16px;flex-shrink:0;margin-top:2px}
+.bulk-student-row>div{min-width:0;flex:1}
+.bulk-student-row strong{font-size:13px;color:var(--g900)}
+.bulk-student-meta{font-size:11px;color:var(--g500);margin-top:3px;line-height:1.55;word-break:break-word}
+.bulk-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0 10px}
+.bulk-toolbar-left,.bulk-toolbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bulk-info{font-size:12px;color:var(--g500);line-height:1.5}
+.siswa-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.siswa-table-wrap{overflow:auto}
+.siswa-table-wrap table{min-width:900px}
+.row-num{font-size:11px;color:var(--g500);font-weight:600}
+.tg-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.tg-summary-card{background:#fff;border:1px solid var(--g200);border-radius:9px;padding:12px 14px;box-shadow:var(--sh)}
+.tg-summary-card div:first-child{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.04em}
+.tg-summary-card strong{display:block;margin-top:4px;font-size:18px;color:var(--g900)}
+.tg-detail{font-size:12px;line-height:1.55;max-width:360px}
+.tg-detail b{color:var(--g800)}
+.kenaikan-table select{min-width:130px}
+@media(max-width:1100px){.tg-summary{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+@media print{
+  html,body{height:auto!important;overflow:visible!important;background:#fff!important}
+  .sidebar,.topbar,.modal-overlay,#toast-container{display:none!important}
+  .main{display:block!important;overflow:visible!important;width:100%!important}
+  .content{padding:0!important;overflow:visible!important}
+  #print-area{display:block!important;width:100%!important;margin:0!important;padding:0!important}
+  #print-area pre{font-family:'Courier New',monospace!important;font-size:10px!important;line-height:1.22!important;white-space:pre!important;margin:0!important;color:#000!important}
+  #print-area.compact pre{font-size:12px!important;line-height:1.55!important}
+  .page{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">S</div>
+    <div>
+      <div class="logo-text">SISPA</div>
+      <div class="logo-sub">Sistem Pembayaran</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Menu Utama</div>
+  <div class="nav-item active" onclick="showPage('dashboard',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </div>
+  <div class="nav-item" onclick="showPage('siswa',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Data Siswa
+  </div>
+  <div class="nav-item" onclick="showPage('pembayaran',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    Pembayaran
+  </div>
+  <div class="nav-item" onclick="showPage('qris',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M15 15h2v2h-2zM19 15v2M17 19h2M21 17v2M19 21h2"/></svg>
+    QRIS
+  </div>
+
+  <div class="sidebar-section">Laporan</div>
+  <div class="nav-item" onclick="showPage('rekap',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Rekap Pembayaran
+  </div>
+  <div class="nav-item" onclick="showPage('tunggakan',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Tunggakan
+  </div>
+  <!-- WhatsApp Tunggakan dinonaktifkan sementara karena nomor HP wali belum lengkap. -->
+
+  <div class="sidebar-section">Pengaturan</div>
+  <div class="nav-item" onclick="showPage('tagihan',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Jenis Tagihan
+  </div>
+  <div class="nav-item" onclick="showPage('setting',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Pengaturan & Data
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="school-chip">
+      <div class="school-chip-name" id="sb-nama">-</div>
+      <div class="school-chip-sub" id="sb-ta">-</div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="page-title" id="topbar-title">Dashboard</div>
+    <div id="topbar-actions" style="display:flex;gap:8px;"></div>
+  </header>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon si-blue"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-label">Total Siswa</div><div class="stat-value" id="ds-siswa">0</div><div class="stat-sub">Siswa aktif</div></div>
+        <div class="stat-card"><div class="stat-icon si-green"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-label">Pemasukan Bulan Ini</div><div class="stat-value" id="ds-pemasukan">Rp 0</div><div class="stat-sub" id="ds-pem-sub">0 transaksi</div></div>
+        <div class="stat-card"><div class="stat-icon si-yellow"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="stat-label">Siswa Ada Tunggakan</div><div class="stat-value" id="ds-tunggakan">0</div><div class="stat-sub">Semua jenis tagihan</div></div>
+        <div class="stat-card"><div class="stat-icon si-red"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="stat-label">Estimasi Total Tunggakan</div><div class="stat-value" id="ds-total-tg">Rp 0</div><div class="stat-sub">Semua tagihan belum lunas</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">5 Transaksi Terakhir</span></div>
+          <table><thead><tr><th>Siswa</th><th>Jenis</th><th>Jumlah</th><th>Metode</th></tr></thead><tbody id="dash-trx"></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Progress SPP <span id="dash-bulan-label"></span></span></div>
+          <div style="padding:16px 18px" id="dash-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA SISWA -->
+    <div class="page" id="page-siswa">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Daftar Siswa</span>
+          <div class="search-box"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Cari nama/NIS..." id="src-siswa" oninput="renderSiswa()"></div>
+          <select class="sel" id="fil-kelas" onchange="renderSiswa()"><option value="">Semua Kelas</option></select>
+          <button class="btn btn-warning" onclick="openNaikKelasSiswa([...siswaSelected])">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            Naik Kelas Massal
+          </button>
+          <button class="btn btn-success" onclick="openImportSiswa()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import Excel
+          </button>
+          <button class="btn btn-primary" onclick="openTambahSiswa()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Siswa
+          </button>
+        </div>
+        <div class="siswa-table-wrap"><table><thead><tr><th style="width:34px"><input type="checkbox" id="siswa-check-all" onchange="toggleSiswaSelectAll(this)"></th><th>NIS</th><th>Nama Siswa</th><th>Kelas</th><th>Wali Murid</th><th>No. HP Wali</th><th>Aksi</th></tr></thead><tbody id="siswa-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- PEMBAYARAN -->
+    <div class="page" id="page-pembayaran">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Riwayat Pembayaran</span>
+          <div class="search-box"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Cari..." id="src-bayar" oninput="renderPembayaran()"></div>
+          <select class="sel" id="fil-bayar-bulan" onchange="renderPembayaran()"><option value="">Semua Bulan</option></select>
+          <select class="sel" id="fil-bayar-jenis" onchange="renderPembayaran()"><option value="">Semua Jenis</option></select>
+          <button class="btn btn-warning" onclick="openMassalBayar()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            Input Massal
+          </button>
+          <button class="btn btn-primary" onclick="openModal('m-bayar')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Input Pembayaran
+          </button>
+        </div>
+        <table><thead><tr><th>Tgl</th><th>NIS</th><th>Nama</th><th>Jenis</th><th>Bulan/Ket</th><th>Jumlah</th><th>Metode</th><th>Kasir</th><th>Aksi</th></tr></thead><tbody id="bayar-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- QRIS -->
+    <div class="page" id="page-qris">
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Form Pembayaran QRIS</span></div>
+          <div style="padding:18px">
+            <div class="form-grid" style="margin-bottom:14px">
+              <div class="fg full"><label>Pilih Siswa</label><select id="qris-siswa" onchange="updateQris()"><option value="">-- Pilih Siswa --</option></select></div>
+              <div class="fg full"><label>Jenis Tagihan</label><select id="qris-jenis" onchange="updateQrisNominal()"><option value="">-- Pilih Jenis --</option></select></div>
+              <div class="fg"><label>Bulan Tagihan</label><select id="qris-bulan"><option value="">-- Pilih Bulan --</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+              <div class="fg"><label>Nominal (Rp)</label><input type="number" id="qris-nominal" placeholder="0" oninput="updateQris()"></div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px" onclick="konfirmasiQris()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Konfirmasi Sudah Dibayar via QRIS
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">QR Code Pembayaran</span></div>
+          <div style="padding:18px;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="qris-box" style="width:100%">
+              <div style="font-size:10px;font-weight:700;letter-spacing:.1em;opacity:.8">QRIS · PEMBAYARAN SEKOLAH</div>
+              <div class="qris-img" id="qris-img-box">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="200" height="200" fill="white"/>
+                  <rect x="10" y="10" width="60" height="60" fill="none" stroke="#000" stroke-width="4"/>
+                  <rect x="20" y="20" width="40" height="40" fill="#000"/>
+                  <rect x="130" y="10" width="60" height="60" fill="none" stroke="#000" stroke-width="4"/>
+                  <rect x="140" y="20" width="40" height="40" fill="#000"/>
+                  <rect x="10" y="130" width="60" height="60" fill="none" stroke="#000" stroke-width="4"/>
+                  <rect x="20" y="140" width="40" height="40" fill="#000"/>
+                  <g fill="#000">
+                    <rect x="80" y="10" width="8" height="8"/><rect x="96" y="10" width="8" height="8"/><rect x="112" y="10" width="8" height="8"/>
+                    <rect x="88" y="18" width="8" height="8"/><rect x="104" y="18" width="8" height="8"/>
+                    <rect x="80" y="26" width="8" height="8"/><rect x="112" y="26" width="8" height="8"/>
+                    <rect x="88" y="34" width="8" height="8"/><rect x="96" y="34" width="8" height="8"/><rect x="104" y="34" width="8" height="8"/>
+                    <rect x="80" y="80" width="8" height="8"/><rect x="88" y="88" width="8" height="8"/><rect x="96" y="80" width="8" height="8"/>
+                    <rect x="112" y="88" width="8" height="8"/><rect x="80" y="96" width="8" height="8"/><rect x="104" y="96" width="8" height="8"/>
+                    <rect x="80" y="112" width="8" height="8"/><rect x="96" y="112" width="8" height="8"/><rect x="112" y="112" width="8" height="8"/>
+                    <rect x="130" y="80" width="8" height="8"/><rect x="146" y="80" width="8" height="8"/><rect x="162" y="80" width="8" height="8"/><rect x="178" y="80" width="8" height="8"/>
+                    <rect x="138" y="88" width="8" height="8"/><rect x="154" y="88" width="8" height="8"/><rect x="170" y="88" width="8" height="8"/>
+                    <rect x="130" y="96" width="8" height="8"/><rect x="146" y="96" width="8" height="8"/><rect x="162" y="96" width="8" height="8"/>
+                    <rect x="138" y="104" width="8" height="8"/><rect x="154" y="104" width="8" height="8"/><rect x="178" y="104" width="8" height="8"/>
+                    <rect x="130" y="112" width="8" height="8"/>
+                    <rect x="130" y="130" width="8" height="8"/><rect x="146" y="130" width="8" height="8"/><rect x="162" y="130" width="8" height="8"/><rect x="178" y="130" width="8" height="8"/>
+                    <rect x="138" y="138" width="8" height="8"/><rect x="154" y="138" width="8" height="8"/>
+                    <rect x="170" y="146" width="8" height="8"/><rect x="130" y="154" width="8" height="8"/>
+                    <rect x="146" y="154" width="8" height="8"/><rect x="162" y="154" width="8" height="8"/>
+                    <rect x="138" y="162" width="8" height="8"/><rect x="154" y="162" width="8" height="8"/><rect x="178" y="162" width="8" height="8"/>
+                    <rect x="130" y="170" width="8" height="8"/>
+                  </g>
+                </svg>
+              </div>
+              <div id="qris-nama-disp" style="font-size:13px;font-weight:600;text-align:center">Pilih siswa &amp; tagihan</div>
+              <div id="qris-nominal-disp" style="font-size:24px;font-weight:700">Rp 0</div>
+              <div class="qris-meta" id="qris-merchant-disp">Merchant: belum disetting</div>
+              <div class="qris-meta" id="qris-nmid-disp">NMID: -</div>
+              <div style="font-size:11px;opacity:.7">Scan QR untuk membayar</div>
+            </div>
+            <p class="qris-note" id="qris-note">Untuk 1 komputer, QRIS yang dipakai adalah QRIS statis sekolah. Upload gambar QRIS asli di Pengaturan → Profil Sekolah. Setelah wali murid transfer, kasir cek mutasi lalu klik konfirmasi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REKAP -->
+    <div class="page" id="page-rekap">
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-header">
+          <span class="card-title">Rekap Pembayaran Per Siswa</span>
+          <select class="sel" id="rek-fil-bulan" onchange="renderRekap()"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select>
+          <select class="sel" id="rek-fil-kelas" onchange="renderRekap()"><option value="">Semua Kelas</option></select>
+          <button class="btn btn-success" onclick="exportExcel()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Excel (3 Sheet)
+          </button>
+        </div>
+        <table><thead><tr><th>Siswa</th><th>Kelas</th><th>SPP</th><th>IPP</th><th>Kegiatan</th><th>Seragam</th><th>Ujian</th><th>Total</th><th>Status</th></tr></thead><tbody id="rek-siswa-tbody"></tbody></table>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Per Jenis Tagihan</span></div>
+          <table><thead><tr><th>Jenis</th><th>Terbayar</th><th>Progress</th></tr></thead><tbody id="rek-jenis-tbody"></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Per Bulan</span></div>
+          <table><thead><tr><th>Bulan</th><th>Total Bayar</th><th>Transaksi</th></tr></thead><tbody id="rek-bulan-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TUNGGAKAN -->
+    <div class="page" id="page-tunggakan">
+      <div class="tg-summary" id="tg-summary"></div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Daftar Tunggakan Semua Tagihan</span>
+          <div class="search-box"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Cari siswa/NIS..." id="src-tg" oninput="renderTunggakan()"></div>
+          <select class="sel" id="fil-tg-kelas" onchange="renderTunggakan()"><option value="">Semua Kelas</option></select>
+          <select class="sel" id="fil-tg-jenis" onchange="renderTunggakan()"><option value="">Semua Tagihan</option></select>
+          <button class="btn btn-warning" onclick="bayarTunggakanTerpilih()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Bayar Terpilih
+          </button>
+          <button class="btn btn-success" onclick="exportTunggakanExcel()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Excel
+          </button>
+        </div>
+        <table><thead><tr><th><input type="checkbox" id="tg-check-all" onchange="toggleTgSelectAll(this)"></th><th>NIS</th><th>Nama Siswa</th><th>Kelas</th><th>Wali Murid</th><th>Rincian Tunggakan</th><th>Total</th><th>Item</th><th>Aksi</th></tr></thead><tbody id="tg-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- WHATSAPP DISABLED -->
+    <div class="page" id="page-whatsapp">
+      <div class="card">
+        <div class="card-header"><span class="card-title">WhatsApp Tunggakan Dinonaktifkan</span></div>
+        <div style="padding:18px">
+          <div class="alert alert-warning" style="margin-bottom:0">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Fitur WhatsApp tunggakan dinonaktifkan sementara karena nomor HP wali murid belum lengkap.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JENIS TAGIHAN -->
+    <div class="page" id="page-tagihan">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Jenis Tagihan</span>
+          <button class="btn btn-primary" onclick="openModal('m-tagihan')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Tagihan
+          </button>
+        </div>
+        <table><thead><tr><th>Nama Tagihan</th><th>Tipe</th><th>Nominal</th><th>Keterangan</th><th>Aksi</th></tr></thead><tbody id="tagihan-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- SETTING -->
+    <div class="page" id="page-setting">
+      <div class="tab-bar">
+        <div class="tab-btn active" onclick="showTab('tab-sekolah',this)">Profil Sekolah</div>
+        <div class="tab-btn" onclick="showTab('tab-import',this)">Import Siswa</div>
+        <div class="tab-btn" onclick="showTab('tab-naik',this)">Kenaikan Kelas</div>
+        <div class="tab-btn" onclick="showTab('tab-backup',this)">Backup &amp; Restore</div>
+      </div>
+
+      <div class="tab-pane active" id="tab-sekolah">
+        <div class="setting-section">
+          <h3>Identitas Sekolah</h3>
+          <div class="form-grid">
+            <div class="fg full"><label>Nama Sekolah</label><input type="text" id="set-nama" placeholder="Nama lengkap sekolah"></div>
+            <div class="fg"><label>Tahun Ajaran</label><input type="text" id="set-ta" placeholder="2024/2025"></div>
+            <div class="fg"><label>Nama Kepala Sekolah</label><input type="text" id="set-kepsek" placeholder="Nama kepala sekolah"></div>
+            <div class="fg"><label>Nama Petugas / Kasir</label><input type="text" id="set-kasir" placeholder="Nama kasir/admin"></div>
+            <div class="fg"><label>Alamat Sekolah</label><input type="text" id="set-alamat" placeholder="Alamat sekolah"></div>
+            <div class="fg"><label>No. Telepon Sekolah</label><input type="text" id="set-telp" placeholder="021-xxxxxxx"></div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px">
+            <button class="btn btn-primary" onclick="saveSetting()">Simpan Pengaturan</button>
+          </div>
+        </div>
+
+
+        <div class="setting-section">
+          <h3>Notifikasi Berbunyi</h3>
+          <div class="sound-setting">
+            <input type="checkbox" id="set-notif-sound">
+            <div>
+              <label for="set-notif-sound" style="cursor:pointer">Aktifkan suara notifikasi</label>
+              <div style="font-size:11px;color:var(--g500);margin-top:2px">Bunyi akan muncul saat pembayaran berhasil, QRIS dikonfirmasi, data disimpan, import berhasil, dan backup selesai.</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline" onclick="testNotifSound()">Tes Bunyi Notifikasi</button>
+            <button class="btn btn-primary" onclick="saveSetting()">Simpan Pengaturan Notifikasi</button>
+          </div>
+        </div>
+
+        <div class="setting-section">
+          <h3>Tampilan Nota Printer LX-310</h3>
+          <div class="form-grid">
+            <div class="fg"><label>Lebar Nota</label><select id="set-lebar"><option value="132">Landscape LX-310 (132 karakter)</option><option value="80">Landscape Ringkas (80 karakter)</option><option value="42">Compact / Struk (42 karakter)</option><option value="32">Sempit (32 karakter)</option></select></div>
+            <div class="fg"><label>Jumlah Rangkap</label><select id="set-rangkap"><option value="1">1 rangkap</option><option value="2">2 rangkap</option><option value="3">3 rangkap</option></select></div>
+            <div class="fg"><label>Kop Nota Baris 1</label><input type="text" id="set-kop1" placeholder="Nama sekolah (otomatis)"></div>
+            <div class="fg"><label>Kop Nota Baris 2</label><input type="text" id="set-kop2" placeholder="Contoh: TAHUN AJARAN 2024/2025"></div>
+          </div>
+          <div style="margin-top:16px"><button class="btn btn-primary" onclick="saveSetting()">Simpan</button></div>
+        </div>
+
+        <div class="setting-section">
+          <h3>Pengaturan QRIS Sekolah</h3>
+          <div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Untuk versi 1 komputer, gunakan <strong>QRIS statis</strong> dari bank/merchant sekolah. Sistem ini mencatat pembayaran setelah kasir mengecek mutasi dan menekan tombol konfirmasi.</div></div>
+          <div class="form-grid">
+            <div class="fg"><label>Nama Merchant QRIS</label><input type="text" id="set-qris-merchant" placeholder="Contoh: SD MUHAMMADIYAH 6"></div>
+            <div class="fg"><label>NMID / ID Merchant</label><input type="text" id="set-qris-nmid" placeholder="Contoh: ID1023xxxxxxxx"></div>
+            <div class="fg full"><label>Catatan QRIS</label><input type="text" id="set-qris-note" placeholder="Contoh: Cek mutasi rekening sebelum konfirmasi pembayaran"></div>
+            <div class="fg full"><label>Upload Gambar QRIS Asli (.png/.jpg)</label><input type="file" id="set-qris-file" accept="image/png,image/jpeg,image/jpg" onchange="handleQrisUpload(this)"></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px">
+            <div class="qris-img" id="set-qris-preview" style="width:120px;height:120px;background:var(--g100);color:var(--g500);font-size:11px;text-align:center">Belum ada QRIS</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="saveSetting()">Simpan Pengaturan QRIS</button>
+              <button class="btn btn-outline" onclick="hapusQrisImage()">Hapus Gambar QRIS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-import">
+        <div class="setting-section">
+          <h3>Import Data Siswa dari Excel</h3>
+          <div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Format kolom Excel yang dibutuhkan: <strong>NIS | Nama | Kelas | Wali | HP | Alamat</strong> (baris pertama = header, baris kedua dst = data siswa)</div></div>
+          <div class="import-drop" id="drop-zone" onclick="document.getElementById('file-import').click()" ondragover="event.preventDefault();this.style.borderColor='var(--primary)'" ondragleave="this.style.borderColor=''" ondrop="handleDropImport(event)">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <p>Klik atau drag &amp; drop file Excel (.xlsx / .xls) di sini</p>
+            <p style="font-size:11px;margin-top:4px;color:var(--g400)">Format: NIS, Nama, Kelas, Wali, HP, Alamat</p>
+            <input type="file" id="file-import" accept=".xlsx,.xls,.csv" onchange="handleImportFile(this)">
+          </div>
+          <div id="import-preview" style="margin-top:14px;display:none">
+            <div class="alert alert-success" id="import-alert"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg><span id="import-alert-text"></span></div>
+            <table style="margin-top:8px"><thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>Wali</th><th>HP</th></tr></thead><tbody id="import-preview-tbody"></tbody></table>
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <button class="btn btn-outline" onclick="document.getElementById('import-preview').style.display='none'">Batal</button>
+              <button class="btn btn-success" id="btn-konfirm-import" onclick="konfirmasiImport()">Konfirmasi Import</button>
+            </div>
+          </div>
+          <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--g200)">
+            <p style="font-size:13px;font-weight:600;margin-bottom:8px">Download Template Excel</p>
+            <button class="btn btn-outline" onclick="downloadTemplate()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Template Siswa.xlsx
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-naik">
+        <div class="setting-section">
+          <h3>Kenaikan Kelas Tahunan</h3>
+          <div class="alert alert-warning"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Sebaiknya klik <strong>Backup Semua Data ke Excel</strong> atau backup JSON dulu sebelum menjalankan kenaikan kelas. Fitur ini akan mengubah kelas siswa secara massal.</span></div>
+          <div class="form-grid" style="margin-bottom:14px">
+            <div class="fg"><label>Tahun Ajaran Sekarang</label><input type="text" id="naik-ta-lama" readonly></div>
+            <div class="fg"><label>Tahun Ajaran Baru</label><input type="text" id="naik-ta-baru" placeholder="Contoh: 2026/2027"></div>
+          </div>
+          <table class="kenaikan-table"><thead><tr><th>Kelas Saat Ini</th><th>Jumlah Siswa</th><th>Naik / Pindah Ke</th></tr></thead><tbody id="naik-tbody"></tbody></table>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline" onclick="populateKenaikanKelas()">Reset Mapping Otomatis</button>
+            <button class="btn btn-success" onclick="jalankanKenaikanKelas()">Jalankan Kenaikan Kelas</button>
+          </div>
+          <p style="font-size:12px;color:var(--g500);margin-top:10px;line-height:1.6">Mapping otomatis: 1 → 2, 1.1 → 2.1, 1.2 → 2.2, 2/2.1/2.2 → 3, 3 → 4, 4 → 5.1, 5/5.1/5.2 → 6, dan kelas 6 diluluskan lalu dikeluarkan dari Data Siswa aktif. Pembagian 2.1/2.2 atau 5.1/5.2 tetap bisa dilakukan melalui menu Data Siswa → Naik Kelas Massal.</p>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-backup">
+        <div class="setting-section">
+          <h3>Informasi Database</h3>
+          <div class="db-info" id="db-info-box"></div>
+        </div>
+        <div class="setting-section">
+          <h3>Backup Data ke Excel</h3>
+          <p style="font-size:13px;color:var(--g600);margin-bottom:14px">Simpan seluruh data ke file Excel sebagai cadangan. Disarankan backup rutin setiap minggu.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-success" onclick="backupExcel()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Backup Semua Data ke Excel
+            </button>
+            <button class="btn btn-warning" onclick="backupJSON()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Backup ke JSON (Full Backup)
+            </button>
+          </div>
+        </div>
+        <div class="setting-section">
+          <h3>Restore Data</h3>
+          <div class="alert alert-warning"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Restore akan <strong>mengganti</strong> semua data saat ini. Pastikan sudah backup terlebih dahulu!</span></div>
+          <div class="two-col">
+            <div class="import-drop" onclick="document.getElementById('file-restore-excel').click()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              <p>Restore dari Excel Backup (.xlsx)</p>
+              <p style="font-size:11px;margin-top:4px;color:var(--g400)">Gunakan file dari tombol Backup Semua Data ke Excel</p>
+              <input type="file" id="file-restore-excel" accept=".xlsx,.xls" style="display:none" onchange="restoreExcel(this)">
+            </div>
+            <div class="import-drop" onclick="document.getElementById('file-restore').click()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              <p>Restore dari JSON Full Backup</p>
+              <p style="font-size:11px;margin-top:4px;color:var(--g400)">JSON menyimpan data paling lengkap termasuk gambar QRIS</p>
+              <input type="file" id="file-restore" accept=".json" style="display:none" onchange="restoreJSON(this)">
+            </div>
+          </div>
+        </div>
+        <div class="setting-section" style="border:1px solid var(--danger-light)">
+          <h3 style="color:var(--danger)">Hapus Semua Data</h3>
+          <p style="font-size:13px;color:var(--g600);margin-bottom:14px">Hapus semua data pembayaran dan siswa. Pengaturan sekolah tetap tersimpan.</p>
+          <button class="btn btn-danger" onclick="resetData()">Hapus Semua Data Transaksi &amp; Siswa</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Modal Siswa -->
+<div class="modal-overlay" id="m-siswa">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="m-siswa-title">Tambah Siswa</div><button class="modal-close" onclick="closeModal('m-siswa')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="s-id">
+      <div class="form-grid">
+        <div class="fg"><label>NIS *</label><input id="s-nis" placeholder="Nomor Induk Siswa"></div>
+        <div class="fg"><label>Nama Lengkap *</label><input id="s-nama" placeholder="Nama siswa"></div>
+        <div class="fg"><label>Kelas *</label><select id="s-kelas"><option value="">-- Pilih Kelas --</option><option value="1">Kelas 1</option><option value="1.1">Kelas 1.1</option><option value="1.2">Kelas 1.2</option><option value="2">Kelas 2</option><option value="2.1">Kelas 2.1</option><option value="2.2">Kelas 2.2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="5.1">Kelas 5.1</option><option value="5.2">Kelas 5.2</option><option value="6">Kelas 6</option></select></div>
+        <div class="fg"><label>Wali Murid</label><input id="s-wali" placeholder="Nama orang tua/wali"></div>
+        <div class="fg"><label>No. HP Wali</label><input id="s-hp" placeholder="08xx-xxxx-xxxx"></div>
+        <div class="fg"><label>Alamat</label><input id="s-alamat" placeholder="Alamat siswa"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('m-siswa')">Batal</button><button class="btn btn-primary" onclick="saveSiswa()">Simpan</button></div>
+  </div>
+</div>
+
+<!-- Modal Pembayaran -->
+<div class="modal-overlay" id="m-bayar">
+  <div class="modal" style="width:560px">
+    <div class="modal-header"><div class="modal-title">Input Pembayaran</div><button class="modal-close" onclick="closeModal('m-bayar')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="fg"><label>Siswa *</label><select id="b-siswa" onchange="updateBayarInfo()"><option value="">-- Pilih Siswa --</option></select></div>
+        <div class="fg"><label>Tanggal *</label><input type="date" id="b-tgl"></div>
+        <div class="fg"><label>Jenis Tagihan *</label><select id="b-jenis" onchange="updateBayarNominal()"><option value="">-- Pilih Jenis --</option></select></div>
+        <div class="fg"><label>Bulan Tagihan</label><select id="b-bulan"><option value="">-- Bulan (SPP/IPP) --</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+        <div class="fg"><label>Nominal *</label><input type="number" id="b-nominal" placeholder="0"></div>
+        <div class="fg"><label>Metode Bayar</label><select id="b-metode"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>Kartu Debit</option></select></div>
+        <div class="fg"><label>Kasir</label><input id="b-kasir" placeholder="Nama petugas"></div>
+        <div class="fg"><label>Keterangan</label><input id="b-ket" placeholder="Keterangan tambahan"></div>
+        <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-cetak" checked> Cetak nota setelah simpan</label></div>
+      </div>
+      <div id="b-info" class="alert alert-warning" style="display:none;margin-top:12px"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="b-info-text"></span></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('m-bayar')">Batal</button><button class="btn btn-primary" onclick="savePembayaran()">Simpan &amp; Cetak Nota</button></div>
+  </div>
+</div>
+
+
+<!-- Modal Naik Kelas Massal dari Data Siswa -->
+<div class="modal-overlay" id="m-naik-siswa">
+  <div class="modal" style="width:780px">
+    <div class="modal-header"><div class="modal-title">Naik / Pindah Kelas Massal</div><button class="modal-close" onclick="closeModal('m-naik-siswa')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Gunakan fitur ini untuk menaikkan kelas per rombel secara massal, misalnya kelas 1 ke kelas 2, atau memilih beberapa siswa saja jika pembagiannya berbeda.</div></div>
+      <div class="form-grid">
+        <div class="fg"><label>Kelas Asal</label><select id="ns-kelas-asal" onchange="renderNaikSiswaList()"><option value="">Semua Kelas</option></select></div>
+        <div class="fg"><label>Naik / Pindah Ke *</label><select id="ns-kelas-tujuan"><option value="">-- Pilih Kelas Tujuan --</option></select></div>
+        <div class="fg full"><label>Cari Siswa</label><input id="ns-search" placeholder="Cari nama atau NIS..." oninput="renderNaikSiswaList()"></div>
+      </div>
+      <div class="bulk-toolbar">
+        <div class="bulk-toolbar-left">
+          <button class="btn btn-outline btn-sm" onclick="pilihSemuaNaikKelas(true)">Pilih Semua yang Tampil</button>
+          <button class="btn btn-outline btn-sm" onclick="pilihSemuaNaikKelas(false)">Hapus Pilihan</button>
+        </div>
+        <div class="bulk-info" id="ns-info">0 siswa tampil · 0 siswa dipilih</div>
+      </div>
+      <div class="bulk-student-list" id="ns-siswa-list"></div>
+      <p style="font-size:11px;color:var(--g500);line-height:1.6;margin-top:10px">Catatan: siswa yang diluluskan tidak akan tampil lagi di Data Siswa, Pembayaran, Rekap, maupun Tunggakan. Data pembayaran lama tetap tersimpan di riwayat.</p>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('m-naik-siswa')">Batal</button><button class="btn btn-primary" onclick="jalankanNaikKelasDataSiswa()">Proses Kelas Terpilih</button></div>
+  </div>
+</div>
+
+<!-- Modal Pembayaran Massal -->
+<div class="modal-overlay" id="m-bayar-massal">
+  <div class="modal" style="width:760px">
+    <div class="modal-header"><div class="modal-title">Input Pembayaran Massal / Pilih Banyak Siswa</div><button class="modal-close" onclick="closeModal('m-bayar-massal')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Pakai fitur ini untuk memilih satu siswa, beberapa siswa, atau semua siswa sekaligus. Cocok untuk memilah siswa yang sudah bayar dan belum bayar.</div></div>
+      <div class="form-grid">
+        <div class="fg"><label>Jenis Tagihan *</label><select id="mb-jenis" onchange="updateMassalNominal();renderMassalSiswa()"><option value="">-- Pilih Jenis --</option></select></div>
+        <div class="fg"><label>Bulan Tagihan</label><select id="mb-bulan" onchange="renderMassalSiswa()"><option value="">-- Tidak pakai bulan --</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+        <div class="fg"><label>Tanggal *</label><input type="date" id="mb-tgl"></div>
+        <div class="fg"><label>Nominal per Siswa *</label><input type="number" id="mb-nominal" placeholder="0"></div>
+        <div class="fg"><label>Metode Bayar</label><select id="mb-metode"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>Kartu Debit</option></select></div>
+        <div class="fg"><label>Kasir</label><input id="mb-kasir" placeholder="Nama petugas"></div>
+        <div class="fg"><label>Filter Kelas</label><select id="mb-kelas" onchange="renderMassalSiswa()"><option value="">Semua Kelas</option></select></div>
+        <div class="fg"><label>Status Pembayaran</label><select id="mb-status" onchange="renderMassalSiswa()"><option value="belum">Belum bayar tagihan ini</option><option value="semua">Semua siswa</option><option value="sudah">Sudah bayar tagihan ini</option></select></div>
+        <div class="fg full"><label>Keterangan</label><input id="mb-ket" placeholder="Contoh: pembayaran kolektif kelas / pembayaran bendahara"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;margin:14px 0 8px;flex-wrap:wrap">
+        <strong style="font-size:13px">Pilih Siswa</strong>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="pilihSemuaMassal(true)">Pilih Semua yang Tampil</button>
+          <button class="btn btn-outline btn-sm" onclick="pilihSemuaMassal(false)">Hapus Pilihan</button>
+        </div>
+      </div>
+      <div class="bulk-student-list" id="mb-siswa-list"></div>
+      <div id="mb-info" style="font-size:12px;color:var(--g500);margin-top:8px"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('m-bayar-massal')">Batal</button><button class="btn btn-primary" onclick="saveMassalPembayaran()">Simpan Pembayaran Terpilih</button></div>
+  </div>
+</div>
+
+<!-- Modal Jenis Tagihan -->
+<div class="modal-overlay" id="m-tagihan">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Jenis Tagihan</div><button class="modal-close" onclick="closeModal('m-tagihan')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="t-id">
+      <div class="form-grid">
+        <div class="fg"><label>Nama Tagihan *</label><input id="t-nama" placeholder="SPP Reguler"></div>
+        <div class="fg"><label>Tipe *</label><select id="t-tipe"><option value="SPP">SPP (Bulanan)</option><option value="IPP">IPP (Semester/Tahunan)</option><option value="Kegiatan">Kegiatan/Ekskul</option><option value="Seragam">Seragam</option><option value="Ujian">Ujian/PAS</option><option value="Lainnya">Lainnya</option></select></div>
+        <div class="fg"><label>Nominal (Rp) *</label><input type="number" id="t-nominal" placeholder="0"></div>
+        <div class="fg"><label>Keterangan</label><input id="t-ket" placeholder="Keterangan"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('m-tagihan')">Batal</button><button class="btn btn-primary" onclick="saveTagihan()">Simpan</button></div>
+  </div>
+</div>
+
+<!-- Modal Nota -->
+<div class="modal-overlay" id="m-nota">
+  <div class="modal" style="width:440px">
+    <div class="modal-header"><div class="modal-title">Nota Pembayaran — LX-310</div><button class="modal-close" onclick="closeModal('m-nota')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <div class="fg" style="min-width:230px"><label>Format Nota</label><select id="n-format" onchange="refreshNota()"><option value="landscape" selected>Landscape LX-310 seperti nota penjualan</option><option value="compact">Compact / struk 42 karakter</option></select></div>
+        <label class="cb-item" style="margin-top:20px"><input type="checkbox" id="n-2copy" checked onchange="refreshNota()"> Cetak 2 rangkap</label>
+      </div>
+      <div class="nota-preview" id="nota-content"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('m-nota')">Tutup</button>
+      <button class="btn btn-primary" onclick="doPrint()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print ke LX-310
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="print-area" class="landscape" style="display:none"><pre id="print-content" style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6"></pre></div>
+
+<script>
+// ========== DATA ==========
+const BLAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const KELAS_OPTIONS = ['1','1.1','1.2','2','2.1','2.2','3','4','5','5.1','5.2','6'];
+const DEFAULT_SEKOLAH = { nama:'SD MUHAMMADIYAH 6 SAMARINDA', ta:'2025/2026', kepsek:'-', kasir:'Admin Bendahara', alamat:'Samarinda', telp:'-', lebar:132, rangkap:2, kop1:'SD MUHAMMADIYAH 6 SAMARINDA', kop2:'TAHUN AJARAN 2025/2026', qrisMerchant:'SD MUHAMMADIYAH 6 SAMARINDA', qrisNmid:'', qrisNote:'Cek mutasi rekening sekolah sebelum konfirmasi pembayaran.', qrisImage:'', notifSound:true };
+const STORAGE_KEY = 'sispa_sd_muhammadiyah_6_fix_error_notif_20260627';
+const DEFAULT_SISWA = [{"id":"s001","nis":"3197419168","nama":"ABIZAR AL GHIFARI PRASADA","kelas":"1.1","wali":"FIRMAN PRASADA / MILLA FATHARANI","hp":"","alamat":"JL. JOYO MULYO, Lempake, Kec. Samarinda Utara"},{"id":"s002","nis":"3197844593","nama":"ALVISYA TIARA","kelas":"1.1","wali":"SUMARNO / ERNAWATI","hp":"","alamat":"JL. GUNUNG KAPUR I, Lempake, Kec. Samarinda Utara"},{"id":"s003","nis":"3188816582","nama":"ANGGITA SETYA RAMADHANI","kelas":"1.1","wali":"SETIAWAN / ANGGELA SILVIANIKA","hp":"","alamat":"ARJUNA, Bukit Pariaman, Kec. Tenggarong Seberang"},{"id":"s004","nis":"3187598305","nama":"AQILA NUR ARAFAH ZAHFIRA","kelas":"1.1","wali":"SUSANTO / YULIANI","hp":"","alamat":"JL. LEMPAKE JAYA, Lempake, Kec. Samarinda Utara"},{"id":"s005","nis":"3187754589","nama":"AQILA RIZKY","kelas":"1.1","wali":"SUKIRNO / DIYAH PUTRI SAPTAYANI","hp":"","alamat":"MUGIREJO NO 13, Mugirejo, Kec. Sungai Pinang"},{"id":"s006","nis":"3194053093","nama":"ASSYIFA INARA","kelas":"1.1","wali":"MARYONO / AFIATI LISTIANA","hp":"","alamat":"JL. MAGELANG, Lempake, Kec. Samarinda Utara"},{"id":"s007","nis":"3193826563","nama":"AZKIYA DWI AURORA","kelas":"1.1","wali":"EKO SUSANTO / YUKHA DEWI ASTUTIK","hp":"","alamat":"JL. LEMPAKE JAYA PERUM GRHA MANDIRI 2, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s008","nis":"3183986613","nama":"DIANDA NURFATIH AURORA LIWIYN","kelas":"1.1","wali":"ADI BUGMAN / LILIK WIDAYATI","hp":"","alamat":"JL. DR. SUTOMO GG. BATU BARA 1 NO. 48, Desa/Kel. Sidodadi, Kec. Samarinda Ulu"},{"id":"s009","nis":"3188538623","nama":"FARIS YUSUF","kelas":"1.1","wali":"ANTON SUJARWO / KEKE MONALISA","hp":"","alamat":"JL. LEMPAKE JAYA Gg. FAMILY, Lempake, Kec. Samarinda Utara"},{"id":"s010","nis":"3180379481","nama":"KEISHA NADHIRA SANTOSO","kelas":"1.1","wali":"WONO SANTOSO / MUMPUNI INDRAWATI","hp":"","alamat":"BUKIT BARISAN NO. 44, Desa/Kel. Jawa, Kec. Samarinda Ulu"},{"id":"s011","nis":"3182137921","nama":"LUTHFI HAQQANI","kelas":"1.1","wali":"SUGINO / SRI MURNINGSIH","hp":"","alamat":"JALAN CITANDUY, Desa/Kel. Tanah Merah, Kec. Samarinda Utara"},{"id":"s012","nis":"3185832704","nama":"Muhammad Ardylan Afwan","kelas":"1.1","wali":"Diyanto Tjatur Sulistyo Budi / Kamsiah","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s013","nis":"3182401535","nama":"Muhammad Bilal Maulana","kelas":"1.1","wali":"Maulana Firmansyah / Eny Fitria Setiyanengsih","hp":"","alamat":"Jl. Belimau Gang Sayur, Lempake, Kec. Samarinda Utara"},{"id":"s014","nis":"3183947530","nama":"NAFEEZA SHAZFA MEDINA","kelas":"1.1","wali":"AMINUL YAQIN / ENI LESTARI","hp":"","alamat":"JL. SUKOREJO, Lempake, Kec. Samarinda Utara"},{"id":"s015","nis":"3190039686","nama":"Nizam Shaqueel Abqory","kelas":"1.1","wali":"Farisa Ahmad Safe'i / Febry Anzelya Laraswati","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s016","nis":"3186503813","nama":"NOUREEN FALISHA","kelas":"1.1","wali":"ACHMAD MAULANA / SITI MUNJIYAH MARDHATILLAH","hp":"","alamat":"JL. K.H. WAHID HASYIM, Sempaja Timur, Kec. Samarinda Utara"},{"id":"s017","nis":"3182801407","nama":"Qaisra Qanita akbar","kelas":"1.1","wali":"Solichin Akbar / Cincin Pertiwi","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s018","nis":"3181314323","nama":"Saddam hamizan Nayu","kelas":"1.1","wali":"Bayu Mulyono / Sunarti","hp":"","alamat":"Jl. Sukorejo, Lempake, Kec. Samarinda Utara"},{"id":"s019","nis":"3195263704","nama":"Samaira Nafisa","kelas":"1.1","wali":"Pujianto / Linda","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s020","nis":"3181824940","nama":"SHANUM AYUDIA ADZKIA","kelas":"1.1","wali":"DARA AYU RINJANI","hp":"","alamat":"JL.PURWOREJO PERUM KOREM, Lempake, Kec. Samarinda Utara"},{"id":"s021","nis":"3193144926","nama":"ARKANA MAUZA RAMADHAN","kelas":"1.2","wali":"SYARIFUDDIN / NAWIYAH","hp":"","alamat":"JL. BEDENG LEMPAKE, Lempake, Kec. Samarinda Utara"},{"id":"s022","nis":"3184711451","nama":"ATHALLAH MUSYAFFA","kelas":"1.2","wali":"WILLY KRAYANDYA DIGGY / ELSA PRATAMA","hp":"","alamat":"JL. KEBUN AGUNG PERUM KOREM CLUSTER ULIN NO.31, Lempake, Kec. Samarinda Utara"},{"id":"s023","nis":"3170930747","nama":"AZRINA NUR SHAZFA KATY SUKARNO","kelas":"1.2","wali":"AJI BAGUS SURYANTO / NUR HASANAH","hp":"","alamat":"GUNUNG LINGAI NO.41, Desa/Kel. Gunung Lingai, Kec. Sungai Pinang"},{"id":"s024","nis":"3181156358","nama":"Khadeja Samaira","kelas":"1.2","wali":"Hery Setiawan / Sayu Widiawati","hp":"","alamat":"Sentosa Gg Kami No 11, Sungai Pinang Dalam, Kec. Sungai Pinang"},{"id":"s025","nis":"3197201325","nama":"MARYAM","kelas":"1.2","wali":"JILLY KURNIAWAN / SITTI MARTINA","hp":"","alamat":"PERUMAHAN GRAHA MANDIRI 4 K11, Lempake, Kec. Samarinda Utara"},{"id":"s026","nis":"3188046358","nama":"MUHAMMAD AKBAR","kelas":"1.2","wali":"MOCHAMAD RHOLY / VIVI NUR HAYATI","hp":"","alamat":"JL. LEMPAKE TEPIAN GUNUNG LINGAI, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s027","nis":"3193448020","nama":"MUHAMMAD NIZAM ZULFAKAR","kelas":"1.2","wali":"MASDARI / REZA HANDAYANI","hp":"","alamat":"BELIMAU PERUM UMUM ASRI BLOK E N0.92, Lempake, Kec. Samarinda Utara"},{"id":"s028","nis":"3192425642","nama":"MUHAMMAD QAYYIM AL-AYUBI","kelas":"1.2","wali":"Slamet Priyono / NUR AZIZAH","hp":"","alamat":"Damahuri Perumahan Artas Blok BI No.7, Mugirejo, Kec. Sungai Pinang"},{"id":"s029","nis":"3181228621","nama":"MUHAMMAD SYAKIR HADIPUTRA","kelas":"1.2","wali":"YUDIANTO HADI / DESY ANGRIANI","hp":"","alamat":"JOYO MULYO PERUM BUKIT BENANGA, Lempake, Kec. Samarinda Utara"},{"id":"s030","nis":"3198583247","nama":"QONITA NUR AFIFAH BUDIMAN","kelas":"1.2","wali":"BUDIMAN / ROSNENI","hp":"","alamat":"JL MUGIREJO, Mugirejo, Kec. Sungai Pinang"},{"id":"s031","nis":"3191243366","nama":"RASHDAN AQMAR ALHUSAYN","kelas":"1.2","wali":"TRI HANDOKO / EVA MARLINA","hp":"","alamat":"JL.POROS RT 11 LEMPAKE, Lempake, Kec. Samarinda Utara"},{"id":"s032","nis":"3188426464","nama":"RUMAISHA","kelas":"1.2","wali":"HERMANSYAH / MUSRIATI","hp":"","alamat":"PERUM PESONA ELFIDA GUNUNG LINGAI, Desa/Kel. Gunung Lingai, Kec. Sungai Pinang"},{"id":"s033","nis":"3187170289","nama":"SEKAR NIRMALA CHANDRARINI","kelas":"1.2","wali":"FINDI IRAWAN / SAFITRI NURAINI","hp":"","alamat":"JOYOMULYO I NO. 27B, Lempake, Kec. Samarinda Utara"},{"id":"s034","nis":"3183536672","nama":"SHAFIN AHSANDRIA ARISAKHA","kelas":"1.2","wali":"KHANIFAN / CICI ARISTI","hp":"","alamat":"GUNUNG LINGAI PERUM GRHA MANDIRI 2 BLOK S NO. 18, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s035","nis":"3189868372","nama":"STARLA KHANSA HAURA","kelas":"1.2","wali":"Syadikin / MARISA ROSID FITRIANI","hp":"","alamat":"Muang Ilir, Lempake, Kec. Samarinda Utara"},{"id":"s036","nis":"3197154004","nama":"Uwais Alqarni Mubarak","kelas":"1.2","wali":"Teguh Ilmi Imansayah / Nur Fahmi Istiqomah","hp":"","alamat":"Jl. Purworejo Perum Bumi Alam Indah Cluster Anggi 1 no 41 A, Lempake, Kec. Samarinda Utara"},{"id":"s037","nis":"3188717759","nama":"ADZKIA ALFAINA YOGA","kelas":"2","wali":"YOGA EKO PURNOMO / IDA YULIANA","hp":"","alamat":"GIRI REJO, Lempake, Kec. Samarinda Utara"},{"id":"s038","nis":"3172996605","nama":"Al Fath Ali Ramadhan","kelas":"2","wali":"Willy Krayandya Diggy / Elsa Pratama","hp":"","alamat":"dusun 1, Handil Terusan, Kec. Anggana"},{"id":"s039","nis":"3184921512","nama":"Alisha Putri Ramadhani","kelas":"2","wali":"Haryanto / Lerry Anggreaini","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s040","nis":"3176484245","nama":"Althafandra Cahya Abdillah","kelas":"2","wali":"Sri Waluyo / Juwariyah","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s041","nis":"3189334588","nama":"ARRAYYAN DILAN ZAFRAN","kelas":"2","wali":"MI'RODIANSYAH / WULAN PIBRIANTI","hp":"","alamat":"PERUM TALANG SARI BLOK G NO 9, Desa/Kel. Tanah Merah, Kec. Samarinda Utara"},{"id":"s042","nis":"3186631146","nama":"Arsyila Naifa Fadhela","kelas":"2","wali":"Samsun / Lilik Widyawati","hp":"","alamat":"Jl. Magelang 3, Lempake, Kec. Samarinda Utara"},{"id":"s043","nis":"3178671355","nama":"Audi Kirana Pranata","kelas":"2","wali":"Indra Pranata / Sulistianingsih","hp":"","alamat":"Jl. Poros lempake, Lempake, Kec. Samarinda Utara"},{"id":"s044","nis":"3183175968","nama":"AVRILLANIKA XENI NUR HAZRINA SETIAWAN","kelas":"2","wali":"ADY SETIAWAN / TITIN SUMARNI","hp":"","alamat":"JL. SUKOREJO, Lempake, Kec. Samarinda Utara"},{"id":"s045","nis":"3174536490","nama":"AZZAM UBAIDILLAH","kelas":"2","wali":"JUMRI / DEA ARSILA WAHYUDI","hp":"","alamat":"MUANG ILIR, LEMPAKE, Kec. Samarinda Utara"},{"id":"s046","nis":"3175252040","nama":"HABIBAH ADDINATURROHMAH","kelas":"2","wali":"TIYANAH","hp":"","alamat":"PURWODADI, LEMPAKE, Kec. Samarinda Utara"},{"id":"s047","nis":"3183186981","nama":"Irsy Syarifa Efendi","kelas":"2","wali":"Muhammad Irfan Effendi / Syifa Dayanti","hp":"","alamat":"Jl. Joyo Mulyo  RT.030, Lempake, Kec. Samarinda Utara"},{"id":"s048","nis":"3178193784","nama":"MARITZA ZYAN KHAIRANA","kelas":"2","wali":"IWAN PRASETYO / WIDYA ERNAWATI","hp":"","alamat":"AMD PURWOREJO, CLUSTER BENGKIRAI, LEMPAKE, Kec. Samarinda Utara"},{"id":"s049","nis":"3182615538","nama":"Melcia Naura Candra","kelas":"2","wali":"Sarimin / Evania Yulianti","hp":"","alamat":"Suko Rejo, Desa/Kel. Lempake, Kec. Samarinda Utara"},{"id":"s050","nis":"3184207216","nama":"Muazzam Farhan Akhmad","kelas":"2","wali":"Akhmad Rano Zainudin / Lia Astuti","hp":"","alamat":"Jl. Lempake Jaya Gg. Grujukan, Lempake, Kec. Samarinda Utara"},{"id":"s051","nis":"3177976233","nama":"Muhammad Adwa Budiman","kelas":"2","wali":"Budiman / Rosneni","hp":"","alamat":"Bugis No. 103 Mugirejo, Mugirejo, Kec. Sungai Pinang"},{"id":"s052","nis":"3177638396","nama":"MUHAMMAD AIDIN DAVIANDRA","kelas":"2","wali":"EDHAR RIZKI APRIANDA / IIN YUNARTI","hp":"","alamat":"PURWODADI, LEMPAKE, Kec. Samarinda Utara"},{"id":"s053","nis":"3184181289","nama":"Muhammad Al Gozali","kelas":"2","wali":"Nur Khamid / Munzaenah","hp":"","alamat":"Jl. Belimau Giri Rejo, Lempake, Kec. Samarinda Utara"},{"id":"s054","nis":"3173389578","nama":"Muhammad Al Zaidhan","kelas":"2","wali":"Baihaki / Rismawati","hp":"","alamat":"Jl. Joyo Mulyo, Lempake, Kec. Samarinda Utara"},{"id":"s055","nis":"3186872475","nama":"Muhammad Arkhan Maulana","kelas":"2","wali":"Sutadi / Ani Listiyanti","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s056","nis":"3186410500","nama":"Muhammad Hatta","kelas":"2","wali":"Agus Santoso / Marni Kurniyati","hp":"","alamat":"Jl. Gunung Lingai Gg Hj. Salamah, Gunung lingai, Kec. Sungai Pinang"},{"id":"s057","nis":"3183091767","nama":"Muhammad Hattib","kelas":"2","wali":"Agus Santoso / Marni Kurniyati","hp":"","alamat":"Jl. Gunung Lingai Gg Hj. Salamah, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s058","nis":"3172064418","nama":"MUHAMMAD IBRAHIM SHAKEER","kelas":"2","wali":"MUHAMMAD ARIEF ZATMOKO / HESTI NOVITA","hp":"","alamat":"JL. KADRIE OENING GG KITA, Desa/Kel. Air Hitam, Kec. Samarinda Ulu"},{"id":"s059","nis":"3187326353","nama":"Muhammad Syauqi Athazaky","kelas":"2","wali":"Eko Agus Saputra / Dwi Puspita Raras","hp":"","alamat":"Jl. Suryanata, Bukit Pinang, Kec. Samarinda Ulu"},{"id":"s060","nis":"3172019964","nama":"Mutiara Indah Pertiwi","kelas":"2","wali":"Sairin / Ettik Marianti","hp":"","alamat":"Jl. Serayu, Tanah Merah, Kec. Samarinda Utara"},{"id":"s061","nis":"3184464955","nama":"NAJWA KHADIJAH","kelas":"2","wali":"TRI BUDI SANTOSO / TIYAS KURNIATI","hp":"","alamat":"GIRI REJO, Lempake, Kec. Samarinda Utara"},{"id":"s062","nis":"3183979854","nama":"Nurlaila Bonita Monteiro","kelas":"2","wali":"Budiman / Mutmainah Monteiro","hp":"","alamat":"Purworejo Perum Bumi Alam Indah, Lempake, Kec. Samarinda Utara"},{"id":"s063","nis":"3184484780","nama":"Rafandra Erlangga Alfarezel","kelas":"2","wali":"Rochmatul Hidayat / Laila Wahyuningsih","hp":"","alamat":"Jl. AMD Sukorejo, Lempake, Kec. Samarinda Utara"},{"id":"s064","nis":"3173406960","nama":"Ramadhannisa Uswatun Khazanah","kelas":"2","wali":"Wahpi'i / Diyah Wahyuningtyas","hp":"","alamat":"Jl. Girimakmur, Lempake, Kec. Samarinda Utara"},{"id":"s065","nis":"3187102162","nama":"RASYDAN TAKA ALFATIH","kelas":"2","wali":"TRI WIDYAWATI","hp":"","alamat":"JL.PURWOREJO PERUM BUMI ALAM INDAH CLUSTER SUNGKAI 29A, Lempake, Kec. Samarinda Utara"},{"id":"s066","nis":"3170052466","nama":"ROBIAN ALFARIZI IKHBAL","kelas":"2","wali":"WIRDUL IKHBAL / ANDI DAHNIAR","hp":"","alamat":"JL.PURWOREJO PERUM BUMI ALAM INDAH CLUSTER BANGGRIS NO 46, Lempake, Kec. Samarinda Utara"},{"id":"s067","nis":"3182758274","nama":"Rumaisha Shareefa Kartini","kelas":"2","wali":"Arif Rismawan / Novika Purwanti","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s068","nis":"3160238370","nama":"ALESCYA SHARFINA CAHYADI","kelas":"3","wali":"BAMBANG CAHYADI / SRI PARWATI","hp":"","alamat":"JL. SUKOREJO NO.6, LEMPAKE, Kec. Samarinda Utara"},{"id":"s069","nis":"3177454767","nama":"Althafizza","kelas":"3","wali":"Supriyadi / Rizki Rindana","hp":"","alamat":"Jl. Sukorejo Perum Villa Kartini 2, blok D 17, Lempake, Kec. Samarinda Utara"},{"id":"s070","nis":"3169879027","nama":"Andi Muhammad Nabil Ayyash Ziyad","kelas":"3","wali":"Syamsuddin / Zully Noviana","hp":"","alamat":"Jl. Belimau Perum Pondok Lima Asri, Lempake, Kec. Samarinda Utara"},{"id":"s071","nis":"3163415710","nama":"Aqila Misha Safa","kelas":"3","wali":"Agus Romdhani / Dyah Prihartini","hp":"","alamat":"Jl. Magelang Gg. Keluarga, Lempake, Kec. Samarinda Utara"},{"id":"s072","nis":"3162229238","nama":"Athasya Zaimatul Fa'ilin","kelas":"3","wali":"Hendra Gunawan / Ika Dian Purwanti","hp":"","alamat":"Jl. Purworejo Perum Korem Kruing 2 No 15, Lempake, Kec. Samarinda Utara"},{"id":"s073","nis":"3175438012","nama":"Azka Airlangga Kusuma","kelas":"3","wali":"Dwi Indra Kusumah / Inawati","hp":"","alamat":"jl. Sukorejo, lempake, Kec. Samarinda Utara"},{"id":"s074","nis":"3173574343","nama":"Gadiza Huwaida","kelas":"3","wali":"Hari Pambudi / Esti Supaidah","hp":"","alamat":"Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s075","nis":"3161500357","nama":"Keenan Bayaanaka Altaf","kelas":"3","wali":"Handriyono / Okti Setiawati","hp":"","alamat":"Jl. Serayu 6 No 40, Tanah Merah, Kec. Samarinda Utara"},{"id":"s076","nis":"3170623498","nama":"KHADI FAIHA ASSIDIQ","kelas":"3","wali":"WAHYU EFFENDI / NOVA WARDAH","hp":"","alamat":"JL.POROS KEBONAGUNG, LEMPAKE, Kec. Samarinda Utara"},{"id":"s077","nis":"0165415623","nama":"Khalila Nafisah Hidayat","kelas":"3","wali":"Taufik Hidayat / Sakinah","hp":"","alamat":"Jl. Belimau, Lempake, Kec. Samarinda Utara"},{"id":"s078","nis":"3176667679","nama":"Kinayya Nazla Mecca","kelas":"3","wali":"Latifpodin Achmad / Endang Astuti","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s079","nis":"3160779828","nama":"MUHAMMAD AFIF SAPUTRA","kelas":"3","wali":"MUHAMMAD AGUS MUSLIMIM / NISA AGUSTINA","hp":"","alamat":"JL.GUNUNG KAPUR 2, Lempake, Kec. Samarinda Utara"},{"id":"s080","nis":"3164866592","nama":"MUHAMMAD ATTHAILLAH FARREL SETIAWAN","kelas":"3","wali":"ADY SETIAWAN / TITIN SUMARNI","hp":"","alamat":"JL. SUKOREJO, LEMPAKE, Kec. Samarinda Utara"},{"id":"s081","nis":"3167350371","nama":"MUHAMMAD HAFIZ SUDAIS","kelas":"3","wali":"MIRNA INDAH SARI","hp":"","alamat":"JL. BELIMAU NO. 23, LEMPAKE, Kec. Samarinda Utara"},{"id":"s082","nis":"3173718684","nama":"Muhammad Rifa'i Hasan","kelas":"3","wali":"Muhammad Ismail Hasan / Siti Maimuna","hp":"","alamat":"Jl. Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s083","nis":"3175616696","nama":"MUHAMMAD SALMAN  AL FARISI","kelas":"3","wali":"Eko Naniah / Dewi Kusumawati","hp":"","alamat":"Jl. Poros Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s084","nis":"3169141181","nama":"MUHAMMAD SATRIA","kelas":"3","wali":"AFATURRAKHMAN / IDA SUSANTI","hp":"","alamat":"PERUM PUSPITA BENGKURING BLOK AL 22, SEMPAJA TIMUR, Kec. Samarinda Utara"},{"id":"s085","nis":"3165330745","nama":"Muhammad Yusuf","kelas":"3","wali":"Mochamad Rholy / Vivi Nur Hayati","hp":"","alamat":"Jl. Lempake Tepian, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s086","nis":"3172934839","nama":"Nathania Al Khaleda","kelas":"3","wali":"Supardi / Tambah Utami","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s087","nis":"0167903970","nama":"Naziha Farzana Syanum","kelas":"3","wali":"Julpadli / Mesiyah","hp":"","alamat":"Jl. Gajah Mada, Barong Tongkok, Kec. Samarinda Ilir"},{"id":"s088","nis":"3171541051","nama":"QUEENZY HUMAIRA ROGOGIRI","kelas":"3","wali":"WITO / PARSIH SUPRIYANI","hp":"","alamat":"PERUM BUMI INDAH CLUSTER MAHONI, Lempake, Kec. Samarinda Utara"},{"id":"s089","nis":"3167605451","nama":"Rakha Sava Hidayat","kelas":"3","wali":"Anton Hidayat / Rubiah Setyawati","hp":"","alamat":"Jl. Belimau Gg. Rukun Makmur, Lempake, Kec. Samarinda Utara"},{"id":"s090","nis":"3171704866","nama":"Shafiyah Anna","kelas":"3","wali":"Arham Nurdin / Nurul Amaliah","hp":"","alamat":"Jl. Magelang 9, Lempake, Kec. Samarinda Utara"},{"id":"s091","nis":"3160013306","nama":"Shafiyah Zulfah Prasetyo","kelas":"3","wali":"Moko Prasetyo / Fauziah Husna","hp":"","alamat":"Jl. Purwodadi, Lempake, Kec. Samarinda Utara"},{"id":"s092","nis":"3158243057","nama":"Shaka Ghani Al Farezel","kelas":"3","wali":"Mustaqim / Melia Sari","hp":"","alamat":"Sukorejo, Lempake, Kec. Samarinda Utara"},{"id":"s093","nis":"3171200246","nama":"Shyakira Cahayamun Ningtyas","kelas":"3","wali":"Arifin / Nungki Nur Kalbar","hp":"","alamat":"Jl. Purwodadi, Lempake, Kec. Samarinda Utara"},{"id":"s094","nis":"3175043065","nama":"SYAKIRA ZAENITA ZAHRA","kelas":"3","wali":"ZAINAL ABIDIN / DWI NASTA SETYOWATI","hp":"","alamat":"JALAN PERUMAHAN BENGKURING, SEMPAJA TIMUR, Kec. Samarinda Utara"},{"id":"s095","nis":"3169715944","nama":"Zaura Mazna Maziya","kelas":"3","wali":"Topan Andika / Suparti","hp":"","alamat":"Jl. Magelang, Lempake, Kec. Samarinda Utara"},{"id":"s096","nis":"3165637023","nama":"Zhafira Satya Paramastri","kelas":"3","wali":"Adhies Satya Putra / Suningsih","hp":"","alamat":"Jl. Kebon Agung Ruko Intraina No. 49, Lempake, Kec. Samarinda Utara"},{"id":"s097","nis":"3160660451","nama":"Zihan Inara","kelas":"3","wali":"Riduansyah Yahya / Ida Susanti","hp":"","alamat":"Jl. Magelang, Lempake, Kec. Samarinda Utara"},{"id":"s098","nis":"3155656490","nama":"ADRESIA NAUFALYN VARISHA","kelas":"4.1","wali":"MARPUAH","hp":"","alamat":"CITANDUY, TANAH MERAH, Kec. Samarinda Utara"},{"id":"s099","nis":"3154953685","nama":"Aisyah Ayudia Inara","kelas":"4.1","wali":"Yukha Dewi Astutik","hp":"","alamat":"JL. PIPIT, BANDARA, Kec. Sungai Pinang"},{"id":"s100","nis":"3158136107","nama":"Alika Almaira Maryam","kelas":"4.1","wali":"Gendut Purwadi / Sadiah","hp":"","alamat":"jl. lempake jaya, lempake, Kec. Samarinda Utara"},{"id":"s101","nis":"3152434817","nama":"ARIANNA FATIN AFIFAH","kelas":"4.1","wali":"MARSINI","hp":"","alamat":"TANAH MERAH, TANAH MERAH, Kec. Samarinda Utara"},{"id":"s102","nis":"3155547624","nama":"Arzanqa El Azzam Sutandhi","kelas":"4.1","wali":"Sofiardi Fitri Sutandhi / Siska Mustika Dewi","hp":"","alamat":"Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s103","nis":"3161311018","nama":"Aswin Ramadan Mandora","kelas":"4.1","wali":"Budiman / Mutmainah Monteiro","hp":"","alamat":"Perumahan Korem Gg. Meranti No. 140, Lempake, Kec. Samarinda Utara"},{"id":"s104","nis":"3164198172","nama":"FATHIMATUZ ZAHRO","kelas":"4.1","wali":"Syahrian Mansyhor Hasyim / Rini","hp":"","alamat":"JL. Proklamasi, Sungai Pinang dalam, Kec. Sungai Pinang"},{"id":"s105","nis":"0139224668","nama":"Finna Myeisha Atmarini","kelas":"4.1","wali":"Arifudinn / Puji Astutik","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s106","nis":"3153929500","nama":"Firdaus Ahlam Ruzain","kelas":"4.1","wali":"SABAR WIDODO / Fitriana","hp":"","alamat":"JL. PURWOREJO PERUM BUMI ALAM INDAH CLUSTER KRUING 2 NO. 23, LEMPAKE, Kec. Samarinda Utara"},{"id":"s107","nis":"3159263885","nama":"Hanna Ayra Humairah","kelas":"4.1","wali":"Ahwandi / Mei Restika","hp":"","alamat":"kEBON AGUNG, Lempake, Kec. Samarinda Utara"},{"id":"s108","nis":"3167680577","nama":"KIRANA ADEERA AZZAHRA","kelas":"4.1","wali":"ILHAM / ENI RACHMAWATI","hp":"","alamat":"REJOMULYO GG. PUSKESMAS, MUANG DALAM, LEMPAKE, Kec. Samarinda Utara"},{"id":"s109","nis":"0159286588","nama":"Muhammad Abizhar Al Ghifary","kelas":"4.1","wali":"Siti Norlaela","hp":"","alamat":"Gunung Lingai Gang Bina Baru, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s110","nis":"0159171937","nama":"Muhammad Izzatul Afif Firdaus","kelas":"4.1","wali":"Sukatman / Siti Qomariah","hp":"","alamat":"Jl.Citanduy, Tanah Merah, Kec. Samarinda Utara"},{"id":"s111","nis":"3155976600","nama":"Muhammad Rifqi Ramdani","kelas":"4.1","wali":"Muhammad Ismail Hasan / Siti Maimuna","hp":"","alamat":"Jalan kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s112","nis":"3159197456","nama":"Nada Izzati Ramadhani","kelas":"4.1","wali":"Riyan Widodo / Reta Indriyani","hp":"","alamat":"Jalan Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s113","nis":"0167742078","nama":"Rezky Febriyan Awaludin","kelas":"4.1","wali":"GATOT SUPRIYONO / Rosdiana","hp":"","alamat":"jl.PURWOREJO PERUM KOREM, LEMPAKE, Kec. Samarinda Utara"},{"id":"s114","nis":"3163121403","nama":"Rifqi Ahmad Baihaqi","kelas":"4.1","wali":"Syahimah","hp":"","alamat":"PM Noor, Sempaja Utara, Kec. Samarinda Utara"},{"id":"s115","nis":"3165226366","nama":"Syakila Olivia Febriani","kelas":"4.1","wali":"Basuki Rahmat / Eni Sulistiowati","hp":"","alamat":"jalan Sukorejo, lempake, Kec. Samarinda Utara"},{"id":"s116","nis":"3159131442","nama":"Zafran Nuril Yasin","kelas":"4.1","wali":"Wahiuddin / Jumriana","hp":"","alamat":"Giri Rejo No. 13, Lempake, Kec. Samarinda Utara"},{"id":"s117","nis":"3156029912","nama":"ABDULLAH ZAIN","kelas":"4.2","wali":"Jumri / DEA ARSILA WAHYUDI","hp":"","alamat":"Muang Ilir, Sempaja Utara, Kec. Samarinda Utara"},{"id":"s118","nis":"3167166758","nama":"Achmad Azzam Al Farizi","kelas":"4.2","wali":"Abdul Basyir / Musrifah","hp":"","alamat":"Jl. Magelang 4, Lempake, Kec. Samarinda Utara"},{"id":"s119","nis":"3151084496","nama":"ADEEVA MAHARANI","kelas":"4.2","wali":"Anton Sujarwo / KEKE MONALISA","hp":"","alamat":"JL. LEMPAKE JAYA GANG FAMILY, LEMPAKE, Kec. Samarinda Utara"},{"id":"s120","nis":"3151705527","nama":"Aisyah Arkania Fatahillah","kelas":"4.2","wali":"surawan / Alit Citra R","hp":"","alamat":"jl. purworejo perum korem no.30A, lempake, Kec. Samarinda Utara"},{"id":"s121","nis":"3150206569","nama":"Alesha Naufalyn haya","kelas":"4.2","wali":"Bilfahmi Handayani","hp":"","alamat":"Jl. Asrama Awang Long Blok B, Bugis, Kec. Samarinda Kota"},{"id":"s122","nis":"3155652109","nama":"Alisha Hanin Dhya","kelas":"4.2","wali":"Fauzi / Nurul Hidayah","hp":"","alamat":"Kebon Agung Gg. Komisari, Lempake, Kec. Samarinda Utara"},{"id":"s123","nis":"3152081968","nama":"Ammar Shan Pranadja","kelas":"4.2","wali":"Edy Sumanto / Eka Armalia Putri","hp":"","alamat":"Jl. Mangkupalas gg. Anugrah Hader, Mesjid, Kec. Samarinda Seberang"},{"id":"s124","nis":"3151951845","nama":"Aufa Raffi Hibatullah","kelas":"4.2","wali":"Abdur Rohim / Dwi Citra Meilani","hp":"","alamat":"Perum Puspita Bengkuring Blok AL No. 06, Sempaja Timur, Kec. Samarinda Utara"},{"id":"s125","nis":"3156448183","nama":"Azka Aldric Arrahman","kelas":"4.2","wali":"Suci Cahyani","hp":"","alamat":"Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s126","nis":"3153237287","nama":"Dzakira Talita Azzahra","kelas":"4.2","wali":"Dedy Poernomo / Fitra Yana","hp":"","alamat":"Belimau No. 104, Lempake, Kec. Samarinda Kota"},{"id":"s127","nis":"3165431731","nama":"FRANSISKA CALISTA APRILIA","kelas":"4.2","wali":"FUJIE CHANDRA LAKSONO / PRISKA DAMAI YANTI DANIEL","hp":"","alamat":"PETUNG, PETUNG, Kec. Penajam"},{"id":"s128","nis":"3157606223","nama":"KAISAN AMMAR MAULANA","kelas":"4.2","wali":"IWAN PRASETYO / WIDYA ERNAWATI","hp":"","alamat":"JL. PURWOREJO CLUSTER BENGKIRAI NO 45A, LEMPAKE, Kec. Samarinda Utara"},{"id":"s129","nis":"3165955360","nama":"Kamila Nahda Rafanda","kelas":"4.2","wali":"Slamet Priyono / Nur Azizah","hp":"","alamat":"Jl. Damanhuri perum ARTAS B1-7 Samarinda, Mugirejo, Kec. Sungai Pinang"},{"id":"s130","nis":"3163938525","nama":"Kayyisah Faahimah","kelas":"4.2","wali":"Hidayat Sapari / Titus Iis Krisdianawati","hp":"","alamat":"Jalan Lempake Jaya, lempake, Kec. Samarinda Utara"},{"id":"s131","nis":"3150020596","nama":"Malika Raffa Khairiyah","kelas":"4.2","wali":"Sarno / Darsih","hp":"","alamat":"jalan lempake jaya, lempake, Kec. Samarinda Utara"},{"id":"s132","nis":"3152514305","nama":"MUHAMMAD ATTAYA AL GHIFARI","kelas":"4.2","wali":"DEWI WAHYUNI","hp":"","alamat":"PURWOREJO, LEMPAKE, Kec. Samarinda Utara"},{"id":"s133","nis":"0161005815","nama":"MUHAMMAD AZKA DANITRA","kelas":"4.2","wali":"DANI / CITRA NORSEHA ANGGRAENI","hp":"","alamat":"JLN NANI WARTABONE, Ulanta, Kec. Suwawa"},{"id":"s134","nis":"3168700555","nama":"Muhammad Noor Raihan","kelas":"4.2","wali":"Zainal Abidin / Rusmini","hp":"","alamat":"Lempake Tepian Gg. Belimbing No.39, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s135","nis":"3171093251","nama":"RAFLIZIO ALZAIN WIJAYANTO","kelas":"4.2","wali":"RHOVICA ESTI RAHMADANI","hp":"","alamat":"SUKOREJO, LEMPAKE, Kec. Samarinda Utara"},{"id":"s136","nis":"3159278806","nama":"Vidisya Lovita Kirana","kelas":"4.2","wali":"Vila Permatasari","hp":"","alamat":"Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s137","nis":"0145989131","nama":"Abiyu Azka Ghalibie","kelas":"5","wali":"Zurianto / Mutmainah","hp":"","alamat":"Lempake Jaya, 75118, Kec. Samarinda Utara"},{"id":"s138","nis":"3157907355","nama":"Achmad Hafiz Alkhalifi","kelas":"5","wali":"INDRA AMRIN / Nur Isna Salmiati","hp":"","alamat":"MUGIREJO GG MASYARAKAT, MUGIREJO, Kec. Sungai Pinang"},{"id":"s139","nis":"0156193053","nama":"Adnan Pradipta Calief","kelas":"5","wali":"Suranto / Winda Sari","hp":"","alamat":"Perum Korem Cluster Kruing 1 No. 3, Lempake, Kec. Samarinda Utara"},{"id":"s140","nis":"3142249924","nama":"Aleena Arsyfa Salsabila","kelas":"5","wali":"Ipong Ady Witoyo / Novita Ratnasari","hp":"","alamat":"Jalan AMD Purworejo Cluster Meranti, Lempake, Kec. Samarinda Utara"},{"id":"s141","nis":"0144813167","nama":"Aufaa Syakiib","kelas":"5","wali":"Supriyadi / Rizki Rindana","hp":"","alamat":"Jl. Talang Sari PGRI V, Tanah Merah, Kec. Samarinda Utara"},{"id":"s142","nis":"0141475903","nama":"AZKA DWI EJAS","kelas":"5","wali":"Yudaryono / Siti Jamilah","hp":"","alamat":"Jl Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s143","nis":"0144109744","nama":"Azzam Mahardika","kelas":"5","wali":"Sudarno / Nur Rachmawati Sholikah","hp":"","alamat":"Bedeng, Lempake, Kec. Samarinda Utara"},{"id":"s144","nis":"0144801142","nama":"Faizah Rahmillah","kelas":"5","wali":"Ida Alfaizin / Siti Munwaroh","hp":"","alamat":"Jalan Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s145","nis":"0147700222","nama":"Fawaz Baihaqi","kelas":"5","wali":"Ali Mashudi / Sumiyati","hp":"","alamat":"Gunung Kapur II, Lempake, Kec. Samarinda Utara"},{"id":"s146","nis":"3154463670","nama":"Ghaitsa Nadhira Faehrial","kelas":"5","wali":"Ade Faehrial / Synthia Defriyana","hp":"","alamat":"Jl. P. Suryanata Graha Indah, Air Putih, Kec. Samarinda Ulu"},{"id":"s147","nis":"3148674737","nama":"Husnah Khairunnisa","kelas":"5","wali":"Ita Azizah","hp":"","alamat":"Giri Mukti, Tanah Merah, Kec. Samarinda Utara"},{"id":"s148","nis":"3157356773","nama":"Ilham Satrio Kamil","kelas":"5","wali":"Tursini","hp":"","alamat":"Gunung Lingai Gg. Masyarakat No. 81, Lempake, Kec. Samarinda Utara"},{"id":"s149","nis":"3159959177","nama":"ISWANDARU ADITYA PRADIPTA SUSANTO","kelas":"5","wali":"ARIS SUSANTO / TARNI DWI JAYANTI","hp":"","alamat":"PERUM KOREM /BUMI ALAM INDAH BLOK KRUING 2 NO.28, LEMPAKE, Kec. Samarinda Utara"},{"id":"s150","nis":"3140980381","nama":"Julian Gilang Ramadhan","kelas":"5","wali":"Yuliasari","hp":"","alamat":"Belimau Gg. Hanum, Lempake, Kec. Samarinda Utara"},{"id":"s151","nis":"0147643617","nama":"Kalila Rifda Ayu","kelas":"5","wali":"Nurrochim / Ayu Musdhalifah","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s152","nis":"0152242351","nama":"KHAIRA ADIBA","kelas":"5","wali":"TRI BUDI SANTOSO / TIYAS KURNIATI","hp":"","alamat":"PERUM 59, LEMPAKE, Kec. Samarinda Utara"},{"id":"s153","nis":"3142293284","nama":"MUHAMMAD ADAM AL-GHIFARI","kelas":"5","wali":"AGUS SETIONO / ERNAWATI","hp":"","alamat":"SLAMET RIYADI G IKHLAS, KARANG ASAM ILIR, Kec. Sungai Kunjang"},{"id":"s154","nis":"3145224915","nama":"Muhammad Azizan","kelas":"5","wali":"Ida Susanti","hp":"","alamat":"Magelang, Lempake, Kec. Samarinda Utara"},{"id":"s155","nis":"0156472420","nama":"Muhammad Daffa Alfarizi","kelas":"5","wali":"Guntur Bastiar / Hartina","hp":"","alamat":"Gunung Lingai Perum Cluster 2 No. 6B, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s156","nis":"3143861658","nama":"Muhammad Fatih Al Aqsho","kelas":"5","wali":"Roszi Krissandi / Nur Fita Sari","hp":"","alamat":"Joyomulyo Perum. Bukit Benanga Blok E, Lempake, Kec. Samarinda Utara"},{"id":"s157","nis":"0149322940","nama":"Muhammad Rasyid Putra Sholih","kelas":"5","wali":"Nur Sholih / Nurdiana","hp":"","alamat":"Jl. Gunung Lingai Gang Baru, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s158","nis":"3158870605","nama":"Namira Raiqa As Syifa","kelas":"5","wali":"Humairo Aziza, S. Hut","hp":"","alamat":"Lempake, Gunung Lingai, Kec. Sungai Pinang"},{"id":"s159","nis":"3150348907","nama":"Naufal Faradeis Belawaan","kelas":"5","wali":"Olyvia Septiani Ping","hp":"","alamat":"Puworejo Perum Bumi Alam Indah, Lempake, Kec. Samarinda Utara"},{"id":"s160","nis":"0142713494","nama":"RAMADANI NAZYA PUTRA","kelas":"5","wali":"Zainal Abidin / Dwi Nasta Setyowati","hp":"","alamat":"Jl. Terong Pipit 9  Perumnas Bengkuring, Sempaja Timur, Kec. Samarinda Utara"},{"id":"s161","nis":"3143874524","nama":"Ridho Abrar Nur Hidayat","kelas":"5","wali":"Budi Anti","hp":"","alamat":"Magelang, Lempake, Kec. Samarinda Utara"},{"id":"s162","nis":"0144213530","nama":"Shofia Humaira","kelas":"5","wali":"Abdullah Hatta / Jamilah","hp":"","alamat":"Jl. Perum Bumi Alam Indah Kebon Agung, lempake, Kec. Samarinda Utara"},{"id":"s163","nis":"0146113897","nama":"Subiyanto Abdush Shamad Ramadhan","kelas":"5","wali":"Sudarminto / Megawati","hp":"","alamat":"Subulus Salam, Sidomulyo, Kec. Samarinda Ilir"},{"id":"s164","nis":"0145164417","nama":"Zain El Rafif","kelas":"5","wali":"Suhadiyono / Suprihatin","hp":"","alamat":"Purwodadi, Lempake, Kec. Samarinda Utara"},{"id":"s165","nis":"0132037288","nama":"Achmad Sakha Ainurachman","kelas":"6","wali":"Burhanudin / Wiwit Suryanti","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s166","nis":"0139479686","nama":"Al Fachrezy Nazriel Sutandhi","kelas":"6","wali":"Sofiardi Fitri Sutandhi / Siska Mustika Dewi","hp":"","alamat":"Kebon Agung, Lempake, Kec. Samarinda Utara"},{"id":"s167","nis":"0137550442","nama":"ALKHALIFI NAUFAL HAYA","kelas":"6","wali":"ASHARI / BILFAHMI HANDAYANI","hp":"","alamat":"AWANG LONG BLOK B, BUGIS, Kec. Samarinda Kota"},{"id":"s168","nis":"3142510765","nama":"Anika Dewi Zivana Nawangsari","kelas":"6","wali":"SAMSUDIN / Nur Hasanah","hp":"","alamat":"JL.PASUNDAN, JAWA, Kec. Samarinda Ulu"},{"id":"s169","nis":"0141199237","nama":"AQELA NAURA RAYYANI","kelas":"6","wali":"Sidiq / Yulita Yustriana","hp":"","alamat":"Sukorejo, Lempake, Kec. Samarinda Utara"},{"id":"s170","nis":"3137352389","nama":"Aqila Naurah Calista Zafarani","kelas":"6","wali":"Ade Siswanto / Risky Amalia","hp":"","alamat":"Perumahan Talangsari Lavender 1 No, 157, Tanah Merah, Kec. Samarinda Utara"},{"id":"s171","nis":"0149441477","nama":"Asy Syfa Azka Humairah","kelas":"6","wali":"Susanto / Yuliani. A","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s172","nis":"0139051657","nama":"AULIA MIFTAHUL JANNAH","kelas":"6","wali":"Winardi / Parti","hp":"","alamat":"Jl.Purworejo Perum. Korem Cluster Meranti, Lempake, Kec. Samarinda Utara"},{"id":"s173","nis":"0148257492","nama":"Aurelia Pranata","kelas":"6","wali":"Indra Pranata / Sulistianingsih","hp":"","alamat":"Poros Lempake, Lempake, Kec. Samarinda Utara"},{"id":"s174","nis":"3147472905","nama":"Fadila Eka Putri Cahyadi","kelas":"6","wali":"Dwi Cahyadi / Winda Astuti","hp":"","alamat":"Panti Baitul Hasan Jl. DI Panjaitan Gg. H. Kasan No.90, Lempake, Kec. Samarinda Utara"},{"id":"s175","nis":"3131171065","nama":"Faith Abiyu Jamail","kelas":"6","wali":"Endy Pratama / Widya Utari","hp":"","alamat":"JL. Sultan Ibrahim Khaliluddin, Tanah Grogot, Kec. Sambutan"},{"id":"s176","nis":"0125868414","nama":"Faris Fadhillah","kelas":"6","wali":"Fitriyani / Saidah","hp":"","alamat":"Jln. Gajah Mada, Muara Muntai Ilir, Kec. Muara Muntai"},{"id":"s177","nis":"0149117560","nama":"Fathiyyah Zahra Aurania","kelas":"6","wali":"Arif Riswaman / Novika Purwanti","hp":"","alamat":"Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s178","nis":"0143929364","nama":"Fitri Amalia","kelas":"6","wali":"Mudhofar / Siti Juminah","hp":"","alamat":"Purwodadi No. 40, Lempake, Kec. Samarinda Utara"},{"id":"s179","nis":"0158460550","nama":"Galih Cahya Al-Fatah","kelas":"6","wali":"Muhammad Zajuli / Riwi Diyana","hp":"","alamat":"Panti Baitul Hasan Jl. DI Panjaitan Gg. H. Hasan No. 90, Lempake, Kec. Samarinda Utara"},{"id":"s180","nis":"3139310998","nama":"GIGIH DANADYAKSA WIGAR","kelas":"6","wali":"WAHYONO / CATUR BAYU ASTUTI","hp":"","alamat":"Jl. Slamet Riyadi Gg. 03, KARANG ASAM ILIR, Kec. Sungai Kunjang"},{"id":"s181","nis":"0137969747","nama":"Gilang Nur Rahmad","kelas":"6","wali":"Budi Rahmat / Masriah","hp":"","alamat":"Giri Rejo, Lempake, Kec. Samarinda Utara"},{"id":"s182","nis":"0132103571","nama":"KHANSA ZAKIYYAH FITRIYANI","kelas":"6","wali":"Achmad Gozali Rohman / Trisna  Mulyani","hp":"","alamat":"AMD. Purwerejo Blok Meranti 06 Perum Bumi Alam Indah/KOREM, Lempake, Kec. Samarinda Utara"},{"id":"s183","nis":"0138269224","nama":"Latrisya Alinka Latif","kelas":"6","wali":"Sutrisno / Ria Angelina","hp":"","alamat":"Jalan Poros Kebon Agung Gg. Komisari, Lempake, Kec. Samarinda Utara"},{"id":"s184","nis":"0154819701","nama":"Meysa Mar'atus Shidqia","kelas":"6","wali":"Moch Mawahib / Siti Markomah","hp":"","alamat":"andika, Lempake, Kec. Samarinda Utara"},{"id":"s185","nis":"3132079516","nama":"Muhammad Aiko Al Aska Baihaqi","kelas":"6","wali":"Lalu Harri Kais Mayadi Irawan / Ayu Irma Nur Sabrida","hp":"","alamat":"Magelang 4, Lempake, Kec. Samarinda Utara"},{"id":"s186","nis":"0139907230","nama":"Muhammad Al - Fath Hanif","kelas":"6","wali":"Ahmad Zainudin / Sri Hidayati","hp":"","alamat":"Magelang, Lempake, Kec. Samarinda Utara"},{"id":"s187","nis":"0132822909","nama":"MUHAMMAD AL FATIH","kelas":"6","wali":"Ahmad Amirudin / Fitriawan","hp":"","alamat":"Jl. Lempake Jaya, Lempake, Kec. Samarinda Utara"},{"id":"s188","nis":"0137568101","nama":"Muhammad Azzka Maulana","kelas":"6","wali":"Heri Sulistiyo / Setiyani","hp":"","alamat":"Gunung Kapur II, Lempake, Kec. Samarinda Utara"},{"id":"s189","nis":"3136377621","nama":"Muhammad Iqbal Hairani","kelas":"6","wali":"Hairani / Karlina Lahmutu","hp":"","alamat":"Panti Baitul Hasan DI Panjaitan Gg. H. Kasan No. 90, Lempake, Kec. Samarinda Utara"},{"id":"s190","nis":"0138690263","nama":"Muhammad Naufal","kelas":"6","wali":"Ali Akbar / Purwanti","hp":"","alamat":"Lempake Jaya, 75118, Kec. Samarinda Utara"},{"id":"s191","nis":"3133544717","nama":"Muhammad Saad Budiman","kelas":"6","wali":"Budiman / Rosneni","hp":"","alamat":"Bugis No,050 Mugirejo, Mugirejo, Kec. Sungai Pinang"},{"id":"s192","nis":"0144399003","nama":"Nazwa Aulia","kelas":"6","wali":"Sugino / Sri Murningsih","hp":"","alamat":"Jl.Citanduy, Tanah Merah, Kec. Samarinda Utara"},{"id":"s193","nis":"3146657339","nama":"Rafie Almair Tsaqib","kelas":"6","wali":"Ano Ari Dani / Yuliawati","hp":"","alamat":"Perumahan Talang Sari, Tanah Merah, Kec. Samarinda Utara"},{"id":"s194","nis":"0141953114","nama":"Ratna Hanifah","kelas":"6","wali":"Tarmizi / Wartiah","hp":"","alamat":"Lempake Jaya, 75118, Kec. Samarinda Utara"},{"id":"s195","nis":"0136305387","nama":"TALITA ALVIENA RHEIVA","kelas":"6","wali":"Candra Pramadya / Lili Sriwahyuni","hp":"","alamat":"Jl. Mahoni, Beno harapan, Kec. Batu Ampar"},{"id":"s196","nis":"0148094925","nama":"Zainal 'Abidin Wardana","kelas":"6","wali":"Warno Al Kholil / Rame","hp":"","alamat":"Jl. Giri Mukti, Tanah Merah, Kec. Samarinda Utara"}];
+let importBuffer = [];
+
+let db = {
+  sekolah:{...DEFAULT_SEKOLAH},
+  tagihan:[
+    {id:'t1',nama:'SPP',tipe:'SPP',nominal:150000,ket:'Iuran SPP bulanan'},
+    {id:'t2',nama:'IPP',tipe:'IPP',nominal:500000,ket:'Iuran Pengembangan Pendidikan'},
+    {id:'t3',nama:'Uang Kegiatan Sekolah',tipe:'Kegiatan',nominal:100000,ket:'Kegiatan sekolah dan ekstrakurikuler'},
+    {id:'t4',nama:'Uang Seragam',tipe:'Seragam',nominal:350000,ket:'Seragam sekolah'},
+    {id:'t5',nama:'Uang Ujian/PAS',tipe:'Ujian',nominal:75000,ket:'Penilaian akhir semester'},
+  ],
+  siswa:DEFAULT_SISWA.map(s=>({...s})),
+  pembayaran:[]
+};
+
+function save(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(db)); }catch(e){ alert('Gagal menyimpan data. Kemungkinan storage browser penuh. Coba hapus gambar QRIS besar atau backup dulu.'); } }
+function load(){ try{ const d=localStorage.getItem(STORAGE_KEY); if(d) db=JSON.parse(d); }catch(e){} }
+function isAlumniKelas(k){ return ['lulus','alumni','lulus/alumni','lulus - alumni'].includes(String(k||'').trim().toLowerCase()); }
+function getActiveSiswa(){ return (db.siswa||[]).filter(s=>!isAlumniKelas(s.kelas)); }
+function kelasLabel(k){ return k==='__ALUMNI__'?'Luluskan / keluarkan dari Data Siswa':'Kelas '+k; }
+function sortKelasArr(arr){ return [...arr].sort((a,b)=>String(a).localeCompare(String(b),'id',{numeric:true})); }
+function archiveSiswaAsAlumni(s){
+  db.alumni=Array.isArray(db.alumni)?db.alumni:[];
+  if(!db.alumni.some(a=>a.id===s.id)){
+    db.alumni.push({...s,kelasTerakhir:s.kelas,status:'Lulus/Alumni',tanggalLulus:new Date().toISOString().split('T')[0]});
+  }
+}
+function normalizeDb(){
+  db.sekolah=Object.assign({},DEFAULT_SEKOLAH,db.sekolah||{});
+  db.tagihan=Array.isArray(db.tagihan)?db.tagihan:[];
+  db.siswa=Array.isArray(db.siswa)?db.siswa:[];
+  db.pembayaran=Array.isArray(db.pembayaran)?db.pembayaran:[];
+  db.alumni=Array.isArray(db.alumni)?db.alumni:[];
+  const aktif=[];
+  db.siswa.forEach(s=>{ if(isAlumniKelas(s.kelas)) archiveSiswaAsAlumni(s); else aktif.push(s); });
+  db.siswa=aktif;
+}
+function getKelasList(){
+  const aktif=getActiveSiswa();
+  const tambahan=[...new Set(aktif.map(s=>String(s.kelas||'').trim()).filter(k=>k && !KELAS_OPTIONS.includes(k) && !isAlumniKelas(k)))];
+  return sortKelasArr([...KELAS_OPTIONS,...tambahan]);
+}
+function kelasOptionsHtml(selected=''){
+  return getKelasList().map(k=>`<option value="${k}"${k===selected?' selected':''}>${kelasLabel(k)}</option>`).join('');
+}
+function populateSiswaKelasSelect(selected=''){
+  const el=document.getElementById('s-kelas');
+  if(el) el.innerHTML='<option value="">-- Pilih Kelas --</option>'+kelasOptionsHtml(selected);
+}
+load(); normalizeDb(); save();
+
+// ========== HELPERS ==========
+const rp = n => 'Rp '+Number(n).toLocaleString('id-ID');
+const uid = () => '_'+Math.random().toString(36).substr(2,9);
+const gS = id => db.siswa.find(s=>s.id===id)||{};
+const gT = id => db.tagihan.find(t=>t.id===id)||{};
+const now = new Date();
+const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+function isTagihanBulanan(t){ return (t?.tipe||'')==='SPP'; }
+function isPembayaranAda(sid,tid,bulan=''){
+  return db.pembayaran.some(p=>p.siswaId===sid && p.tagihanId===tid && (bulan ? p.bulan===bulan : true));
+}
+function bulanTagihanBerjalan(){ return BLAN.slice(0, now.getMonth()+1); }
+
+
+// ========== NOTIFIKASI BERBUNYI ==========
+function playNotif(type='success'){
+  if(db?.sekolah?.notifSound===false) return;
+  try{
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if(ctx.state==='suspended' && ctx.resume) ctx.resume();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.connect(gain); gain.connect(ctx.destination);
+    const t = ctx.currentTime;
+    if(type==='warning' || type==='error'){
+      osc.frequency.setValueAtTime(330,t);
+      osc.frequency.setValueAtTime(220,t+0.12);
+    }else{
+      osc.frequency.setValueAtTime(660,t);
+      osc.frequency.setValueAtTime(880,t+0.12);
+    }
+    gain.gain.setValueAtTime(0.0001,t);
+    gain.gain.exponentialRampToValueAtTime(0.16,t+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001,t+0.38);
+    osc.start(t); osc.stop(t+0.42);
+    setTimeout(()=>ctx.close&&ctx.close(),520);
+  }catch(e){}
+}
+function notify(msg,type='success'){
+  playNotif(type);
+  let box=document.getElementById('toast-container');
+  if(!box){ box=document.createElement('div'); box.id='toast-container'; document.body.appendChild(box); }
+  const item=document.createElement('div');
+  item.className='toast-notif '+type;
+  item.innerHTML=`<span class="toast-dot"></span><div>${msg}</div>`;
+  box.appendChild(item);
+  setTimeout(()=>item.classList.add('show'),10);
+  setTimeout(()=>{ item.classList.remove('show'); setTimeout(()=>item.remove(),250); },3600);
+}
+function testNotifSound(){ notify('Suara notifikasi aktif dan siap dipakai.','success'); }
+
+// ========== NAV ==========
+function showPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles={dashboard:'Dashboard',siswa:'Data Siswa',pembayaran:'Pembayaran',qris:'QRIS Pembayaran',rekap:'Rekap Pembayaran',tunggakan:'Daftar Tunggakan',whatsapp:'WhatsApp Tunggakan',tagihan:'Jenis Tagihan',setting:'Pengaturan & Data'};
+  document.getElementById('topbar-title').textContent=titles[id]||id;
+  if(id==='dashboard') renderDashboard();
+  if(id==='siswa') renderSiswa();
+  if(id==='pembayaran'){ renderPembayaran(); populateBayarFilters(); }
+  if(id==='qris') populateQris();
+  if(id==='rekap'){ renderRekap(); populateRekapFilters(); }
+  if(id==='tunggakan'){ renderTunggakan(); populateTgFilter(); }
+  if(id==='whatsapp') populateWA();
+  if(id==='tagihan') renderTagihan();
+  if(id==='setting') loadSetting();
+}
+
+function showTab(id, el){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  if(id==='tab-backup') updateDbInfo();
+  if(id==='tab-naik') populateKenaikanKelas();
+}
+
+function openTambahSiswa(){ clearSiswaForm(); openModal('m-siswa'); }
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='m-bayar'){ populateBayarSelects(); document.getElementById('b-tgl').value=now.toISOString().split('T')[0]; document.getElementById('b-kasir').value=db.sekolah.kasir; }
+  if(id==='m-siswa') populateSiswaKelasSelect(document.getElementById('s-kelas')?.value||'');
+  if(id==='m-tagihan') clearTagihanForm();
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); }));
+
+// ========== DASHBOARD ==========
+function renderDashboard(){
+  document.getElementById('ds-siswa').textContent = db.siswa.length;
+  const bulanLabel = BLAN[now.getMonth()];
+  document.getElementById('dash-bulan-label').textContent = bulanLabel;
+  const thisMonth = db.pembayaran.filter(p=>{ const d=new Date(p.tgl); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); });
+  document.getElementById('ds-pemasukan').textContent = rp(thisMonth.reduce((s,p)=>s+p.nominal,0));
+  document.getElementById('ds-pem-sub').textContent = thisMonth.length+' transaksi';
+  const tgAll=getTunggakanList();
+  document.getElementById('ds-tunggakan').textContent = tgAll.length;
+  document.getElementById('ds-total-tg').textContent = rp(tgAll.reduce((sum,r)=>sum+r.total,0));
+  // Transaksi terakhir
+  const last5 = [...db.pembayaran].sort((a,b)=>new Date(b.tgl)-new Date(a.tgl)).slice(0,5);
+  document.getElementById('dash-trx').innerHTML = last5.length
+    ? last5.map(p=>{ const s=gS(p.siswaId),t=gT(p.tagihanId); return `<tr><td style="font-weight:500">${esc(s.nama)||'-'}</td><td>${esc(t.nama)||'-'}</td><td>${rp(p.nominal)}</td><td><span class="badge ${p.metode==='QRIS'?'badge-blue':'badge-gray'}">${esc(p.metode)}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="4" class="empty-state"><p>Belum ada transaksi</p></td></tr>';
+  // Progress SPP
+  const sppTag = db.tagihan.find(t=>t.tipe==='SPP');
+  const pd = document.getElementById('dash-progress');
+  if(!sppTag||!db.siswa.length){ pd.innerHTML='<div class="empty-state"><p>Tambah siswa & tagihan SPP</p></div>'; return; }
+  const sudah = db.siswa.filter(s=>isPembayaranAda(s.id,sppTag.id,bulanLabel)).length;
+  const pct = Math.round(sudah/db.siswa.length*100);
+  pd.innerHTML=`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>SPP ${bulanLabel}</span><strong>${sudah}/${db.siswa.length} (${pct}%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${pct>=80?'var(--success)':pct>=50?'var(--primary)':'var(--warning)'}"></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--success-light);border-radius:8px;padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;color:#065f46">${sudah}</div><div style="font-size:11px;color:#065f46">Sudah Bayar</div></div><div style="background:var(--danger-light);border-radius:8px;padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;color:#991b1b">${db.siswa.length-sudah}</div><div style="font-size:11px;color:#991b1b">Belum Bayar</div></div></div>`;
+}
+
+// ========== SISWA ==========
+let siswaSelected = new Set();
+let naikSiswaSelected = new Set();
+function getVisibleSiswaData(){
+  const q=(document.getElementById('src-siswa')?.value||'').toLowerCase();
+  const kl=document.getElementById('fil-kelas')?.value||'';
+  return getActiveSiswa().filter(s=>(!q||(s.nama||'').toLowerCase().includes(q)||(s.nis||'').includes(q))&&(!kl||s.kelas===kl))
+    .sort((a,b)=>String(a.kelas).localeCompare(String(b.kelas),'id',{numeric:true}) || String(a.nama).localeCompare(String(b.nama),'id'));
+}
+function renderSiswa(){
+  const f=document.getElementById('fil-kelas'); const cv=f?.value||'';
+  if(f) f.innerHTML='<option value="">Semua Kelas</option>'+getKelasList().map(k=>`<option value="${k}"${k===cv?' selected':''}>${kelasLabel(k)}</option>`).join('');
+  const list=getVisibleSiswaData();
+  const all=document.getElementById('siswa-check-all'); if(all) all.checked=list.length>0 && list.every(s=>siswaSelected.has(s.id));
+  document.getElementById('siswa-tbody').innerHTML = list.length
+    ? list.map(s=>`<tr><td><input type="checkbox" class="siswa-row-check" value="${s.id}" ${siswaSelected.has(s.id)?'checked':''} onchange="toggleSiswaSelected('${s.id}',this.checked)"></td><td style="font-family:monospace;font-weight:600">${esc(s.nis||'')}</td><td style="font-weight:500">${esc(s.nama||'')}</td><td><span class="badge badge-blue">${esc(s.kelas||'-')}</span></td><td>${esc(s.wali||'-')}</td><td>${esc(s.hp||'-')}</td><td class="abtns"><button class="btn btn-outline btn-sm" onclick="editSiswa('${s.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="hapusSiswa('${s.id}')">Hapus</button></td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty-state"><p>Tidak ada data siswa</p></td></tr>';
+}
+function toggleSiswaSelected(id,checked){ if(checked) siswaSelected.add(id); else siswaSelected.delete(id); const all=document.getElementById('siswa-check-all'); const list=getVisibleSiswaData(); if(all) all.checked=list.length>0 && list.every(s=>siswaSelected.has(s.id)); }
+function toggleSiswaSelectAll(el){ getVisibleSiswaData().forEach(s=>{ if(el.checked) siswaSelected.add(s.id); else siswaSelected.delete(s.id); }); renderSiswa(); }
+function populateNaikSiswaSelects(){
+  const asal=document.getElementById('ns-kelas-asal');
+  const tujuan=document.getElementById('ns-kelas-tujuan');
+  const asalVal=asal?.value||''; const tujuanVal=tujuan?.value||'';
+  const opts=getKelasList().map(k=>`<option value="${k}"${k===asalVal?' selected':''}>${kelasLabel(k)}</option>`).join('');
+  if(asal) asal.innerHTML='<option value="">Semua Kelas</option>'+opts;
+  const targetOpts=getKelasList().map(k=>`<option value="${k}"${k===tujuanVal?' selected':''}>${kelasLabel(k)}</option>`).join('')+`<option value="__ALUMNI__"${tujuanVal==='__ALUMNI__'?' selected':''}>Luluskan / keluarkan dari Data Siswa</option>`;
+  if(tujuan) tujuan.innerHTML='<option value="">-- Pilih Kelas Tujuan --</option>'+targetOpts;
+}
+function openNaikKelasSiswa(ids=[]){
+  naikSiswaSelected=new Set(Array.isArray(ids)?ids:[]);
+  populateNaikSiswaSelects();
+  const asal=document.getElementById('ns-kelas-asal');
+  const tujuan=document.getElementById('ns-kelas-tujuan');
+  const selected=[...naikSiswaSelected].map(id=>db.siswa.find(s=>s.id===id)).filter(Boolean);
+  const kelasUnik=[...new Set(selected.map(s=>s.kelas))];
+  asal.value=kelasUnik.length===1?kelasUnik[0]:(document.getElementById('fil-kelas')?.value||'');
+  if(!tujuan.value) tujuan.value=asal.value?defaultNaikKe(asal.value):'';
+  document.getElementById('ns-search').value='';
+  openModal('m-naik-siswa');
+  renderNaikSiswaList();
+}
+function getNaikVisibleSiswa(){
+  const asal=document.getElementById('ns-kelas-asal')?.value||'';
+  const q=(document.getElementById('ns-search')?.value||'').toLowerCase();
+  return getActiveSiswa().filter(s=>(!asal||s.kelas===asal)&&(!q||(s.nama||'').toLowerCase().includes(q)||(s.nis||'').includes(q)))
+    .sort((a,b)=>String(a.kelas).localeCompare(String(b.kelas),'id',{numeric:true}) || String(a.nama).localeCompare(String(b.nama),'id'));
+}
+function renderNaikSiswaList(){
+  const box=document.getElementById('ns-siswa-list');
+  const info=document.getElementById('ns-info');
+  const list=getNaikVisibleSiswa();
+  if(!list.length){ box.innerHTML='<div class="empty-state"><p>Tidak ada siswa sesuai filter.</p></div>'; info.textContent='0 siswa tampil · '+naikSiswaSelected.size+' siswa dipilih'; return; }
+  box.innerHTML=list.map((s,i)=>`<label class="bulk-student-row"><input type="checkbox" value="${s.id}" ${naikSiswaSelected.has(s.id)?'checked':''} onchange="toggleNaikSiswa('${s.id}',this.checked)"><div><div><span class="row-num">${i+1}.</span> <strong>${esc(s.nama||'-')}</strong> <span class="badge badge-blue">${esc(s.kelas||'-')}</span></div><div class="bulk-student-meta">NIS: ${esc(s.nis||'-')} · Wali: ${esc(s.wali||'-')}</div></div></label>`).join('');
+  info.textContent=`${list.length} siswa tampil · ${naikSiswaSelected.size} siswa dipilih`;
+}
+function toggleNaikSiswa(id,checked){ if(checked) naikSiswaSelected.add(id); else naikSiswaSelected.delete(id); renderNaikSiswaList(); }
+function pilihSemuaNaikKelas(checked){ getNaikVisibleSiswa().forEach(s=>{ if(checked) naikSiswaSelected.add(s.id); else naikSiswaSelected.delete(s.id); }); renderNaikSiswaList(); }
+function jalankanNaikKelasDataSiswa(){
+  const tujuan=document.getElementById('ns-kelas-tujuan').value;
+  const ids=[...naikSiswaSelected];
+  if(!tujuan){ alert('Pilih kelas tujuan terlebih dahulu.'); return; }
+  if(!ids.length){ alert('Pilih minimal 1 siswa yang akan diproses.'); return; }
+  const label=tujuan==='__ALUMNI__'?'diluluskan dan dikeluarkan dari Data Siswa':'dipindahkan ke '+kelasLabel(tujuan);
+  if(!confirm(`${ids.length} siswa akan ${label}. Lanjutkan?`)) return;
+  let changed=0;
+  if(tujuan==='__ALUMNI__'){
+    const keep=[];
+    db.siswa.forEach(s=>{ if(ids.includes(s.id)){ archiveSiswaAsAlumni(s); changed++; } else keep.push(s); });
+    db.siswa=keep;
+  }else{
+    db.siswa.forEach(s=>{ if(ids.includes(s.id)){ s.kelas=tujuan; changed++; } });
+  }
+  save();
+  closeModal('m-naik-siswa');
+  siswaSelected.clear(); naikSiswaSelected.clear();
+  renderSiswa(); renderDashboard(); populateAllSelects(); updateDbInfo();
+  notify(`${changed} siswa berhasil ${label}.`,'success');
+}
+function clearSiswaForm(){ ['s-id','s-nis','s-nama','s-wali','s-hp','s-alamat'].forEach(x=>document.getElementById(x).value=''); populateSiswaKelasSelect(''); document.getElementById('s-kelas').value=''; document.getElementById('m-siswa-title').textContent='Tambah Siswa'; }
+function editSiswa(id){ const s=db.siswa.find(x=>x.id===id); if(!s) return; populateSiswaKelasSelect(s.kelas); document.getElementById('s-id').value=s.id; document.getElementById('s-nis').value=s.nis; document.getElementById('s-nama').value=s.nama; document.getElementById('s-kelas').value=s.kelas; document.getElementById('s-wali').value=s.wali||''; document.getElementById('s-hp').value=s.hp||''; document.getElementById('s-alamat').value=s.alamat||''; document.getElementById('m-siswa-title').textContent='Edit Siswa'; openModal('m-siswa'); }
+function saveSiswa(){ const id=document.getElementById('s-id').value; const data={nis:document.getElementById('s-nis').value.trim(),nama:document.getElementById('s-nama').value.trim(),kelas:document.getElementById('s-kelas').value.trim(),wali:document.getElementById('s-wali').value.trim(),hp:document.getElementById('s-hp').value.trim(),alamat:document.getElementById('s-alamat').value.trim()}; if(!data.nis||!data.nama||!data.kelas){alert('NIS, Nama, dan Kelas wajib diisi!');return;} const isEdit=!!id; if(id){const i=db.siswa.findIndex(s=>s.id===id);if(i>=0)db.siswa[i]={...db.siswa[i],...data};}else{db.siswa.push({id:uid(),...data});} save();closeModal('m-siswa');renderSiswa(); notify(`Data siswa ${data.nama} berhasil ${isEdit?'diperbarui':'ditambahkan'}.`,'success'); }
+function hapusSiswa(id){ if(!confirm('Hapus siswa ini?')) return; db.siswa=db.siswa.filter(s=>s.id!==id); save(); renderSiswa(); notify('Data siswa berhasil dihapus.','warning'); }
+function openImportSiswa(){ showPage('setting',document.querySelector('[onclick*=setting]')); setTimeout(()=>showTab('tab-import',document.querySelectorAll('.tab-btn')[1]),100); }
+
+// ========== IMPORT SISWA ==========
+function handleDropImport(e){ e.preventDefault(); document.getElementById('drop-zone').style.borderColor=''; const f=e.dataTransfer.files[0]; if(f) prosesImportFile(f); }
+function handleImportFile(input){ if(input.files[0]) prosesImportFile(input.files[0]); }
+function prosesImportFile(file){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const wb=XLSX.read(e.target.result,{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    if(rows.length<2){alert('File kosong atau format tidak sesuai!');return;}
+    importBuffer=[];
+    for(let i=1;i<rows.length;i++){
+      const r=rows[i];
+      const nis=String(r[0]||'').trim(); const nama=String(r[1]||'').trim();
+      if(!nis&&!nama) continue;
+      importBuffer.push({nis,nama,kelas:String(r[2]||'').trim(),wali:String(r[3]||'').trim(),hp:String(r[4]||'').trim(),alamat:String(r[5]||'').trim()});
+    }
+    document.getElementById('import-alert-text').textContent=`${importBuffer.length} siswa siap diimport. Periksa data di bawah sebelum konfirmasi.`;
+    document.getElementById('import-preview-tbody').innerHTML=importBuffer.map(s=>`<tr><td>${s.nis}</td><td>${s.nama}</td><td>${s.kelas}</td><td>${s.wali}</td><td>${s.hp}</td></tr>`).join('');
+    document.getElementById('import-preview').style.display='block';
+  };
+  reader.readAsArrayBuffer(file);
+}
+function konfirmasiImport(){
+  let added=0,updated=0;
+  importBuffer.forEach(s=>{
+    const exists=db.siswa.find(x=>x.nis===s.nis);
+    if(exists){db.siswa[db.siswa.indexOf(exists)]={...exists,...s};updated++;}
+    else{db.siswa.push({id:uid(),...s});added++;}
+  });
+  save(); document.getElementById('import-preview').style.display='none'; importBuffer=[];
+  notify(`Import berhasil: ${added} siswa baru ditambahkan, ${updated} siswa diperbarui.`,'success');
+  renderSiswa();
+}
+function downloadTemplate(){
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet([['NIS','Nama','Kelas','Wali','HP','Alamat'],['26001','Nama Siswa','1','Nama Wali','08123456789','Alamat Siswa'],['26002','Nama Siswa','2.1','Nama Wali','08123456789','Alamat Siswa'],['26003','Nama Siswa','2.2','Nama Wali','08123456789','Alamat Siswa'],['26004','Nama Siswa','5.1','Nama Wali','08123456789','Alamat Siswa'],['26005','Nama Siswa','5.2','Nama Wali','08123456789','Alamat Siswa']]);
+  ws['!cols']=[{wch:12},{wch:25},{wch:12},{wch:20},{wch:16},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws,'Template Siswa');
+  XLSX.writeFile(wb,'Template_Import_Siswa.xlsx');
+}
+
+// ========== TAGIHAN ==========
+function renderTagihan(){
+  document.getElementById('tagihan-tbody').innerHTML=db.tagihan.length
+    ? db.tagihan.map(t=>`<tr><td style="font-weight:600">${t.nama}</td><td><span class="badge badge-blue">${t.tipe}</span></td><td style="font-weight:700">${rp(t.nominal)}</td><td>${t.ket||'-'}</td><td class="abtns"><button class="btn btn-outline btn-sm" onclick="editTagihan('${t.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="hapusTagihan('${t.id}')">Hapus</button></td></tr>`).join('')
+    : '<tr><td colspan="5" class="empty-state"><p>Belum ada jenis tagihan</p></td></tr>';
+}
+function clearTagihanForm(){ ['t-id','t-nama','t-nominal','t-ket'].forEach(x=>document.getElementById(x).value=''); document.getElementById('t-tipe').value='SPP'; }
+function editTagihan(id){ const t=db.tagihan.find(x=>x.id===id); if(!t) return; document.getElementById('t-id').value=t.id; document.getElementById('t-nama').value=t.nama; document.getElementById('t-tipe').value=t.tipe; document.getElementById('t-nominal').value=t.nominal; document.getElementById('t-ket').value=t.ket||''; openModal('m-tagihan'); }
+function saveTagihan(){ const id=document.getElementById('t-id').value; const data={nama:document.getElementById('t-nama').value.trim(),tipe:document.getElementById('t-tipe').value,nominal:Number(document.getElementById('t-nominal').value),ket:document.getElementById('t-ket').value.trim()}; if(!data.nama||!data.nominal){alert('Nama dan nominal wajib diisi!');return;} const isEdit=!!id; if(id){const i=db.tagihan.findIndex(t=>t.id===id);if(i>=0)db.tagihan[i]={...db.tagihan[i],...data};}else{db.tagihan.push({id:uid(),...data});} save();closeModal('m-tagihan');renderTagihan(); notify(`Tagihan ${data.nama} berhasil ${isEdit?'diperbarui':'ditambahkan'}.`,'success'); }
+function hapusTagihan(id){ if(!confirm('Hapus tagihan ini?')) return; db.tagihan=db.tagihan.filter(t=>t.id!==id); save(); renderTagihan(); notify('Jenis tagihan berhasil dihapus.','warning'); }
+
+// ========== PEMBAYARAN ==========
+function populateBayarSelects(){
+  document.getElementById('b-siswa').innerHTML='<option value="">-- Pilih Siswa --</option>'+db.siswa.map(s=>`<option value="${s.id}">${s.nis} - ${s.nama} (${s.kelas})</option>`).join('');
+  document.getElementById('b-jenis').innerHTML='<option value="">-- Pilih Jenis --</option>'+db.tagihan.map(t=>`<option value="${t.id}">${t.nama} — ${rp(t.nominal)}</option>`).join('');
+}
+function updateBayarNominal(){ const tid=document.getElementById('b-jenis').value; if(tid){document.getElementById('b-nominal').value=gT(tid).nominal||'';} }
+function updateBayarInfo(){
+  const sid=document.getElementById('b-siswa').value;
+  const box=document.getElementById('b-info');
+  if(!sid){box.style.display='none';return;}
+  const s=gS(sid);
+  const items=getUnpaidItemsForSiswa(s);
+  if(items.length){
+    box.style.display='flex';
+    document.getElementById('b-info-text').textContent=`${s.nama} masih punya tunggakan: ${formatTunggakanItems(items)}. Total ${rp(items.reduce((sum,it)=>sum+it.nominal,0))}`;
+  } else box.style.display='none';
+}
+function populateBayarFilters(){ const bl=[...new Set(db.pembayaran.map(p=>p.bulan).filter(Boolean))]; document.getElementById('fil-bayar-bulan').innerHTML='<option value="">Semua Bulan</option>'+bl.map(b=>`<option>${b}</option>`).join(''); document.getElementById('fil-bayar-jenis').innerHTML='<option value="">Semua Jenis</option>'+db.tagihan.map(t=>`<option>${t.nama}</option>`).join(''); }
+function renderPembayaran(){
+  const q=(document.getElementById('src-bayar')?.value||'').toLowerCase();
+  const bl=document.getElementById('fil-bayar-bulan')?.value||'';
+  const jn=document.getElementById('fil-bayar-jenis')?.value||'';
+  let list=[...db.pembayaran].sort((a,b)=>new Date(b.tgl)-new Date(a.tgl));
+  if(q) list=list.filter(p=>{ const s=gS(p.siswaId); return (s.nama||'').toLowerCase().includes(q)||(s.nis||'').includes(q); });
+  if(bl) list=list.filter(p=>p.bulan===bl);
+  if(jn) list=list.filter(p=>gT(p.tagihanId).nama===jn);
+  document.getElementById('bayar-tbody').innerHTML=list.length
+    ? list.map(p=>{ const s=gS(p.siswaId),t=gT(p.tagihanId); return `<tr><td style="white-space:nowrap">${p.tgl}</td><td style="font-family:monospace">${s.nis||'-'}</td><td style="font-weight:500">${s.nama||'-'}</td><td>${t.nama||'-'}</td><td>${p.bulan||p.ket||'-'}</td><td style="font-weight:700">${rp(p.nominal)}</td><td><span class="badge ${p.metode==='QRIS'?'badge-blue':'badge-gray'}">${p.metode}</span></td><td>${p.kasir||'-'}</td><td class="abtns"><button class="btn btn-outline btn-sm" onclick="cetakNota('${p.id}')">🖨 Nota</button><button class="btn btn-danger btn-sm" onclick="hapusBayar('${p.id}')">Hapus</button></td></tr>`; }).join('')
+    : '<tr><td colspan="9" class="empty-state"><p>Tidak ada data</p></td></tr>';
+}
+function savePembayaran(){
+  const data={
+    siswaId:document.getElementById('b-siswa').value,
+    tagihanId:document.getElementById('b-jenis').value,
+    tgl:document.getElementById('b-tgl').value,
+    bulan:document.getElementById('b-bulan').value,
+    nominal:Number(document.getElementById('b-nominal').value),
+    metode:document.getElementById('b-metode').value,
+    kasir:document.getElementById('b-kasir').value,
+    ket:document.getElementById('b-ket').value
+  };
+  if(!data.siswaId||!data.tagihanId||!data.nominal){alert('Siswa, Jenis, dan Nominal wajib diisi!');return;}
+  const id=uid();
+  db.pembayaran.push({id,...data});
+  save();
+  closeModal('m-bayar');
+  const s=gS(data.siswaId), t=gT(data.tagihanId);
+  notify(`Pembayaran ${t.nama||'tagihan'}${data.bulan?' bulan '+data.bulan:''} atas nama ${s.nama||'siswa'} sebesar ${rp(data.nominal)} berhasil disimpan.`, 'success');
+  renderPembayaran();
+  populateBayarFilters();
+  renderDashboard();
+  if(document.getElementById('b-cetak')?.checked) cetakNota(id);
+}
+function hapusBayar(id){ if(!confirm('Hapus data pembayaran ini?')) return; db.pembayaran=db.pembayaran.filter(p=>p.id!==id); save(); renderPembayaran(); renderDashboard(); notify('Data pembayaran berhasil dihapus.','warning'); }
+
+// ========== PEMBAYARAN MASSAL ==========
+let massalSelected = new Set();
+function populateMassalSelects(){
+  const jenis=document.getElementById('mb-jenis');
+  const curJenis=jenis?.value||'';
+  jenis.innerHTML='<option value="">-- Pilih Jenis --</option>'+db.tagihan.map(t=>`<option value="${t.id}"${t.id===curJenis?' selected':''}>${esc(t.nama)} — ${rp(t.nominal)}</option>`).join('');
+  const kelas=document.getElementById('mb-kelas');
+  const curKelas=kelas?.value||'';
+  kelas.innerHTML='<option value="">Semua Kelas</option>'+getKelasList().map(k=>`<option value="${k}"${k===curKelas?' selected':''}>${kelasLabel(k)}</option>`).join('');
+}
+function openMassalBayar(ids=[]){
+  massalSelected = new Set(Array.isArray(ids)?ids:[]);
+  populateMassalSelects();
+  document.getElementById('mb-tgl').value=new Date().toISOString().split('T')[0];
+  document.getElementById('mb-kasir').value=db.sekolah.kasir||'Admin';
+  document.getElementById('mb-status').value=ids.length?'semua':'belum';
+  document.getElementById('mb-ket').value='';
+  openModal('m-bayar-massal');
+  updateMassalNominal();
+  renderMassalSiswa();
+}
+function updateMassalNominal(){
+  const tid=document.getElementById('mb-jenis').value;
+  if(tid){
+    const t=gT(tid);
+    document.getElementById('mb-nominal').value=t.nominal||'';
+    const bulanEl=document.getElementById('mb-bulan');
+    if(isTagihanBulanan(t) && !bulanEl.value) bulanEl.value=BLAN[now.getMonth()];
+    if(!isTagihanBulanan(t)) bulanEl.value='';
+  }
+}
+function getMassalVisibleSiswa(){
+  const tid=document.getElementById('mb-jenis').value;
+  const bulan=document.getElementById('mb-bulan').value;
+  const kelas=document.getElementById('mb-kelas').value;
+  const status=document.getElementById('mb-status').value;
+  let list=[...getActiveSiswa()];
+  if(kelas) list=list.filter(s=>s.kelas===kelas);
+  if(tid){
+    list=list.filter(s=>{
+      const paid=isPembayaranAda(s.id,tid,bulan);
+      if(status==='belum') return !paid;
+      if(status==='sudah') return paid;
+      return true;
+    });
+  }
+  return list.sort((a,b)=>String(a.kelas).localeCompare(String(b.kelas),'id',{numeric:true}) || String(a.nama).localeCompare(String(b.nama),'id'));
+}
+function renderMassalSiswa(){
+  const box=document.getElementById('mb-siswa-list');
+  const info=document.getElementById('mb-info');
+  const tid=document.getElementById('mb-jenis').value;
+  const bulan=document.getElementById('mb-bulan').value;
+  if(!tid){
+    box.innerHTML='<div class="empty-state"><p>Pilih jenis tagihan terlebih dahulu.</p></div>';
+    info.textContent='';
+    return;
+  }
+  const t=gT(tid);
+  const list=getMassalVisibleSiswa();
+  if(!list.length){
+    box.innerHTML='<div class="empty-state"><p>Tidak ada siswa sesuai filter.</p></div>';
+    info.textContent='0 siswa tampil';
+    return;
+  }
+  box.innerHTML=list.map(s=>{
+    const paid=isPembayaranAda(s.id,tid,bulan);
+    const checked=massalSelected.has(s.id)?'checked':'';
+    return `<label class="bulk-student-row"><input type="checkbox" value="${s.id}" ${checked} onchange="toggleMassalSiswa('${s.id}',this.checked)"><div style="flex:1"><div><strong>${esc(s.nama)}</strong> <span class="badge badge-blue">${esc(s.kelas)}</span> <span class="badge ${paid?'badge-success':'badge-warning'}">${paid?'Sudah bayar':'Belum bayar'}</span></div><div class="bulk-student-meta">NIS: ${esc(s.nis||'-')} · Wali: ${esc(s.wali||'-')} · ${esc(t.nama)}${bulan?' bulan '+esc(bulan):''}</div></div></label>`;
+  }).join('');
+  const terpilih=[...massalSelected].length;
+  info.textContent=`${list.length} siswa tampil · ${terpilih} siswa dipilih. Sistem akan melewati pembayaran yang sudah tercatat agar tidak dobel.`;
+}
+function toggleMassalSiswa(id,checked){ if(checked) massalSelected.add(id); else massalSelected.delete(id); renderMassalSiswa(); }
+function pilihSemuaMassal(checked){
+  getMassalVisibleSiswa().forEach(s=>{ if(checked) massalSelected.add(s.id); else massalSelected.delete(s.id); });
+  renderMassalSiswa();
+}
+function saveMassalPembayaran(){
+  const tid=document.getElementById('mb-jenis').value;
+  const bulan=document.getElementById('mb-bulan').value;
+  const tgl=document.getElementById('mb-tgl').value;
+  const nominal=Number(document.getElementById('mb-nominal').value);
+  const metode=document.getElementById('mb-metode').value;
+  const kasir=document.getElementById('mb-kasir').value;
+  const ket=document.getElementById('mb-ket').value;
+  const ids=[...massalSelected];
+  if(!tid||!tgl||!nominal){ alert('Jenis tagihan, tanggal, dan nominal wajib diisi!'); return; }
+  if(!ids.length){ alert('Pilih minimal 1 siswa.'); return; }
+  const t=gT(tid);
+  if(!bulan && isTagihanBulanan(t) && !confirm('Tagihan SPP biasanya perlu bulan. Lanjut tanpa bulan?')) return;
+  let added=0, skipped=0;
+  ids.forEach(sid=>{
+    if(isPembayaranAda(sid,tid,bulan)){ skipped++; return; }
+    db.pembayaran.push({id:uid(),siswaId:sid,tagihanId:tid,tgl,bulan,nominal,metode,kasir,ket});
+    added++;
+  });
+  save();
+  closeModal('m-bayar-massal');
+  massalSelected.clear();
+  notify(`Pembayaran massal berhasil: ${added} siswa dicatat${skipped?`, ${skipped} dilewati karena sudah bayar`:''}.`,'success');
+  renderPembayaran(); populateBayarFilters(); renderDashboard(); renderTunggakan();
+}
+
+// ========== NOTA ==========
+let currentNotaId='';
+function centerText(str,w){ str=String(str||''); const pad=Math.max(0,Math.floor((w-str.length)/2)); return ' '.repeat(pad)+str; }
+function fitText(str,w,align='left'){
+  str=String(str??'').replace(/\s+/g,' ').trim();
+  if(str.length>w) str=str.slice(0,Math.max(0,w-1))+'…';
+  const sp=Math.max(0,w-str.length);
+  if(align==='right') return ' '.repeat(sp)+str;
+  if(align==='center'){ const l=Math.floor(sp/2); return ' '.repeat(l)+str+' '.repeat(sp-l); }
+  return str+' '.repeat(sp);
+}
+function rowCompact(l,r,w){ const sp=w-l.length-r.length; return l+' '.repeat(Math.max(1,sp))+r; }
+function moneyPlain(n){ return Number(n||0).toLocaleString('id-ID')+'.00'; }
+function moneyRp(n){ return 'Rp '+Number(n||0).toLocaleString('id-ID'); }
+function twoSide(left,right,w=132){ left=String(left||''); right=String(right||''); return left+' '.repeat(Math.max(1,w-left.length-right.length))+right; }
+function tableRow(vals,widths,aligns=[]){
+  return vals.map((v,i)=>fitText(v,widths[i],aligns[i]||'left')).join(' ');
+}
+function buildNotaLandscape(pid){
+  const p=db.pembayaran.find(x=>x.id===pid); if(!p) return '';
+  const s=gS(p.siswaId),t=gT(p.tagihanId);
+  const w=132, ln='-'.repeat(w);
+  const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+  const noNota='NO-'+p.id.slice(-8).toUpperCase();
+  const periode=p.bulan || p.ket || '-';
+  const wali=s.wali||'Wali Murid';
+  const hp=s.hp||'-';
+  const tagihan=t.nama||'-';
+  const kode=(t.tipe||t.id||'TAGIHAN').toString().toUpperCase();
+  const widths=[4,12,46,18,8,14,12,15];
+  const aligns=['left','left','left','left','right','right','right','right'];
+  let n='';
+  n+=centerText('NOTA PEMBAYARAN',w)+'\n\n';
+  n+=twoSide((db.sekolah.nama||'SD MUHAMMADIYAH 6 SAMARINDA'), 'Tanggal   : '+tgl,w)+'\n';
+  n+=twoSide((db.sekolah.alamat||'Samarinda'), 'No. Nota  : '+noNota,w)+'\n';
+  n+=twoSide('Telp: '+(db.sekolah.telp||'-'), 'Metode    : '+(p.metode||'-'),w)+'\n';
+  n+=twoSide('TA: '+(db.sekolah.ta||'-'), 'Kasir     : '+(p.kasir||db.sekolah.kasir||'-'),w)+'\n';
+  n+=ln+'\n';
+  n+=twoSide('Kepada : '+wali, 'Siswa     : '+(s.nama||'-'),w)+'\n';
+  n+=twoSide('Telp   : '+hp, 'Kelas/NIS : '+(s.kelas||'-')+' / '+(s.nis||'-'),w)+'\n';
+  n+=ln+'\n';
+  n+=tableRow(['No','Kode','Nama Tagihan / Keterangan','Periode/Ket','Qty','Harga','Diskon','Sub Total'],widths,aligns)+'\n';
+  n+=ln+'\n';
+  n+=tableRow(['1',kode,tagihan,periode,'1.00',moneyPlain(p.nominal),'0',moneyPlain(p.nominal)],widths,aligns)+'\n';
+  n+=ln+'\n';
+  const labelPad=' '.repeat(96);
+  n+=labelPad+fitText('Total Qty',12)+': '+fitText('1.00',18,'right')+'\n';
+  n+=labelPad+fitText('Sub Total',12)+': '+fitText(moneyRp(p.nominal),18,'right')+'\n';
+  n+=labelPad+fitText('Potongan',12)+': '+fitText(moneyRp(0),18,'right')+'\n';
+  n+=labelPad+fitText('Total',12)+': '+fitText(moneyRp(p.nominal),18,'right')+'\n';
+  n+=labelPad+fitText('Terbayar',12)+': '+fitText(moneyRp(p.nominal),18,'right')+'\n';
+  n+=labelPad+fitText('Kembali',12)+': '+fitText(moneyRp(0),18,'right')+'\n';
+  n+='\n';
+  n+='              Orang Tua/Wali                         Bendahara/Kasir                         Kepala Sekolah\n\n\n\n';
+  n+='          (                    )              ('+fitText(db.sekolah.kasir||'-',24,'center')+')              ('+fitText(db.sekolah.kepsek||'-',24,'center')+')\n\n';
+  n+='Terima kasih. Bukti pembayaran ini sah setelah divalidasi petugas sekolah. Simpan nota sebagai arsip pembayaran.\n';
+  return n;
+}
+function buildNotaCompact(pid,narrow){
+  const p=db.pembayaran.find(x=>x.id===pid); if(!p) return '';
+  const s=gS(p.siswaId),t=gT(p.tagihanId);
+  const w=narrow?32:42;
+  const ln='-'.repeat(w);
+  const ctr=str=>centerText(str,w);
+  const row=(l,r)=>rowCompact(l,r,w);
+  const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+  const noNota='NO-'+p.id.slice(-8).toUpperCase();
+  let n='';
+  n+=ctr(db.sekolah.kop1||db.sekolah.nama)+'\n';
+  if(db.sekolah.kop2) n+=ctr(db.sekolah.kop2)+'\n';
+  n+=ctr('TA '+db.sekolah.ta)+'\n';
+  n+=ln+'\n';
+  n+=ctr('BUKTI PEMBAYARAN')+'\n';
+  n+=ln+'\n';
+  n+=row('No. Nota',': '+noNota)+'\n';
+  n+=row('Tanggal',': '+tgl)+'\n';
+  n+=row('Kasir',': '+(p.kasir||'-'))+'\n';
+  n+=ln+'\n';
+  n+=row('NIS',': '+s.nis)+'\n';
+  n+=row('Nama',': '+s.nama)+'\n';
+  n+=row('Kelas',': '+s.kelas)+'\n';
+  n+=ln+'\n';
+  n+=row('Jenis',': '+t.nama)+'\n';
+  if(p.bulan) n+=row('Periode',': '+p.bulan)+'\n';
+  if(p.ket) n+=row('Ket',': '+p.ket)+'\n';
+  n+=row('Metode',': '+p.metode)+'\n';
+  n+=ln+'\n';
+  n+=row('JUMLAH BAYAR',rp(p.nominal))+'\n';
+  n+=ln+'\n';
+  n+=ctr('** LUNAS **')+'\n\n';
+  n+=ctr('Ttd Kasir')+'\n\n\n';
+  n+=ctr('('+db.sekolah.kasir+')')+'\n\n';
+  n+=ctr('Dokumen ini sah tanpa tanda tangan')+'\n';
+  return n;
+}
+function buildNota(pid,narrow){ return buildNotaCompact(pid,narrow); }
+function cetakNota(pid){ currentNotaId=pid; refreshNota(); openModal('m-nota'); }
+function refreshNota(){
+  if(!currentNotaId) return;
+  const format=document.getElementById('n-format')?.value || 'landscape';
+  const copy2=document.getElementById('n-2copy')?.checked;
+  const isLandscape=format==='landscape';
+  const w=isLandscape?132:42;
+  let n=isLandscape?buildNotaLandscape(currentNotaId):buildNotaCompact(currentNotaId,false);
+  if(copy2) n+='\n'+'='.repeat(w)+'\n'+centerText('LEMBAR KEDUA',w)+'\n'+'='.repeat(w)+'\n'+(isLandscape?buildNotaLandscape(currentNotaId):buildNotaCompact(currentNotaId,false));
+  const preview=document.getElementById('nota-content');
+  preview.textContent=n;
+  preview.classList.toggle('landscape',isLandscape);
+}
+function doPrint(){
+  const format=document.getElementById('n-format')?.value || 'landscape';
+  const area=document.getElementById('print-area');
+  area.className=format==='landscape'?'landscape':'compact';
+  document.getElementById('print-content').textContent=document.getElementById('nota-content').textContent;
+  area.style.display='block';
+  window.print();
+  setTimeout(()=>area.style.display='none',1000);
+}
+
+// ========== QRIS ==========
+function renderQrisImage(){
+  const box=document.getElementById('qris-img-box');
+  if(box){
+    if(db.sekolah.qrisImage){
+      box.innerHTML=`<img src="${db.sekolah.qrisImage}" alt="QRIS ${db.sekolah.qrisMerchant||db.sekolah.nama||'Sekolah'}">`;
+    }else{
+      box.innerHTML=`<div style="font-size:12px;color:var(--g500);text-align:center;line-height:1.5;padding:10px">QRIS belum diupload.<br>Buka Pengaturan → Profil Sekolah.</div>`;
+    }
+  }
+  const prev=document.getElementById('set-qris-preview');
+  if(prev){
+    if(db.sekolah.qrisImage){
+      prev.innerHTML=`<img src="${db.sekolah.qrisImage}" alt="Preview QRIS">`;
+    }else{
+      prev.innerHTML='Belum ada QRIS';
+    }
+  }
+  const merchant=db.sekolah.qrisMerchant||db.sekolah.nama||'belum disetting';
+  const nmid=db.sekolah.qrisNmid||'-';
+  const merchantEl=document.getElementById('qris-merchant-disp');
+  const nmidEl=document.getElementById('qris-nmid-disp');
+  const noteEl=document.getElementById('qris-note');
+  if(merchantEl) merchantEl.textContent='Merchant: '+merchant;
+  if(nmidEl) nmidEl.textContent='NMID: '+nmid;
+  if(noteEl) noteEl.textContent=db.sekolah.qrisNote||'Kasir perlu cek mutasi rekening sebelum mengonfirmasi pembayaran QRIS.';
+}
+function populateQris(){
+  document.getElementById('qris-siswa').innerHTML='<option value="">-- Pilih Siswa --</option>'+db.siswa.map(s=>`<option value="${s.id}">${s.nis} - ${s.nama}</option>`).join('');
+  document.getElementById('qris-jenis').innerHTML='<option value="">-- Pilih Jenis --</option>'+db.tagihan.map(t=>`<option value="${t.id}" data-n="${t.nominal}">${t.nama}</option>`).join('');
+  renderQrisImage();
+  updateQris();
+}
+function updateQrisNominal(){
+  const opt=document.getElementById('qris-jenis').selectedOptions[0];
+  if(opt&&opt.dataset.n) document.getElementById('qris-nominal').value=opt.dataset.n;
+  updateQris();
+}
+function updateQris(){
+  const s=gS(document.getElementById('qris-siswa').value),t=gT(document.getElementById('qris-jenis').value),n=Number(document.getElementById('qris-nominal').value)||0;
+  document.getElementById('qris-nama-disp').textContent=s.nama?`${s.nama} | ${t.nama||''}`:'Pilih siswa & tagihan';
+  document.getElementById('qris-nominal-disp').textContent=rp(n);
+  renderQrisImage();
+}
+function konfirmasiQris(){
+  const sid=document.getElementById('qris-siswa').value,tid=document.getElementById('qris-jenis').value,nominal=Number(document.getElementById('qris-nominal').value),bulan=document.getElementById('qris-bulan').value;
+  if(!db.sekolah.qrisImage && !confirm('Gambar QRIS asli belum diupload. Tetap catat pembayaran QRIS?')) return;
+  if(!sid||!tid||!nominal){alert('Lengkapi data pembayaran QRIS!');return;}
+  if(!confirm('Pastikan dana QRIS sudah masuk di mutasi rekening/e-wallet. Konfirmasi pembayaran ini?')) return;
+  const id=uid();
+  db.pembayaran.push({id,siswaId:sid,tagihanId:tid,tgl:new Date().toISOString().split('T')[0],bulan,nominal,metode:'QRIS',kasir:db.sekolah.kasir,ket:'via QRIS'});
+  save();
+  const s=gS(sid), t=gT(tid);
+  notify(`Pembayaran QRIS ${t.nama||'tagihan'}${bulan?' bulan '+bulan:''} atas nama ${s.nama||'siswa'} sebesar ${rp(nominal)} berhasil dicatat.`, 'success');
+  renderDashboard();
+  cetakNota(id);
+}
+
+// ========== REKAP ==========
+function populateRekapFilters(){ const f=document.getElementById('rek-fil-kelas'); const cv=f.value; f.innerHTML='<option value="">Semua Kelas</option>'+getKelasList().map(k=>`<option value="${k}"${k===cv?' selected':''}>${kelasLabel(k)}</option>`).join(''); }
+function renderRekap(){
+  const kl=document.getElementById('rek-fil-kelas')?.value||'';
+  const bl=document.getElementById('rek-fil-bulan')?.value||'';
+  const siswaList=kl?db.siswa.filter(s=>s.kelas===kl):db.siswa;
+  const gTot=(sid,tipe)=>{ const ids=db.tagihan.filter(t=>t.tipe===tipe).map(t=>t.id); return db.pembayaran.filter(p=>p.siswaId===sid&&ids.includes(p.tagihanId)&&(!bl||p.bulan===bl)).reduce((s,p)=>s+p.nominal,0); };
+  document.getElementById('rek-siswa-tbody').innerHTML=siswaList.length
+    ? siswaList.map(s=>{ const sp=gTot(s.id,'SPP'),ip=gTot(s.id,'IPP'),kg=gTot(s.id,'Kegiatan'),sr=gTot(s.id,'Seragam'),uj=gTot(s.id,'Ujian'),tot=sp+ip+kg+sr+uj; return `<tr><td style="font-weight:500">${s.nama}</td><td><span class="badge badge-blue">${s.kelas}</span></td><td>${sp?rp(sp):'-'}</td><td>${ip?rp(ip):'-'}</td><td>${kg?rp(kg):'-'}</td><td>${sr?rp(sr):'-'}</td><td>${uj?rp(uj):'-'}</td><td style="font-weight:700">${rp(tot)}</td><td><span class="badge ${tot>0?'badge-success':'badge-warning'}">${tot>0?'Ada Bayar':'Belum'}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="9" class="empty-state"><p>Tidak ada data</p></td></tr>';
+  // Per jenis
+  document.getElementById('rek-jenis-tbody').innerHTML=db.tagihan.map(t=>{ const terbayar=db.pembayaran.filter(p=>p.tagihanId===t.id&&siswaList.find(s=>s.id===p.siswaId)&&(!bl||p.bulan===bl)).reduce((s,p)=>s+p.nominal,0); const target=siswaList.length*t.nominal; const pct=target?Math.round(terbayar/target*100):0; return `<tr><td>${t.nama}</td><td style="font-weight:700">${rp(terbayar)}</td><td style="min-width:120px"><div style="display:flex;align-items:center;gap:6px;font-size:11px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:${pct>=100?'var(--success)':pct>=50?'var(--primary)':'var(--warning)'}"></div></div>${pct}%</div></td></tr>`; }).join('');
+  // Per bulan
+  const bulanData=BLAN.map(b=>{ const pems=db.pembayaran.filter(p=>p.bulan===b&&(!kl||siswaList.find(s=>s.id===p.siswaId))); return {b,tot:pems.reduce((s,p)=>s+p.nominal,0),cnt:pems.length}; }).filter(d=>d.cnt>0);
+  document.getElementById('rek-bulan-tbody').innerHTML=bulanData.length
+    ? bulanData.map(d=>`<tr><td>${d.b}</td><td style="font-weight:700">${rp(d.tot)}</td><td>${d.cnt} transaksi</td></tr>`).join('')
+    : '<tr><td colspan="3" class="empty-state"><p>Belum ada data</p></td></tr>';
+}
+
+// ========== TUNGGAKAN ==========
+let tgSelected = new Set();
+function getUnpaidItemsForSiswa(s, filterTid=''){
+  const items=[];
+  (db.tagihan||[]).forEach(t=>{
+    if(filterTid && t.id!==filterTid) return;
+    if(isTagihanBulanan(t)){
+      bulanTagihanBerjalan().forEach(b=>{
+        if(!isPembayaranAda(s.id,t.id,b)) items.push({tagihan:t,bulan:b,label:`${t.nama} ${b}`,nominal:Number(t.nominal)||0});
+      });
+    }else{
+      if(!isPembayaranAda(s.id,t.id,'')) items.push({tagihan:t,bulan:'',label:t.nama,nominal:Number(t.nominal)||0});
+    }
+  });
+  return items;
+}
+function formatTunggakanItems(items){
+  const map={};
+  items.forEach(it=>{
+    const nama=it.tagihan?.nama||'Tagihan';
+    if(!map[nama]) map[nama]=[];
+    map[nama].push(it.bulan||'Belum dibayar');
+  });
+  return Object.entries(map).map(([nama,vals])=>`${nama}: ${vals.join(', ')}`).join('; ');
+}
+function getTunggakanList(filterTid=''){
+  return getActiveSiswa().map(s=>{
+    const items=getUnpaidItemsForSiswa(s,filterTid);
+    return {s,items,total:items.reduce((sum,it)=>sum+it.nominal,0),detail:formatTunggakanItems(items)};
+  }).filter(r=>r.items.length>0).sort((a,b)=>b.total-a.total || b.items.length-a.items.length);
+}
+function populateTgFilter(){
+  const f=document.getElementById('fil-tg-kelas');
+  if(f){ const cv=f.value; f.innerHTML='<option value="">Semua Kelas</option>'+getKelasList().map(k=>`<option value="${k}"${k===cv?' selected':''}>${kelasLabel(k)}</option>`).join(''); }
+  const j=document.getElementById('fil-tg-jenis');
+  if(j){ const cv=j.value; j.innerHTML='<option value="">Semua Tagihan</option>'+db.tagihan.map(t=>`<option value="${t.id}"${t.id===cv?' selected':''}>${esc(t.nama)}</option>`).join(''); }
+}
+function renderTunggakan(){
+  populateTgFilter();
+  const kl=document.getElementById('fil-tg-kelas')?.value||'';
+  const tid=document.getElementById('fil-tg-jenis')?.value||'';
+  const q=(document.getElementById('src-tg')?.value||'').toLowerCase();
+  let list=getTunggakanList(tid);
+  if(kl) list=list.filter(r=>r.s.kelas===kl);
+  if(q) list=list.filter(r=>(r.s.nama||'').toLowerCase().includes(q)||(r.s.nis||'').includes(q));
+  const totalNom=list.reduce((sum,r)=>sum+r.total,0);
+  const totalItem=list.reduce((sum,r)=>sum+r.items.length,0);
+  const totalSiswa=list.length;
+  const sppItem=list.reduce((sum,r)=>sum+r.items.filter(it=>it.tagihan.tipe==='SPP').length,0);
+  const sumBox=document.getElementById('tg-summary');
+  if(sumBox) sumBox.innerHTML=`<div class="tg-summary-card"><div>Siswa Menunggak</div><strong>${totalSiswa}</strong></div><div class="tg-summary-card"><div>Total Item Tunggakan</div><strong>${totalItem}</strong></div><div class="tg-summary-card"><div>Item SPP</div><strong>${sppItem}</strong></div><div class="tg-summary-card"><div>Estimasi Tunggakan</div><strong>${rp(totalNom)}</strong></div>`;
+  const all=document.getElementById('tg-check-all'); if(all) all.checked=false;
+  document.getElementById('tg-tbody').innerHTML=list.length
+    ? list.map(r=>`<tr><td><input type="checkbox" class="tg-row-check" value="${r.s.id}" ${tgSelected.has(r.s.id)?'checked':''} onchange="toggleTgSelected('${r.s.id}',this.checked)"></td><td style="font-family:monospace">${esc(r.s.nis)}</td><td style="font-weight:500">${esc(r.s.nama)}</td><td><span class="badge badge-blue">${esc(r.s.kelas)}</span></td><td>${esc(r.s.wali||'-')}</td><td class="tg-detail">${esc(r.detail)}</td><td style="font-weight:700;color:var(--danger)">${rp(r.total)}</td><td><span class="badge badge-danger">${r.items.length} item</span></td><td><button class="btn btn-primary btn-sm" onclick="openMassalBayar(['${r.s.id}'])">Bayar</button></td></tr>`).join('')
+    : '<tr><td colspan="9" class="empty-state"><p>🎉 Tidak ada tunggakan sesuai filter!</p></td></tr>';
+}
+function toggleTgSelected(id,checked){ if(checked) tgSelected.add(id); else tgSelected.delete(id); }
+function toggleTgSelectAll(el){
+  document.querySelectorAll('.tg-row-check').forEach(cb=>{ cb.checked=el.checked; toggleTgSelected(cb.value,el.checked); });
+}
+function bayarTunggakanTerpilih(){
+  const ids=[...tgSelected];
+  if(!ids.length){ alert('Pilih siswa dulu dengan centang di tabel tunggakan.'); return; }
+  openMassalBayar(ids);
+}
+
+// ========== WHATSAPP ==========
+const WA_DISABLED_MSG = 'Fitur WhatsApp tunggakan dinonaktifkan sementara karena nomor HP wali murid belum lengkap.';
+function populateWA(){
+  const el=document.getElementById('wa-siswa');
+  if(el) el.innerHTML='<option value="">WhatsApp dinonaktifkan sementara</option>';
+  const prev=document.getElementById('wa-preview-box');
+  if(prev) prev.textContent=WA_DISABLED_MSG;
+}
+function buildWAMsg(siswaId){ return null; }
+function previewWA(){ alert(WA_DISABLED_MSG); }
+function kirimWA(){ alert(WA_DISABLED_MSG); }
+function kirimWASatu(siswaId){ alert(WA_DISABLED_MSG); }
+function kirimWASemuaTunggakan(){ alert(WA_DISABLED_MSG); }
+
+// ========== KENAIKAN KELAS ==========
+function nextTahunAjaran(ta){
+  const m=String(ta||'').match(/(\d{4})\s*\/\s*(\d{4})/);
+  if(!m) return '';
+  return (Number(m[1])+1)+'/'+(Number(m[2])+1);
+}
+function defaultNaikKe(k){
+  const map={'1':'2','1.1':'2.1','1.2':'2.2','2':'3','2.1':'3','2.2':'3','3':'4','4':'5.1','5':'6','5.1':'6','5.2':'6','6':'__ALUMNI__'};
+  return map[String(k)]||String(k);
+}
+function targetKelasOptions(selected=''){
+  const opts=getKelasList().map(k=>`<option value="${k}"${k===selected?' selected':''}>${kelasLabel(k)}</option>`).join('');
+  return opts+`<option value="__ALUMNI__"${selected==='__ALUMNI__'?' selected':''}>Luluskan / keluarkan dari Data Siswa</option>`;
+}
+function safeId(str){ return String(str).replace(/[^a-zA-Z0-9_-]/g,'_'); }
+function populateKenaikanKelas(){
+  const taL=document.getElementById('naik-ta-lama');
+  const taB=document.getElementById('naik-ta-baru');
+  if(!taL||!taB) return;
+  taL.value=db.sekolah.ta||'';
+  taB.value=nextTahunAjaran(db.sekolah.ta)||'';
+  const counts={};
+  getActiveSiswa().forEach(s=>{ counts[s.kelas||'-']=(counts[s.kelas||'-']||0)+1; });
+  const kelas=sortKelasArr(Object.keys(counts));
+  document.getElementById('naik-tbody').innerHTML=kelas.length?kelas.map(k=>{
+    const to=defaultNaikKe(k);
+    return `<tr><td><strong>${esc(kelasLabel(k))}</strong></td><td>${counts[k]} siswa</td><td><select id="naik-map-${safeId(k)}" data-kelas="${esc(k)}">${targetKelasOptions(to)}</select></td></tr>`;
+  }).join(''):'<tr><td colspan="3" class="empty-state"><p>Belum ada data siswa.</p></td></tr>';
+}
+function jalankanKenaikanKelas(){
+  const rows=[...document.querySelectorAll('#naik-tbody select[data-kelas]')];
+  if(!rows.length){ alert('Tidak ada data kelas yang bisa diproses.'); return; }
+  const taBaru=document.getElementById('naik-ta-baru').value.trim();
+  if(!taBaru){ alert('Isi tahun ajaran baru terlebih dahulu.'); return; }
+  if(!confirm('Jalankan kenaikan kelas sekarang? Kelas 6 akan diluluskan dan dikeluarkan dari Data Siswa. Pastikan sudah backup data terlebih dahulu.')) return;
+  const map={}; rows.forEach(sel=>map[sel.dataset.kelas]=sel.value);
+  let changed=0;
+  const keep=[];
+  db.siswa.forEach(s=>{
+    const to=map[s.kelas];
+    if(to){
+      changed++;
+      if(to==='__ALUMNI__') archiveSiswaAsAlumni(s); else { s.kelas=to; keep.push(s); }
+    }else keep.push(s);
+  });
+  db.siswa=keep;
+  db.sekolah.ta=taBaru;
+  db.sekolah.kop2='TAHUN AJARAN '+taBaru;
+  save();
+  document.getElementById('sb-ta').textContent='TA '+db.sekolah.ta;
+  notify(`Kenaikan kelas berhasil diproses untuk ${changed} siswa. Tahun ajaran menjadi ${taBaru}. Siswa lulus tidak lagi tampil di data aktif.`,'success');
+  populateKenaikanKelas(); renderSiswa(); renderDashboard(); updateDbInfo(); populateAllSelects();
+}
+
+// ========== SETTING ==========
+function loadSetting(){
+  document.getElementById('set-nama').value=db.sekolah.nama||'';
+  document.getElementById('set-ta').value=db.sekolah.ta||'';
+  document.getElementById('set-kepsek').value=db.sekolah.kepsek||'';
+  document.getElementById('set-kasir').value=db.sekolah.kasir||'';
+  document.getElementById('set-alamat').value=db.sekolah.alamat||'';
+  document.getElementById('set-telp').value=db.sekolah.telp||'';
+  document.getElementById('set-lebar').value=db.sekolah.lebar||132;
+  document.getElementById('set-rangkap').value=db.sekolah.rangkap||2;
+  document.getElementById('set-kop1').value=db.sekolah.kop1||'';
+  document.getElementById('set-kop2').value=db.sekolah.kop2||'';
+  document.getElementById('set-qris-merchant').value=db.sekolah.qrisMerchant||'';
+  document.getElementById('set-qris-nmid').value=db.sekolah.qrisNmid||'';
+  document.getElementById('set-qris-note').value=db.sekolah.qrisNote||'';
+  const notifEl=document.getElementById('set-notif-sound'); if(notifEl) notifEl.checked=db.sekolah.notifSound!==false;
+  renderQrisImage();
+  updateDbInfo();
+}
+function saveSetting(){
+  db.sekolah.nama=document.getElementById('set-nama').value.trim();
+  db.sekolah.ta=document.getElementById('set-ta').value.trim();
+  db.sekolah.kepsek=document.getElementById('set-kepsek').value.trim();
+  db.sekolah.kasir=document.getElementById('set-kasir').value.trim();
+  db.sekolah.alamat=document.getElementById('set-alamat').value.trim();
+  db.sekolah.telp=document.getElementById('set-telp').value.trim();
+  db.sekolah.lebar=Number(document.getElementById('set-lebar').value)||132;
+  db.sekolah.rangkap=Number(document.getElementById('set-rangkap').value)||2;
+  db.sekolah.kop1=document.getElementById('set-kop1').value.trim();
+  db.sekolah.kop2=document.getElementById('set-kop2').value.trim();
+  db.sekolah.qrisMerchant=document.getElementById('set-qris-merchant').value.trim();
+  db.sekolah.qrisNmid=document.getElementById('set-qris-nmid').value.trim();
+  db.sekolah.qrisNote=document.getElementById('set-qris-note').value.trim();
+  const notifEl=document.getElementById('set-notif-sound'); db.sekolah.notifSound=notifEl?notifEl.checked:true;
+  save();
+  document.getElementById('sb-nama').textContent=db.sekolah.nama||'-';
+  document.getElementById('sb-ta').textContent='TA '+(db.sekolah.ta||'-');
+  renderQrisImage();
+  updateDbInfo();
+  notify('Pengaturan berhasil disimpan.','success');
+}
+function handleQrisUpload(input){
+  const file=input.files&&input.files[0];
+  if(!file) return;
+  if(!/^image\/(png|jpeg|jpg)$/.test(file.type)){ alert('Format QRIS harus PNG/JPG.'); input.value=''; return; }
+  if(file.size>1500000){ alert('Ukuran gambar terlalu besar. Maksimal sekitar 1,5 MB agar localStorage tidak penuh.'); input.value=''; return; }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    db.sekolah.qrisImage=e.target.result;
+    save();
+    renderQrisImage();
+    updateDbInfo();
+    notify('Gambar QRIS berhasil disimpan. Jangan lupa isi Nama Merchant/NMID jika ada.','success');
+  };
+  reader.readAsDataURL(file);
+}
+function hapusQrisImage(){
+  if(!db.sekolah.qrisImage){ alert('Belum ada gambar QRIS.'); return; }
+  if(!confirm('Hapus gambar QRIS dari sistem ini?')) return;
+  db.sekolah.qrisImage='';
+  save();
+  renderQrisImage();
+  updateDbInfo();
+  const inp=document.getElementById('set-qris-file'); if(inp) inp.value='';
+  notify('Gambar QRIS dihapus.','warning');
+}
+function updateDbInfo(){
+  const size=JSON.stringify(db).length;
+  const qrisStatus=db.sekolah.qrisImage?'Sudah upload QRIS asli':'Belum upload QRIS asli';
+  document.getElementById('db-info-box').innerHTML=`
+    <div>📦 <strong>Database operasional:</strong> localStorage browser (lokal, cocok untuk 1 komputer)</div>
+    <div>📊 <strong>Excel:</strong> dipakai untuk import siswa, export laporan, backup, dan restore. Excel bukan database live karena browser tidak bisa menulis otomatis ke file Excel setiap transaksi.</div>
+    <div>👨‍🎓 <strong>Jumlah Siswa:</strong> ${db.siswa.length} siswa</div>
+    <div>💳 <strong>Jumlah Tagihan:</strong> ${db.tagihan.length} jenis</div>
+    <div>📑 <strong>Total Transaksi:</strong> ${db.pembayaran.length} transaksi</div>
+    <div>🔳 <strong>Status QRIS:</strong> ${qrisStatus}</div>
+    <div>💾 <strong>Ukuran Data:</strong> ~${(size/1024).toFixed(1)} KB dari max sekitar 5 MB</div>
+    <div>⚠️ <strong>Catatan:</strong> Data hanya ada di browser/komputer ini. Backup rutin ke Excel atau JSON sangat dianjurkan.</div>`;
+}
+
+// ========== EXPORT EXCEL ==========
+function exportExcel(){
+  const wb=XLSX.utils.book_new();
+  const kl=document.getElementById('rek-fil-kelas')?.value||'';
+  const bl=document.getElementById('rek-fil-bulan')?.value||'';
+  const siswaList=kl?db.siswa.filter(s=>s.kelas===kl):db.siswa;
+  const gTot=(sid,tipe)=>{ const ids=db.tagihan.filter(t=>t.tipe===tipe).map(t=>t.id); return db.pembayaran.filter(p=>p.siswaId===sid&&ids.includes(p.tagihanId)&&(!bl||p.bulan===bl)).reduce((s,p)=>s+p.nominal,0); };
+  // Sheet 1: Rekap
+  const ws1=XLSX.utils.aoa_to_sheet([
+    [db.sekolah.nama],['REKAP PEMBAYARAN — TA '+db.sekolah.ta],[bl?'Bulan: '+bl:'Semua Bulan','','',kl?'Kelas: '+kl:'Semua Kelas'],[],
+    ['NIS','Nama Siswa','Kelas','SPP','IPP','Kegiatan','Seragam','Ujian','Total'],
+    ...siswaList.map(s=>{ const sp=gTot(s.id,'SPP'),ip=gTot(s.id,'IPP'),kg=gTot(s.id,'Kegiatan'),sr=gTot(s.id,'Seragam'),uj=gTot(s.id,'Ujian'); return [s.nis,s.nama,s.kelas,sp||0,ip||0,kg||0,sr||0,uj||0,sp+ip+kg+sr+uj]; }),
+    [],[`Dicetak: ${new Date().toLocaleDateString('id-ID')}`,'','Kasir: '+db.sekolah.kasir]
+  ]);
+  ws1['!cols']=[{wch:12},{wch:25},{wch:12},{wch:14},{wch:14},{wch:14},{wch:14},{wch:12},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Rekap Siswa');
+  // Sheet 2: Riwayat
+  const ws2=XLSX.utils.aoa_to_sheet([
+    ['RIWAYAT PEMBAYARAN — '+db.sekolah.nama],[],
+    ['Tanggal','NIS','Nama','Kelas','Jenis Tagihan','Bulan/Ket','Nominal','Metode','Kasir'],
+    ...[...db.pembayaran].sort((a,b)=>new Date(b.tgl)-new Date(a.tgl)).map(p=>{ const s=gS(p.siswaId),t=gT(p.tagihanId); return [p.tgl,s.nis,s.nama,s.kelas,t.nama,p.bulan||p.ket||'-',p.nominal,p.metode,p.kasir]; })
+  ]);
+  ws2['!cols']=[{wch:12},{wch:10},{wch:25},{wch:12},{wch:20},{wch:15},{wch:14},{wch:12},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Riwayat Pembayaran');
+  // Sheet 3: Tunggakan semua tagihan
+  const tgList=getTunggakanList();
+  const ws3=XLSX.utils.aoa_to_sheet([
+    [db.sekolah.nama],['LAPORAN TUNGGAKAN SEMUA TAGIHAN — TA '+db.sekolah.ta],[`Per: ${new Date().toLocaleDateString('id-ID')}`],[],
+    ['NIS','Nama Siswa','Kelas','Wali Murid','Rincian Tunggakan','Total Tunggak','Jumlah Item'],
+    ...tgList.map(r=>[r.s.nis,r.s.nama,r.s.kelas,r.s.wali||'-',r.detail,r.total,r.items.length])
+  ]);
+  ws3['!cols']=[{wch:12},{wch:28},{wch:12},{wch:24},{wch:70},{wch:18},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws3,'Tunggakan Semua');
+  XLSX.writeFile(wb,`Rekap_Pembayaran_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+function exportTunggakanExcel(){
+  const wb=XLSX.utils.book_new();
+  const tid=document.getElementById('fil-tg-jenis')?.value||'';
+  const kl=document.getElementById('fil-tg-kelas')?.value||'';
+  let list=getTunggakanList(tid);
+  if(kl) list=list.filter(r=>r.s.kelas===kl);
+  const ws=XLSX.utils.aoa_to_sheet([
+    [db.sekolah.nama],['LAPORAN TUNGGAKAN SEMUA TAGIHAN — TA '+db.sekolah.ta],[`Dicetak: ${new Date().toLocaleDateString('id-ID')}`],[],
+    ['NIS','Nama Siswa','Kelas','Wali Murid','Rincian Tunggakan','Total Tunggak (Rp)','Jumlah Item'],
+    ...list.map(r=>[r.s.nis,r.s.nama,r.s.kelas,r.s.wali||'-',r.detail,r.total,r.items.length])
+  ]);
+  ws['!cols']=[{wch:12},{wch:28},{wch:12},{wch:24},{wch:70},{wch:18},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws,'Tunggakan');
+  XLSX.writeFile(wb,`Tunggakan_Semua_Tagihan_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+// ========== BACKUP / RESTORE ==========
+function backupExcel(){
+  const wb=XLSX.utils.book_new();
+
+  const ws1=XLSX.utils.aoa_to_sheet([
+    ['ID','NIS','Nama','Kelas','Wali','HP','Alamat'],
+    ...db.siswa.map(s=>[s.id,s.nis,s.nama,s.kelas,s.wali,s.hp,s.alamat])
+  ]);
+  ws1['!cols']=[{wch:14},{wch:14},{wch:28},{wch:14},{wch:24},{wch:18},{wch:35}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Siswa');
+
+  const ws2=XLSX.utils.aoa_to_sheet([
+    ['ID','Nama','Tipe','Nominal','Keterangan'],
+    ...db.tagihan.map(t=>[t.id,t.nama,t.tipe,t.nominal,t.ket])
+  ]);
+  ws2['!cols']=[{wch:14},{wch:24},{wch:14},{wch:16},{wch:35}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Tagihan');
+
+  const ws3=XLSX.utils.aoa_to_sheet([
+    ['ID','SiswaID','TagihanID','Tanggal','NIS','Nama','Kelas','Jenis','Bulan','Nominal','Metode','Kasir','Keterangan'],
+    ...db.pembayaran.map(p=>{ const s=gS(p.siswaId),t=gT(p.tagihanId); return [p.id,p.siswaId,p.tagihanId,p.tgl,s.nis,s.nama,s.kelas,t.nama,p.bulan||'',p.nominal,p.metode,p.kasir,p.ket||'']; })
+  ]);
+  ws3['!cols']=[{wch:14},{wch:14},{wch:14},{wch:12},{wch:12},{wch:26},{wch:14},{wch:22},{wch:14},{wch:16},{wch:12},{wch:16},{wch:28}];
+  XLSX.utils.book_append_sheet(wb,ws3,'Pembayaran');
+
+  const ws4=XLSX.utils.aoa_to_sheet([
+    ['Key','Value'],
+    ['nama',db.sekolah.nama||''],
+    ['ta',db.sekolah.ta||''],
+    ['kepsek',db.sekolah.kepsek||''],
+    ['kasir',db.sekolah.kasir||''],
+    ['alamat',db.sekolah.alamat||''],
+    ['telp',db.sekolah.telp||''],
+    ['lebar',db.sekolah.lebar||132],
+    ['rangkap',db.sekolah.rangkap||2],
+    ['kop1',db.sekolah.kop1||''],
+    ['kop2',db.sekolah.kop2||''],
+    ['qrisMerchant',db.sekolah.qrisMerchant||''],
+    ['qrisNmid',db.sekolah.qrisNmid||''],
+    ['qrisNote',db.sekolah.qrisNote||''],
+    ['qrisImage','(Gambar QRIS tidak disimpan di Excel. Gunakan backup JSON untuk menyimpan gambar QRIS.)']
+  ]);
+  ws4['!cols']=[{wch:22},{wch:70}];
+  XLSX.utils.book_append_sheet(wb,ws4,'Pengaturan');
+
+  XLSX.writeFile(wb,`BACKUP_SISPA_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+function backupJSON(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`BACKUP_SISPA_FULL_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+}
+function sheetRows(wb,name){
+  const ws=wb.Sheets[name];
+  if(!ws) return [];
+  return XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+}
+function rowsToObjects(rows){
+  if(!rows || rows.length<2) return [];
+  const headers=rows[0].map(h=>String(h).trim().toLowerCase());
+  return rows.slice(1).filter(r=>r.some(c=>String(c).trim()!=='')).map(r=>{
+    const o={};
+    headers.forEach((h,i)=>o[h]=r[i]);
+    return o;
+  });
+}
+function val(o,keys,def=''){
+  for(const k of keys){
+    const key=Object.keys(o).find(x=>x.toLowerCase()===k.toLowerCase());
+    if(key && o[key]!==undefined && o[key]!==null && String(o[key]).trim()!=='') return String(o[key]).trim();
+  }
+  return def;
+}
+function restoreExcel(input){
+  const file=input.files&&input.files[0];
+  if(!file) return;
+  if(!confirm('PERINGATAN: Restore Excel akan mengganti data siswa, tagihan, dan pembayaran saat ini. Sudah backup?')){ input.value=''; return; }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      const siswaObjs=rowsToObjects(sheetRows(wb,'Siswa'));
+      const tagihanObjs=rowsToObjects(sheetRows(wb,'Tagihan'));
+      const pembayaranObjs=rowsToObjects(sheetRows(wb,'Pembayaran'));
+      const pengaturanRows=sheetRows(wb,'Pengaturan');
+
+      const newDb={sekolah:Object.assign({},db.sekolah),siswa:DEFAULT_SISWA.map(s=>({...s})),tagihan:[],pembayaran:[]};
+
+      if(pengaturanRows.length>1){
+        pengaturanRows.slice(1).forEach(r=>{
+          const k=String(r[0]||'').trim();
+          const v=String(r[1]||'').trim();
+          if(k && k!=='qrisImage' && k in newDb.sekolah) newDb.sekolah[k]=v;
+        });
+        newDb.sekolah.lebar=Number(newDb.sekolah.lebar)||132;
+        newDb.sekolah.rangkap=Number(newDb.sekolah.rangkap)||2;
+      }
+
+      newDb.siswa=siswaObjs.map(o=>({
+        id:val(o,['id'],'')||uid(),
+        nis:val(o,['nis']),
+        nama:val(o,['nama','nama siswa']),
+        kelas:val(o,['kelas']),
+        wali:val(o,['wali','wali murid','orang tua']),
+        hp:val(o,['hp','no hp','no. hp wali','no hp wali']),
+        alamat:val(o,['alamat'])
+      })).filter(s=>s.nis||s.nama);
+
+      newDb.tagihan=tagihanObjs.map(o=>({
+        id:val(o,['id'],'')||uid(),
+        nama:val(o,['nama','jenis','nama tagihan']),
+        tipe:val(o,['tipe'],'Lainnya'),
+        nominal:Number(val(o,['nominal'],0))||0,
+        ket:val(o,['keterangan','ket'])
+      })).filter(t=>t.nama);
+
+      if(!newDb.tagihan.length){
+        newDb.tagihan=JSON.parse(JSON.stringify(db.tagihan||[]));
+      }
+
+      const siswaById=Object.fromEntries(newDb.siswa.map(s=>[s.id,s]));
+      const siswaByNis=Object.fromEntries(newDb.siswa.map(s=>[s.nis,s]));
+      const tagihanById=Object.fromEntries(newDb.tagihan.map(t=>[t.id,t]));
+      const tagihanByNama=Object.fromEntries(newDb.tagihan.map(t=>[String(t.nama).toLowerCase(),t]));
+
+      newDb.pembayaran=pembayaranObjs.map(o=>{
+        const sid=val(o,['siswaid','siswa id'],'');
+        const tid=val(o,['tagihanid','tagihan id'],'');
+        const nis=val(o,['nis']);
+        const jenis=val(o,['jenis','nama tagihan']);
+        const s=siswaById[sid]||siswaByNis[nis];
+        const t=tagihanById[tid]||tagihanByNama[String(jenis).toLowerCase()];
+        return {
+          id:val(o,['id'],'')||uid(),
+          siswaId:s?s.id:sid,
+          tagihanId:t?t.id:tid,
+          tgl:val(o,['tanggal','tgl'],new Date().toISOString().split('T')[0]),
+          bulan:val(o,['bulan']),
+          nominal:Number(val(o,['nominal'],0))||0,
+          metode:val(o,['metode'],'Tunai'),
+          kasir:val(o,['kasir'],newDb.sekolah.kasir||'Admin'),
+          ket:val(o,['keterangan','ket'])
+        };
+      }).filter(p=>p.siswaId&&p.tagihanId);
+
+      db=newDb;
+      normalizeDb();
+      save();
+      alert(`Restore Excel berhasil!\nSiswa: ${db.siswa.length}\nTagihan: ${db.tagihan.length}\nPembayaran: ${db.pembayaran.length}\n\nCatatan: gambar QRIS tidak ikut dari Excel. Pakai backup JSON atau upload ulang QRIS.`);
+      location.reload();
+    }catch(ex){
+      alert('Restore Excel gagal: '+ex.message);
+    }finally{
+      input.value='';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+function restoreJSON(input){
+  if(!input.files[0]) return;
+  if(!confirm('PERINGATAN: Ini akan mengganti SEMUA data. Sudah backup? Lanjutkan?')) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      db=JSON.parse(e.target.result);
+      normalizeDb();
+      save();
+      alert('Restore JSON berhasil! Halaman akan di-reload.');
+      location.reload();
+    }catch(ex){
+      alert('File JSON tidak valid: '+ex.message);
+    }
+  };
+  r.readAsText(input.files[0]);
+}
+function resetData(){ if(!confirm('Hapus SEMUA data siswa dan transaksi? Pengaturan sekolah tetap tersimpan. Aksi ini tidak bisa dibatalkan!')) return; if(!confirm('Yakin? Data yang dihapus TIDAK BISA dikembalikan!')) return; db.siswa=[]; db.pembayaran=[]; save(); notify('Data transaksi dan siswa berhasil dihapus.','warning'); renderDashboard(); }
+
+// ========== INIT ==========
+document.getElementById('sb-nama').textContent=db.sekolah.nama;
+document.getElementById('sb-ta').textContent='TA '+db.sekolah.ta;
+renderDashboard();
+</script>
+</body>
+</html>

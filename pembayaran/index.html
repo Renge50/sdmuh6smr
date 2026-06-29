@@ -1996,6 +1996,336 @@ function initMobileUX(){
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') toggleMobileMenu(false); });
 }
 
+
+
+// ========== UPGRADE BIAYA: SPP PER KELAS, POTONGAN, SERAGAM PER ITEM ==========
+function kelasDasar(k){ return String(k||'').trim().split('.')[0]; }
+function upgradeBiayaDb(){
+  db.siswa=(db.siswa||[]).map(s=>({potonganSPP:0,...s,potonganSPP:Number(s.potonganSPP||s.potongan||0)||0}));
+  db.tagihan=Array.isArray(db.tagihan)?db.tagihan:[];
+  db.tagihan.forEach(t=>{
+    t.nominal=Number(t.nominal)||0;
+    if((t.tipe||'')==='SPP'){
+      const old=t.nominalKelas&&typeof t.nominalKelas==='object'?t.nominalKelas:{};
+      t.nominalKelas={...old};
+      KELAS_OPTIONS.forEach(k=>{ if(t.nominalKelas[k]===undefined || t.nominalKelas[k]==='') t.nominalKelas[k]=t.nominal||0; });
+    }
+  });
+  const seragam=db.tagihan.filter(t=>(t.tipe||'')==='Seragam');
+  const names=seragam.map(t=>String(t.nama||'').toLowerCase());
+  const hasRinci=names.some(n=>n.includes('putih')||n.includes('olahraga')||n.includes('batik')||n.includes('hw')||n.includes('muslim'));
+  if(seragam.length===0){
+    db.tagihan.push({id:'sg_putih_merah',nama:'Seragam Putih Merah',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+    db.tagihan.push({id:'sg_olahraga',nama:'Seragam Olahraga',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+    db.tagihan.push({id:'sg_batik',nama:'Seragam Batik',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+    db.tagihan.push({id:'sg_hw',nama:'Seragam HW',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+  }else if(!hasRinci){
+    const base=seragam[0];
+    if(base) base.nama='Seragam Putih Merah';
+    const genId=prefix=>prefix+'_'+Math.random().toString(36).slice(2,8);
+    if(!names.some(n=>n.includes('olahraga'))) db.tagihan.push({id:genId('sg_olahraga'),nama:'Seragam Olahraga',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+    if(!names.some(n=>n.includes('batik'))) db.tagihan.push({id:genId('sg_batik'),nama:'Seragam Batik',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+    if(!names.some(n=>n.includes('hw'))) db.tagihan.push({id:genId('sg_hw'),nama:'Seragam HW',tipe:'Seragam',nominal:0,ket:'Edit nominal sesuai harga pakaian'});
+  }
+  db.pembayaran=(db.pembayaran||[]).map(p=>({diskon:0,hargaAwal:Number(p.nominal||0),...p,diskon:Number(p.diskon||0)||0,hargaAwal:Number(p.hargaAwal||Number(p.nominal||0)+Number(p.diskon||0))||0}));
+}
+function formatTagihanNominal(t){
+  if(!t) return 'Rp 0';
+  if((t.tipe||'')==='SPP' && t.nominalKelas && Object.keys(t.nominalKelas).length){
+    const vals=KELAS_OPTIONS.map(k=>Number(t.nominalKelas[k]||0)).filter(v=>v>0);
+    const uniq=[...new Set(vals)];
+    if(uniq.length===0) return 'Per kelas: belum diisi';
+    if(uniq.length===1) return rp(uniq[0])+' / siswa';
+    return 'Per kelas ('+rp(Math.min(...uniq))+' - '+rp(Math.max(...uniq))+')';
+  }
+  return rp(t.nominal||0);
+}
+function getTagihanNominal(tOrId,sOrId){
+  const t=typeof tOrId==='string'?gT(tOrId):(tOrId||{});
+  const s=typeof sOrId==='string'?gS(sOrId):(sOrId||{});
+  let nominal=Number(t.nominal)||0;
+  if((t.tipe||'')==='SPP'){
+    const nk=t.nominalKelas||{};
+    const k=String(s.kelas||'').trim();
+    const candidates=[k,kelasDasar(k)];
+    for(const c of candidates){
+      if(c && nk[c]!==undefined && nk[c]!=='' && !isNaN(Number(nk[c]))) return Number(nk[c])||0;
+    }
+  }
+  return nominal;
+}
+function getSiswaPotongan(sOrId,tOrId){
+  const s=typeof sOrId==='string'?gS(sOrId):(sOrId||{});
+  const t=typeof tOrId==='string'?gT(tOrId):(tOrId||{});
+  if((t.tipe||'')==='SPP') return Number(s.potonganSPP||0)||0;
+  return 0;
+}
+function getNetTagihanNominal(tOrId,sOrId){
+  const t=typeof tOrId==='string'?gT(tOrId):(tOrId||{});
+  const s=typeof sOrId==='string'?gS(sOrId):(sOrId||{});
+  const bruto=getTagihanNominal(t,s);
+  const diskon=getSiswaPotongan(s,t);
+  return Math.max(0,bruto-diskon);
+}
+function renderKelasNominalInputs(t={}){
+  const box=document.getElementById('t-kelas-nominal-grid');
+  if(!box) return;
+  const nk=t.nominalKelas||{};
+  box.innerHTML=KELAS_OPTIONS.map(k=>`<div class="fg"><label>${kelasLabel(k)}</label><input type="number" class="t-nom-kelas" data-kelas="${k}" value="${Number(nk[k]!==undefined?nk[k]:(t.nominal||0))||''}" placeholder="0"></div>`).join('');
+}
+function toggleTagihanKelasBox(){
+  const tipe=document.getElementById('t-tipe')?.value;
+  const box=document.getElementById('t-kelas-box');
+  if(box) box.style.display=tipe==='SPP'?'block':'none';
+}
+function injectBiayaUI(){
+  const sAlamat=document.getElementById('s-alamat')?.closest('.fg');
+  if(sAlamat && !document.getElementById('s-potonganSPP')) sAlamat.insertAdjacentHTML('afterend','<div class="fg"><label>Potongan SPP per Bulan (Rp)</label><input type="number" id="s-potonganSPP" placeholder="0"></div>');
+
+  const bNom=document.getElementById('b-nominal')?.closest('.fg');
+  if(bNom && !document.getElementById('b-diskon')){
+    bNom.insertAdjacentHTML('beforebegin','<div class="fg"><label>Potongan (Rp)</label><input type="number" id="b-diskon" placeholder="0" oninput="recalcBayarTotal()"></div>');
+    const lab=bNom.querySelector('label'); if(lab) lab.textContent='Total Bayar (Rp) *';
+  }
+  const bS=document.getElementById('b-siswa'); if(bS) bS.setAttribute('onchange','updateBayarNominal();updateBayarInfo()');
+  const bJ=document.getElementById('b-jenis'); if(bJ) bJ.setAttribute('onchange','updateBayarNominal();updateBayarInfo()');
+
+  const qNom=document.getElementById('qris-nominal')?.closest('.fg');
+  if(qNom && !document.getElementById('qris-diskon')){
+    qNom.insertAdjacentHTML('beforebegin','<div class="fg"><label>Potongan (Rp)</label><input type="number" id="qris-diskon" placeholder="0" oninput="recalcQrisTotal()"></div>');
+    const lab=qNom.querySelector('label'); if(lab) lab.textContent='Total Bayar (Rp)';
+  }
+  const qS=document.getElementById('qris-siswa'); if(qS) qS.setAttribute('onchange','updateQrisNominal()');
+  const qJ=document.getElementById('qris-jenis'); if(qJ) qJ.setAttribute('onchange','updateQrisNominal()');
+
+  const mbNom=document.getElementById('mb-nominal');
+  if(mbNom){ mbNom.placeholder='Kosong = otomatis per kelas/potongan'; const lab=mbNom.closest('.fg')?.querySelector('label'); if(lab) lab.textContent='Nominal Manual per Siswa'; }
+  const mbKet=document.getElementById('mb-ket');
+  if(mbKet && !document.getElementById('mb-auto-note')) mbKet.closest('.fg')?.insertAdjacentHTML('afterend','<div class="fg full" id="mb-auto-note" style="font-size:12px;color:var(--g500);line-height:1.5">Kosongkan nominal manual jika ingin sistem menghitung otomatis sesuai SPP per kelas dan potongan masing-masing siswa.</div>');
+
+  const tGrid=document.querySelector('#m-tagihan .form-grid');
+  if(tGrid && !document.getElementById('t-kelas-box')){
+    tGrid.insertAdjacentHTML('afterend','<div id="t-kelas-box" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--g200)"><div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Untuk SPP, isi nominal per kelas. Jika rombel seperti 2.1/2.2 berbeda, isi masing-masing. Kalau sama, boleh isi angka yang sama.</div></div><div class="form-grid" id="t-kelas-nominal-grid"></div></div>');
+  }
+  const tTipe=document.getElementById('t-tipe'); if(tTipe) tTipe.setAttribute('onchange','toggleTagihanKelasBox()');
+}
+upgradeBiayaDb();
+injectBiayaUI();
+save();
+
+// Override Data Siswa agar menyimpan potongan SPP
+function clearSiswaForm(){ ['s-id','s-nis','s-nama','s-wali','s-hp','s-alamat'].forEach(x=>{ const el=document.getElementById(x); if(el) el.value=''; }); const pot=document.getElementById('s-potonganSPP'); if(pot) pot.value=''; populateSiswaKelasSelect(''); document.getElementById('s-kelas').value=''; document.getElementById('m-siswa-title').textContent='Tambah Siswa'; }
+function editSiswa(id){ const s=db.siswa.find(x=>x.id===id); if(!s) return; populateSiswaKelasSelect(s.kelas); document.getElementById('s-id').value=s.id; document.getElementById('s-nis').value=s.nis; document.getElementById('s-nama').value=s.nama; document.getElementById('s-kelas').value=s.kelas; document.getElementById('s-wali').value=s.wali||''; document.getElementById('s-hp').value=s.hp||''; document.getElementById('s-alamat').value=s.alamat||''; const pot=document.getElementById('s-potonganSPP'); if(pot) pot.value=Number(s.potonganSPP||0)||''; document.getElementById('m-siswa-title').textContent='Edit Siswa'; openModal('m-siswa'); }
+function saveSiswa(){ const id=document.getElementById('s-id').value; const data={nis:document.getElementById('s-nis').value.trim(),nama:document.getElementById('s-nama').value.trim(),kelas:document.getElementById('s-kelas').value.trim(),wali:document.getElementById('s-wali').value.trim(),hp:document.getElementById('s-hp').value.trim(),alamat:document.getElementById('s-alamat').value.trim(),potonganSPP:Number(document.getElementById('s-potonganSPP')?.value||0)||0}; if(!data.nis||!data.nama||!data.kelas){alert('NIS, Nama, dan Kelas wajib diisi!');return;} const isEdit=!!id; if(id){const i=db.siswa.findIndex(s=>s.id===id);if(i>=0)db.siswa[i]={...db.siswa[i],...data};}else{db.siswa.push({id:uid(),...data});} save();closeModal('m-siswa');renderSiswa();renderDashboard(); notify(`Data siswa ${data.nama} berhasil ${isEdit?'diperbarui':'ditambahkan'}.`,'success'); }
+
+// Override Jenis Tagihan agar mendukung SPP per kelas dan seragam per item
+function renderTagihan(){
+  const tbody=document.getElementById('tagihan-tbody');
+  tbody.innerHTML=db.tagihan.length
+    ? db.tagihan.map(t=>`<tr><td style="font-weight:600">${esc(t.nama)}</td><td><span class="badge badge-blue">${esc(t.tipe)}</span></td><td style="font-weight:700">${esc(formatTagihanNominal(t))}</td><td>${esc(t.ket||'-')}</td><td class="abtns"><button class="btn btn-outline btn-sm" onclick="editTagihan('${t.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="hapusTagihan('${t.id}')">Hapus</button></td></tr>`).join('')
+    : '<tr><td colspan="5" class="empty-state"><p>Belum ada jenis tagihan</p></td></tr>';
+}
+function clearTagihanForm(){ ['t-id','t-nama','t-nominal','t-ket'].forEach(x=>{ const el=document.getElementById(x); if(el) el.value=''; }); document.getElementById('t-tipe').value='SPP'; renderKelasNominalInputs({nominal:0,nominalKelas:{}}); toggleTagihanKelasBox(); }
+function editTagihan(id){ const t=db.tagihan.find(x=>x.id===id); if(!t) return; openModal('m-tagihan'); document.getElementById('t-id').value=t.id; document.getElementById('t-nama').value=t.nama; document.getElementById('t-tipe').value=t.tipe; document.getElementById('t-nominal').value=t.nominal; document.getElementById('t-ket').value=t.ket||''; renderKelasNominalInputs(t); toggleTagihanKelasBox(); }
+function saveTagihan(){
+  const id=document.getElementById('t-id').value;
+  const data={nama:document.getElementById('t-nama').value.trim(),tipe:document.getElementById('t-tipe').value,nominal:Number(document.getElementById('t-nominal').value)||0,ket:document.getElementById('t-ket').value.trim()};
+  if(!data.nama){alert('Nama tagihan wajib diisi!');return;}
+  if(data.tipe!=='SPP' && data.nominal<=0){alert('Nominal wajib diisi. Untuk uang baju, buat per item pakaian lalu isi harga masing-masing.');return;}
+  if(data.tipe==='SPP'){
+    data.nominalKelas={};
+    document.querySelectorAll('.t-nom-kelas').forEach(inp=>{ data.nominalKelas[inp.dataset.kelas]=Number(inp.value)||0; });
+    let vals=Object.values(data.nominalKelas).map(Number).filter(v=>v>0);
+    if(!vals.length && data.nominal>0){ KELAS_OPTIONS.forEach(k=>data.nominalKelas[k]=data.nominal); vals=[data.nominal]; }
+    if(!vals.length && data.nominal<=0){ alert('Isi minimal satu nominal SPP per kelas.'); return; }
+    if(data.nominal<=0 && vals.length) data.nominal=vals[0];
+  }
+  const isEdit=!!id;
+  if(id){const i=db.tagihan.findIndex(t=>t.id===id);if(i>=0)db.tagihan[i]={...db.tagihan[i],...data};}
+  else{db.tagihan.push({id:uid(),...data});}
+  upgradeBiayaDb(); save();closeModal('m-tagihan');renderTagihan(); populateBayarSelects(); populateQris(); populateMassalSelects(); renderTunggakan(); notify(`Tagihan ${data.nama} berhasil ${isEdit?'diperbarui':'ditambahkan'}.`,'success');
+}
+
+// Override Pembayaran manual
+function populateBayarSelects(){
+  document.getElementById('b-siswa').innerHTML='<option value="">-- Pilih Siswa --</option>'+getActiveSiswa().map(s=>`<option value="${s.id}">${esc(s.nis)} - ${esc(s.nama)} (${esc(s.kelas)})</option>`).join('');
+  document.getElementById('b-jenis').innerHTML='<option value="">-- Pilih Jenis --</option>'+db.tagihan.map(t=>`<option value="${t.id}">${esc(t.nama)} — ${esc(formatTagihanNominal(t))}</option>`).join('');
+}
+function recalcBayarTotal(){ const nEl=document.getElementById('b-nominal'), dEl=document.getElementById('b-diskon'); const base=Number(nEl?.dataset.harga||0)||getTagihanNominal(document.getElementById('b-jenis')?.value,document.getElementById('b-siswa')?.value); const diskon=Number(dEl?.value||0)||0; if(nEl) nEl.value=Math.max(0,base-diskon); }
+function updateBayarNominal(){
+  const sid=document.getElementById('b-siswa')?.value||'';
+  const tid=document.getElementById('b-jenis')?.value||'';
+  if(!tid) return;
+  const s=gS(sid), t=gT(tid);
+  const base=getTagihanNominal(t,s);
+  const diskon=getSiswaPotongan(s,t);
+  const dEl=document.getElementById('b-diskon'), nEl=document.getElementById('b-nominal');
+  if(dEl) dEl.value=diskon||'';
+  if(nEl){ nEl.dataset.harga=base; nEl.value=Math.max(0,base-diskon); }
+  const bulanEl=document.getElementById('b-bulan'); if(isTagihanBulanan(t) && bulanEl && !bulanEl.value) bulanEl.value=BLAN[now.getMonth()];
+}
+function updateBayarInfo(){
+  const sid=document.getElementById('b-siswa').value;
+  const tid=document.getElementById('b-jenis')?.value||'';
+  const box=document.getElementById('b-info');
+  if(!sid){box.style.display='none';return;}
+  const s=gS(sid), t=gT(tid);
+  const hargaInfo=tid?`Harga ${t.nama}: ${rp(getTagihanNominal(t,s))}${getSiswaPotongan(s,t)>0?` | Potongan: ${rp(getSiswaPotongan(s,t))}`:''}. `:'';
+  const items=getUnpaidItemsForSiswa(s);
+  if(items.length){
+    box.style.display='flex';
+    document.getElementById('b-info-text').textContent=`${hargaInfo}${s.nama} masih punya tunggakan: ${formatTunggakanItems(items)}. Total ${rp(items.reduce((sum,it)=>sum+it.nominal,0))}`;
+  } else if(hargaInfo){ box.style.display='flex'; document.getElementById('b-info-text').textContent=hargaInfo+'Tidak ada tunggakan lain yang terdeteksi.'; }
+  else box.style.display='none';
+}
+function savePembayaran(){
+  const hargaAwal=Number(document.getElementById('b-nominal')?.dataset.harga||0)||getTagihanNominal(document.getElementById('b-jenis').value,document.getElementById('b-siswa').value);
+  const diskon=Number(document.getElementById('b-diskon')?.value||0)||0;
+  const data={siswaId:document.getElementById('b-siswa').value,tagihanId:document.getElementById('b-jenis').value,tgl:document.getElementById('b-tgl').value,bulan:document.getElementById('b-bulan').value,nominal:Number(document.getElementById('b-nominal').value)||0,metode:document.getElementById('b-metode').value,kasir:document.getElementById('b-kasir').value,ket:document.getElementById('b-ket').value,hargaAwal,diskon};
+  if(!data.siswaId||!data.tagihanId||!data.tgl){alert('Siswa, jenis tagihan, dan tanggal wajib diisi!');return;}
+  if(data.nominal<0){alert('Nominal tidak boleh minus!');return;}
+  if(data.hargaAwal<=0 && data.nominal<=0){alert('Nominal tagihan belum diisi. Buka Jenis Tagihan lalu isi harga/SPP per kelas terlebih dahulu.');return;}
+  const id=uid(); db.pembayaran.push({id,...data}); save(); closeModal('m-bayar');
+  const s=gS(data.siswaId), t=gT(data.tagihanId);
+  notify(`Pembayaran ${t.nama||'tagihan'}${data.bulan?' bulan '+data.bulan:''} atas nama ${s.nama||'siswa'} sebesar ${rp(data.nominal)} berhasil disimpan${data.diskon?` (potongan ${rp(data.diskon)})`:''}.`, 'success');
+  renderPembayaran(); populateBayarFilters(); renderDashboard(); renderTunggakan(); renderRekap();
+  if(document.getElementById('b-cetak')?.checked) cetakNota(id);
+}
+
+// Override QRIS agar ikut SPP per kelas dan potongan
+function populateQris(){
+  document.getElementById('qris-siswa').innerHTML='<option value="">-- Pilih Siswa --</option>'+getActiveSiswa().map(s=>`<option value="${s.id}">${esc(s.nis)} - ${esc(s.nama)}</option>`).join('');
+  document.getElementById('qris-jenis').innerHTML='<option value="">-- Pilih Jenis --</option>'+db.tagihan.map(t=>`<option value="${t.id}">${esc(t.nama)} — ${esc(formatTagihanNominal(t))}</option>`).join('');
+  renderQrisImage(); updateQris();
+}
+function recalcQrisTotal(){ const nEl=document.getElementById('qris-nominal'), dEl=document.getElementById('qris-diskon'); const base=Number(nEl?.dataset.harga||0)||getTagihanNominal(document.getElementById('qris-jenis')?.value,document.getElementById('qris-siswa')?.value); const diskon=Number(dEl?.value||0)||0; if(nEl) nEl.value=Math.max(0,base-diskon); updateQris(); }
+function updateQrisNominal(){
+  const sid=document.getElementById('qris-siswa')?.value||'';
+  const tid=document.getElementById('qris-jenis')?.value||'';
+  if(tid){ const s=gS(sid), t=gT(tid); const base=getTagihanNominal(t,s); const diskon=getSiswaPotongan(s,t); const dEl=document.getElementById('qris-diskon'), nEl=document.getElementById('qris-nominal'); if(dEl) dEl.value=diskon||''; if(nEl){ nEl.dataset.harga=base; nEl.value=Math.max(0,base-diskon); } const bulanEl=document.getElementById('qris-bulan'); if(isTagihanBulanan(t)&&bulanEl&&!bulanEl.value) bulanEl.value=BLAN[now.getMonth()]; }
+  updateQris();
+}
+function konfirmasiQris(){
+  const sid=document.getElementById('qris-siswa').value,tid=document.getElementById('qris-jenis').value,nominal=Number(document.getElementById('qris-nominal').value)||0,bulan=document.getElementById('qris-bulan').value;
+  const hargaAwal=Number(document.getElementById('qris-nominal')?.dataset.harga||0)||getTagihanNominal(tid,sid);
+  const diskon=Number(document.getElementById('qris-diskon')?.value||0)||0;
+  if(!db.sekolah.qrisImage && !confirm('Gambar QRIS asli belum diupload. Tetap catat pembayaran QRIS?')) return;
+  if(!sid||!tid){alert('Lengkapi data pembayaran QRIS!');return;}
+  if(hargaAwal<=0 && nominal<=0){alert('Nominal tagihan belum diisi. Buka Jenis Tagihan lalu isi harga/SPP per kelas terlebih dahulu.');return;}
+  if(!confirm('Pastikan dana QRIS sudah masuk di mutasi rekening/e-wallet. Konfirmasi pembayaran ini?')) return;
+  const id=uid(); db.pembayaran.push({id,siswaId:sid,tagihanId:tid,tgl:new Date().toISOString().split('T')[0],bulan,nominal,metode:'QRIS',kasir:db.sekolah.kasir,ket:'via QRIS',hargaAwal,diskon}); save();
+  const s=gS(sid), t=gT(tid); notify(`Pembayaran QRIS ${t.nama||'tagihan'}${bulan?' bulan '+bulan:''} atas nama ${s.nama||'siswa'} sebesar ${rp(nominal)} berhasil dicatat${diskon?` (potongan ${rp(diskon)})`:''}.`, 'success');
+  renderDashboard(); renderPembayaran(); renderTunggakan(); cetakNota(id);
+}
+
+// Override Massal agar otomatis per kelas + potongan
+function populateMassalSelects(){
+  const jenis=document.getElementById('mb-jenis'); const curJenis=jenis?.value||'';
+  jenis.innerHTML='<option value="">-- Pilih Jenis --</option>'+db.tagihan.map(t=>`<option value="${t.id}"${t.id===curJenis?' selected':''}>${esc(t.nama)} — ${esc(formatTagihanNominal(t))}</option>`).join('');
+  const kelas=document.getElementById('mb-kelas'); const curKelas=kelas?.value||'';
+  kelas.innerHTML='<option value="">Semua Kelas</option>'+getKelasList().map(k=>`<option value="${k}"${k===curKelas?' selected':''}>${kelasLabel(k)}</option>`).join('');
+}
+function updateMassalNominal(){
+  const tid=document.getElementById('mb-jenis').value; const nEl=document.getElementById('mb-nominal');
+  if(tid){ const t=gT(tid); if(nEl){ if((t.tipe||'')==='SPP'){ nEl.value=''; nEl.placeholder='Kosong = otomatis per kelas/potongan'; } else { nEl.value=t.nominal||''; nEl.placeholder='Kosong = otomatis'; } } const bulanEl=document.getElementById('mb-bulan'); if(isTagihanBulanan(t)&&!bulanEl.value) bulanEl.value=BLAN[now.getMonth()]; if(!isTagihanBulanan(t)) bulanEl.value=''; }
+}
+function renderMassalSiswa(){
+  const box=document.getElementById('mb-siswa-list'), info=document.getElementById('mb-info'); const tid=document.getElementById('mb-jenis').value, bulan=document.getElementById('mb-bulan').value;
+  if(!tid){ box.innerHTML='<div class="empty-state"><p>Pilih jenis tagihan terlebih dahulu.</p></div>'; info.textContent=''; return; }
+  const t=gT(tid), list=getMassalVisibleSiswa();
+  if(!list.length){ box.innerHTML='<div class="empty-state"><p>Tidak ada siswa sesuai filter.</p></div>'; info.textContent='0 siswa tampil'; return; }
+  box.innerHTML=list.map(s=>{ const paid=isPembayaranAda(s.id,tid,bulan); const checked=massalSelected.has(s.id)?'checked':''; const base=getTagihanNominal(t,s); const diskon=getSiswaPotongan(s,t); const net=Math.max(0,base-diskon); return `<label class="bulk-student-row"><input type="checkbox" value="${s.id}" ${checked} onchange="toggleMassalSiswa('${s.id}',this.checked)"><div style="flex:1"><div><strong>${esc(s.nama)}</strong> <span class="badge badge-blue">${esc(s.kelas)}</span> <span class="badge ${paid?'badge-success':'badge-warning'}">${paid?'Sudah bayar':'Belum bayar'}</span> <span class="badge badge-gray">${rp(net)}</span></div><div class="bulk-student-meta">NIS: ${esc(s.nis||'-')} · Wali: ${esc(s.wali||'-')} · ${esc(t.nama)}${bulan?' bulan '+esc(bulan):''}${diskon?` · Potongan ${rp(diskon)}`:''}</div></div></label>`; }).join('');
+  const terpilih=[...massalSelected].length; info.textContent=`${list.length} siswa tampil · ${terpilih} siswa dipilih. Kosongkan nominal manual agar sistem menghitung otomatis per kelas dan potongan siswa.`;
+}
+function saveMassalPembayaran(){
+  const tid=document.getElementById('mb-jenis').value, bulan=document.getElementById('mb-bulan').value, tgl=document.getElementById('mb-tgl').value, metode=document.getElementById('mb-metode').value, kasir=document.getElementById('mb-kasir').value, ket=document.getElementById('mb-ket').value;
+  const raw=String(document.getElementById('mb-nominal').value||'').trim(); const manual=raw===''?null:Number(raw);
+  const ids=[...massalSelected]; if(!tid||!tgl){ alert('Jenis tagihan dan tanggal wajib diisi!'); return; } if(manual!==null && (isNaN(manual)||manual<0)){ alert('Nominal manual tidak valid!'); return; } if(!ids.length){ alert('Pilih minimal 1 siswa.'); return; }
+  const t=gT(tid); if(!bulan && isTagihanBulanan(t) && !confirm('Tagihan SPP biasanya perlu bulan. Lanjut tanpa bulan?')) return;
+  let added=0, skipped=0, skippedNoNom=0;
+  ids.forEach(sid=>{ if(isPembayaranAda(sid,tid,bulan)){ skipped++; return; } const s=gS(sid); const base=getTagihanNominal(t,s); const diskon=manual===null?getSiswaPotongan(s,t):0; const nominal=manual===null?Math.max(0,base-diskon):manual; if(manual===null && base<=0){ skippedNoNom++; return; } db.pembayaran.push({id:uid(),siswaId:sid,tagihanId:tid,tgl,bulan,nominal,metode,kasir,ket,hargaAwal:manual===null?base:manual,diskon}); added++; });
+  save(); closeModal('m-bayar-massal'); massalSelected.clear(); notify(`Pembayaran massal berhasil: ${added} siswa dicatat${skipped?`, ${skipped} dilewati karena sudah bayar`:''}${skippedNoNom?`, ${skippedNoNom} dilewati karena nominal belum diisi`:''}.`,'success');
+  renderPembayaran(); populateBayarFilters(); renderDashboard(); renderTunggakan(); renderRekap();
+}
+
+// Override Tunggakan agar estimasi memakai nominal kelas dan potongan
+function getUnpaidItemsForSiswa(s, filterTid=''){
+  const items=[];
+  (db.tagihan||[]).forEach(t=>{
+    if(filterTid && t.id!==filterTid) return;
+    if(isTagihanBulanan(t)){
+      bulanTagihanBerjalan().forEach(b=>{ if(!isPembayaranAda(s.id,t.id,b)){ const base=getTagihanNominal(t,s); const diskon=getSiswaPotongan(s,t); items.push({tagihan:t,bulan:b,label:`${t.nama} ${b}`,nominal:Math.max(0,base-diskon),hargaAwal:base,diskon}); } });
+    }else{
+      if(!isPembayaranAda(s.id,t.id,'')){ const base=getTagihanNominal(t,s); items.push({tagihan:t,bulan:'',label:t.nama,nominal:base,hargaAwal:base,diskon:0}); }
+    }
+  });
+  return items;
+}
+
+// Override Rekap progress target agar mengikuti biaya per siswa
+function renderRekap(){
+  const kl=document.getElementById('rek-fil-kelas')?.value||'', bl=document.getElementById('rek-fil-bulan')?.value||'';
+  const siswaList=kl?getActiveSiswa().filter(s=>s.kelas===kl):getActiveSiswa();
+  const gTot=(sid,tipe)=>{ const ids=db.tagihan.filter(t=>t.tipe===tipe).map(t=>t.id); return db.pembayaran.filter(p=>p.siswaId===sid&&ids.includes(p.tagihanId)&&(!bl||p.bulan===bl)).reduce((s,p)=>s+p.nominal,0); };
+  document.getElementById('rek-siswa-tbody').innerHTML=siswaList.length
+    ? siswaList.map(s=>{ const sp=gTot(s.id,'SPP'),ip=gTot(s.id,'IPP'),kg=gTot(s.id,'Kegiatan'),sr=gTot(s.id,'Seragam'),uj=gTot(s.id,'Ujian'),tot=sp+ip+kg+sr+uj; return `<tr><td style="font-weight:500">${esc(s.nama)}</td><td><span class="badge badge-blue">${esc(s.kelas)}</span></td><td>${sp?rp(sp):'-'}</td><td>${ip?rp(ip):'-'}</td><td>${kg?rp(kg):'-'}</td><td>${sr?rp(sr):'-'}</td><td>${uj?rp(uj):'-'}</td><td style="font-weight:700">${rp(tot)}</td><td><span class="badge ${tot>0?'badge-success':'badge-warning'}">${tot>0?'Ada Bayar':'Belum'}</span></td></tr>`; }).join('')
+    : '<tr><td colspan="9" class="empty-state"><p>Tidak ada data</p></td></tr>';
+  document.getElementById('rek-jenis-tbody').innerHTML=db.tagihan.map(t=>{ const terbayar=db.pembayaran.filter(p=>p.tagihanId===t.id&&siswaList.find(s=>s.id===p.siswaId)&&(!bl||p.bulan===bl)).reduce((s,p)=>s+p.nominal,0); const target=siswaList.reduce((sum,s)=>sum+getNetTagihanNominal(t,s),0); const pct=target?Math.round(terbayar/target*100):0; return `<tr><td>${esc(t.nama)}</td><td style="font-weight:700">${rp(terbayar)}</td><td style="min-width:120px"><div style="display:flex;align-items:center;gap:6px;font-size:11px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:${pct>=100?'var(--success)':pct>=50?'var(--primary)':'var(--warning)'}"></div></div>${pct}%</div></td></tr>`; }).join('');
+  const bulanData=BLAN.map(b=>{ const pems=db.pembayaran.filter(p=>p.bulan===b&&(!kl||siswaList.find(s=>s.id===p.siswaId))); return {b,tot:pems.reduce((s,p)=>s+p.nominal,0),cnt:pems.length}; }).filter(d=>d.cnt>0);
+  document.getElementById('rek-bulan-tbody').innerHTML=bulanData.length ? bulanData.map(d=>`<tr><td>${d.b}</td><td style="font-weight:700">${rp(d.tot)}</td><td>${d.cnt} transaksi</td></tr>`).join('') : '<tr><td colspan="3" class="empty-state"><p>Belum ada data</p></td></tr>';
+}
+
+// Override Nota: hapus Kepala Sekolah dan tampilkan potongan
+function buildNotaLandscape(pid){
+  const p=db.pembayaran.find(x=>x.id===pid); if(!p) return '';
+  const s=gS(p.siswaId),t=gT(p.tagihanId); const w=132, ln='-'.repeat(w);
+  const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}); const noNota='NO-'+p.id.slice(-8).toUpperCase();
+  const periode=p.bulan || p.ket || '-'; const wali=s.wali||'Wali Murid'; const hp=s.hp||'-'; const tagihan=t.nama||'-'; const kode=(t.tipe||t.id||'TAGIHAN').toString().toUpperCase();
+  const hargaAwal=Number(p.hargaAwal||0)||getTagihanNominal(t,s)||Number(p.nominal||0); const diskon=Number(p.diskon||0)||Math.max(0,hargaAwal-Number(p.nominal||0)); const total=Number(p.nominal||0);
+  const widths=[4,12,46,18,8,14,12,15]; const aligns=['left','left','left','left','right','right','right','right']; let n='';
+  n+=centerText('NOTA PEMBAYARAN',w)+'\n\n';
+  n+=twoSide((db.sekolah.nama||'SD MUHAMMADIYAH 6 SAMARINDA'), 'Tanggal   : '+tgl,w)+'\n';
+  n+=twoSide((db.sekolah.alamat||'Samarinda'), 'No. Nota  : '+noNota,w)+'\n';
+  n+=twoSide('Telp: '+(db.sekolah.telp||'-'), 'Metode    : '+(p.metode||'-'),w)+'\n';
+  n+=twoSide('TA: '+(db.sekolah.ta||'-'), 'Kasir     : '+(p.kasir||db.sekolah.kasir||'-'),w)+'\n';
+  n+=ln+'\n';
+  n+=twoSide('Kepada : '+wali, 'Siswa     : '+(s.nama||'-'),w)+'\n';
+  n+=twoSide('Telp   : '+hp, 'Kelas/NIS : '+(s.kelas||'-')+' / '+(s.nis||'-'),w)+'\n';
+  n+=ln+'\n';
+  n+=tableRow(['No','Kode','Nama Tagihan / Keterangan','Periode/Ket','Qty','Harga','Diskon','Sub Total'],widths,aligns)+'\n';
+  n+=ln+'\n';
+  n+=tableRow(['1',kode,tagihan,periode,'1.00',moneyPlain(hargaAwal),moneyPlain(diskon),moneyPlain(total)],widths,aligns)+'\n';
+  n+=ln+'\n';
+  const labelPad=' '.repeat(96);
+  n+=labelPad+fitText('Total Qty',12)+': '+fitText('1.00',18,'right')+'\n';
+  n+=labelPad+fitText('Sub Total',12)+': '+fitText(moneyRp(hargaAwal),18,'right')+'\n';
+  n+=labelPad+fitText('Potongan',12)+': '+fitText(moneyRp(diskon),18,'right')+'\n';
+  n+=labelPad+fitText('Total',12)+': '+fitText(moneyRp(total),18,'right')+'\n';
+  n+=labelPad+fitText('Terbayar',12)+': '+fitText(moneyRp(total),18,'right')+'\n';
+  n+=labelPad+fitText('Kembali',12)+': '+fitText(moneyRp(0),18,'right')+'\n\n';
+  n+='                       Orang Tua/Wali                                      Bendahara/Kasir\n\n\n\n';
+  n+='                  (                    )                              ('+fitText(p.kasir||db.sekolah.kasir||'-',24,'center')+')\n\n';
+  n+='Terima kasih. Bukti pembayaran ini sah setelah divalidasi petugas sekolah. Simpan nota sebagai arsip pembayaran.\n'; return n;
+}
+function buildNotaCompact(pid,narrow){
+  const p=db.pembayaran.find(x=>x.id===pid); if(!p) return ''; const s=gS(p.siswaId),t=gT(p.tagihanId); const w=narrow?32:42; const ln='-'.repeat(w); const ctr=str=>centerText(str,w); const row=(l,r)=>rowCompact(l,r,w); const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}); const noNota='NO-'+p.id.slice(-8).toUpperCase(); const hargaAwal=Number(p.hargaAwal||0)||getTagihanNominal(t,s)||Number(p.nominal||0); const diskon=Number(p.diskon||0)||Math.max(0,hargaAwal-Number(p.nominal||0));
+  let n=''; n+=ctr(db.sekolah.kop1||db.sekolah.nama)+'\n'; if(db.sekolah.kop2) n+=ctr(db.sekolah.kop2)+'\n'; n+=ctr('TA '+db.sekolah.ta)+'\n'; n+=ln+'\n'; n+=ctr('BUKTI PEMBAYARAN')+'\n'; n+=ln+'\n'; n+=row('No. Nota',': '+noNota)+'\n'; n+=row('Tanggal',': '+tgl)+'\n'; n+=row('Kasir',': '+(p.kasir||'-'))+'\n'; n+=ln+'\n'; n+=row('NIS',': '+s.nis)+'\n'; n+=row('Nama',': '+s.nama)+'\n'; n+=row('Kelas',': '+s.kelas)+'\n'; n+=ln+'\n'; n+=row('Jenis',': '+t.nama)+'\n'; if(p.bulan) n+=row('Periode',': '+p.bulan)+'\n'; if(p.ket) n+=row('Ket',': '+p.ket)+'\n'; n+=row('Metode',': '+p.metode)+'\n'; n+=ln+'\n'; n+=row('Harga',rp(hargaAwal))+'\n'; if(diskon) n+=row('Potongan',rp(diskon))+'\n'; n+=row('JUMLAH BAYAR',rp(p.nominal))+'\n'; n+=ln+'\n'; n+=ctr('** LUNAS **')+'\n\n'; n+=ctr('Ttd Kasir')+'\n\n\n'; n+=ctr('('+(p.kasir||db.sekolah.kasir||'-')+')')+'\n\n'; n+=ctr('Dokumen ini sah tanpa tanda tangan')+'\n'; return n;
+}
+
+// Override Backup Excel supaya kolom potongan dan rincian nominal ikut terbaca
+function backupExcel(){
+  const wb=XLSX.utils.book_new();
+  const ws1=XLSX.utils.aoa_to_sheet([['ID','NIS','Nama','Kelas','Wali','HP','Alamat','Potongan SPP'],...db.siswa.map(s=>[s.id,s.nis,s.nama,s.kelas,s.wali,s.hp,s.alamat,Number(s.potonganSPP||0)])]);
+  ws1['!cols']=[{wch:14},{wch:14},{wch:28},{wch:14},{wch:24},{wch:18},{wch:35},{wch:16}]; XLSX.utils.book_append_sheet(wb,ws1,'Siswa');
+  const kelasCols=KELAS_OPTIONS.map(k=>'SPP '+k);
+  const ws2=XLSX.utils.aoa_to_sheet([['ID','Nama','Tipe','Nominal','Keterangan',...kelasCols],...db.tagihan.map(t=>[t.id,t.nama,t.tipe,t.nominal,t.ket,...KELAS_OPTIONS.map(k=>t.nominalKelas?.[k]||'')])]);
+  ws2['!cols']=[{wch:14},{wch:24},{wch:14},{wch:16},{wch:35},...KELAS_OPTIONS.map(()=>({wch:12}))]; XLSX.utils.book_append_sheet(wb,ws2,'Tagihan');
+  const ws3=XLSX.utils.aoa_to_sheet([['ID','SiswaID','TagihanID','Tanggal','NIS','Nama','Kelas','Jenis','Bulan','Harga Awal','Potongan','Nominal','Metode','Kasir','Keterangan'],...db.pembayaran.map(p=>{ const s=gS(p.siswaId),t=gT(p.tagihanId); return [p.id,p.siswaId,p.tagihanId,p.tgl,s.nis,s.nama,s.kelas,t.nama,p.bulan||'',p.hargaAwal||p.nominal||0,p.diskon||0,p.nominal,p.metode,p.kasir,p.ket||'']; })]);
+  ws3['!cols']=[{wch:14},{wch:14},{wch:14},{wch:12},{wch:12},{wch:26},{wch:14},{wch:22},{wch:14},{wch:16},{wch:14},{wch:16},{wch:12},{wch:16},{wch:28}]; XLSX.utils.book_append_sheet(wb,ws3,'Pembayaran');
+  const ws4=XLSX.utils.aoa_to_sheet([['Key','Value'],['nama',db.sekolah.nama||''],['ta',db.sekolah.ta||''],['kepsek',db.sekolah.kepsek||''],['kasir',db.sekolah.kasir||''],['alamat',db.sekolah.alamat||''],['telp',db.sekolah.telp||''],['lebar',db.sekolah.lebar||132],['rangkap',db.sekolah.rangkap||2],['kop1',db.sekolah.kop1||''],['kop2',db.sekolah.kop2||''],['qrisMerchant',db.sekolah.qrisMerchant||''],['qrisNmid',db.sekolah.qrisNmid||''],['qrisNote',db.sekolah.qrisNote||''],['qrisImage','(Gambar QRIS tidak disimpan di Excel. Gunakan backup JSON untuk menyimpan gambar QRIS.)']]);
+  ws4['!cols']=[{wch:22},{wch:70}]; XLSX.utils.book_append_sheet(wb,ws4,'Pengaturan'); XLSX.writeFile(wb,`BACKUP_SISPA_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
 // ========== INIT ==========
 document.getElementById('sb-nama').textContent=db.sekolah.nama;
 document.getElementById('sb-ta').textContent='TA '+db.sekolah.ta;

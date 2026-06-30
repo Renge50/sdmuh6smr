@@ -312,7 +312,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
     Tunggakan
   </div>
-  <!-- WhatsApp Tunggakan dinonaktifkan sementara karena nomor HP wali belum lengkap. -->
+  <div class="nav-item" onclick="showPage('whatsapp',this)">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    WhatsApp Tunggakan
+  </div>
 
   <div class="sidebar-section">Pengaturan</div>
   <div class="nav-item" onclick="showPage('tagihan',this)">
@@ -514,6 +517,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             Bayar Terpilih
           </button>
+          <button class="btn btn-whatsapp" onclick="kirimWATunggakanTerpilih()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            WA Terpilih
+          </button>
           <button class="btn btn-success" onclick="exportTunggakanExcel()">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export Excel
@@ -523,14 +530,50 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
       </div>
     </div>
 
-    <!-- WHATSAPP DISABLED -->
+    <!-- WHATSAPP -->
     <div class="page" id="page-whatsapp">
-      <div class="card">
-        <div class="card-header"><span class="card-title">WhatsApp Tunggakan Dinonaktifkan</span></div>
-        <div style="padding:18px">
-          <div class="alert alert-warning" style="margin-bottom:0">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span>Fitur WhatsApp tunggakan dinonaktifkan sementara karena nomor HP wali murid belum lengkap.</span>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">WhatsApp Tunggakan Otomatis</span></div>
+          <div style="padding:18px">
+            <div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Sistem akan membuka WhatsApp Web/App dengan pesan otomatis. Pengiriman tetap perlu klik <strong>Send/Kirim</strong> di WhatsApp karena browser tidak boleh mengirim pesan diam-diam.</div></div>
+            <div class="form-grid" style="margin-bottom:14px">
+              <div class="fg"><label>Filter Kelas</label><select id="wa-kelas" onchange="populateWA()"><option value="">Semua Kelas</option></select></div>
+              <div class="fg"><label>Filter Tagihan</label><select id="wa-jenis" onchange="populateWA()"><option value="">Semua Tagihan</option></select></div>
+              <div class="fg full"><label>Pilih Siswa Tunggakan</label><select id="wa-siswa" onchange="previewWA()"><option value="">-- Pilih Siswa --</option></select></div>
+              <div class="fg full"><label>Template Pesan</label>
+                <textarea id="wa-template" rows="10" style="resize:vertical;font-size:12px;line-height:1.6">Assalamu'alaikum Bapak/Ibu {WALI},
+
+Kami dari {SEKOLAH} menginformasikan bahwa ananda:
+
+Nama  : {NAMA}
+Kelas : {KELAS}
+NIS   : {NIS}
+
+Masih memiliki tunggakan pembayaran:
+{DETAIL_TUNGGAK}
+
+Total tunggakan: {TOTAL}
+
+Mohon agar dapat segera diselesaikan. Apabila sudah melakukan pembayaran, mohon abaikan pesan ini atau konfirmasi ke bendahara/kasir sekolah.
+
+Terima kasih.
+Wassalamu'alaikum.</textarea>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-outline" onclick="previewWA()">Preview Pesan</button>
+              <button class="btn btn-whatsapp" onclick="kirimWA()">Buka WhatsApp Siswa Ini</button>
+              <button class="btn btn-whatsapp" onclick="kirimWASemuaTunggakan()">Buka WA Semua yang Tampil</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Daftar Siswa Siap Dihubungi</span></div>
+          <div style="padding:18px">
+            <div class="wa-preview" id="wa-preview-box">Pilih siswa untuk melihat preview pesan...</div>
+            <div id="wa-summary" style="margin:12px 0;font-size:12px;color:var(--g600)"></div>
+            <div id="wa-list" class="bulk-student-list"></div>
           </div>
         </div>
       </div>
@@ -750,6 +793,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
         <div class="fg"><label>Kasir</label><input id="b-kasir" placeholder="Nama petugas"></div>
         <div class="fg"><label>Keterangan</label><input id="b-ket" placeholder="Keterangan tambahan"></div>
         <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-cetak" checked> Cetak nota setelah simpan</label></div>
+        <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-wa-notif" checked> Buka WhatsApp wali setelah simpan pembayaran</label></div>
       </div>
       <div id="b-info" class="alert alert-warning" style="display:none;margin-top:12px"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="b-info-text"></span></div>
     </div>
@@ -2324,6 +2368,187 @@ function backupExcel(){
   ws3['!cols']=[{wch:14},{wch:14},{wch:14},{wch:12},{wch:12},{wch:26},{wch:14},{wch:22},{wch:14},{wch:16},{wch:14},{wch:16},{wch:12},{wch:16},{wch:28}]; XLSX.utils.book_append_sheet(wb,ws3,'Pembayaran');
   const ws4=XLSX.utils.aoa_to_sheet([['Key','Value'],['nama',db.sekolah.nama||''],['ta',db.sekolah.ta||''],['kepsek',db.sekolah.kepsek||''],['kasir',db.sekolah.kasir||''],['alamat',db.sekolah.alamat||''],['telp',db.sekolah.telp||''],['lebar',db.sekolah.lebar||132],['rangkap',db.sekolah.rangkap||2],['kop1',db.sekolah.kop1||''],['kop2',db.sekolah.kop2||''],['qrisMerchant',db.sekolah.qrisMerchant||''],['qrisNmid',db.sekolah.qrisNmid||''],['qrisNote',db.sekolah.qrisNote||''],['qrisImage','(Gambar QRIS tidak disimpan di Excel. Gunakan backup JSON untuk menyimpan gambar QRIS.)']]);
   ws4['!cols']=[{wch:22},{wch:70}]; XLSX.utils.book_append_sheet(wb,ws4,'Pengaturan'); XLSX.writeFile(wb,`BACKUP_SISPA_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+
+// ========== WHATSAPP AKTIF ==========
+function normalizePhone(hp){
+  let n=String(hp||'').replace(/[^0-9]/g,'');
+  if(!n) return '';
+  if(n.startsWith('0')) n='62'+n.slice(1);
+  else if(n.startsWith('8')) n='62'+n;
+  else if(n.startsWith('620')) n='62'+n.slice(3);
+  return n;
+}
+function waEncode(text){ return encodeURIComponent(text||''); }
+function getWAFilterJenis(){ const waActive=document.getElementById('page-whatsapp')?.classList.contains('active'); return (waActive?document.getElementById('wa-jenis')?.value:document.getElementById('fil-tg-jenis')?.value)||''; }
+function getWAFilterKelas(){ return document.getElementById('page-whatsapp')?.classList.contains('active')?(document.getElementById('wa-kelas')?.value||''):''; }
+function getWAList(){
+  const tid=getWAFilterJenis();
+  const kl=getWAFilterKelas();
+  let list=getTunggakanList(tid);
+  if(kl) list=list.filter(r=>r.s.kelas===kl);
+  return list;
+}
+function formatWADetail(items){
+  const grouped={};
+  items.forEach(it=>{
+    const nama=it.tagihan?.nama||'Tagihan';
+    if(!grouped[nama]) grouped[nama]=[];
+    grouped[nama].push({bulan:it.bulan||'', nominal:Number(it.nominal||0)});
+  });
+  return Object.entries(grouped).map(([nama,arr])=>{
+    const ket=arr.map(x=>x.bulan?`${x.bulan} (${rp(x.nominal)})`:rp(x.nominal)).join(', ');
+    const subtotal=arr.reduce((a,b)=>a+b.nominal,0);
+    return `- ${nama}: ${ket} = ${rp(subtotal)}`;
+  }).join('\n');
+}
+function populateWA(){
+  const kelasEl=document.getElementById('wa-kelas');
+  if(kelasEl){ const cv=kelasEl.value; kelasEl.innerHTML='<option value="">Semua Kelas</option>'+getKelasList().map(k=>`<option value="${k}"${k===cv?' selected':''}>${kelasLabel(k)}</option>`).join(''); }
+  const jenisEl=document.getElementById('wa-jenis');
+  if(jenisEl){ const cv=jenisEl.value; jenisEl.innerHTML='<option value="">Semua Tagihan</option>'+db.tagihan.map(t=>`<option value="${t.id}"${t.id===cv?' selected':''}>${esc(t.nama)}</option>`).join(''); }
+  const list=getWAList();
+  const select=document.getElementById('wa-siswa');
+  if(select){
+    const cur=select.value;
+    select.innerHTML='<option value="">-- Pilih Siswa Tunggakan --</option>'+list.map(r=>`<option value="${r.s.id}"${r.s.id===cur?' selected':''}>${esc(r.s.nama)} (${esc(r.s.kelas)}) - ${rp(r.total)}${normalizePhone(r.s.hp)?'':' - NO HP KOSONG'}</option>`).join('');
+  }
+  renderWAList(list);
+  if(select && select.value) previewWA();
+}
+function renderWAList(list=getWAList()){
+  const box=document.getElementById('wa-list');
+  const sum=document.getElementById('wa-summary');
+  const siap=list.filter(r=>normalizePhone(r.s.hp)).length;
+  const kosong=list.length-siap;
+  if(sum) sum.textContent=`${list.length} siswa menunggak tampil · ${siap} ada nomor HP · ${kosong} belum ada nomor HP.`;
+  if(!box) return;
+  box.innerHTML=list.length?list.map(r=>{
+    const no=normalizePhone(r.s.hp);
+    return `<label class="bulk-student-row" style="align-items:flex-start"><input type="checkbox" class="wa-row-check" value="${r.s.id}" ${no?'checked':''} ${no?'':'disabled'}><div style="flex:1"><div><strong>${esc(r.s.nama)}</strong> <span class="badge badge-blue">${esc(r.s.kelas)}</span> <span class="badge ${no?'badge-success':'badge-danger'}">${no?'HP ada':'HP kosong'}</span> <span class="badge badge-warning">${r.items.length} item</span></div><div class="bulk-student-meta">NIS: ${esc(r.s.nis||'-')} · Wali: ${esc(r.s.wali||'-')} · HP: ${esc(r.s.hp||'-')} · Total: ${rp(r.total)}</div><div style="margin-top:6px"><button type="button" class="btn btn-whatsapp btn-sm" onclick="event.preventDefault();kirimWASatu('${r.s.id}')" ${no?'':'disabled'}>Buka WA</button></div></div></label>`;
+  }).join(''):'<div class="empty-state"><p>Tidak ada tunggakan sesuai filter.</p></div>';
+}
+function buildWAMsg(siswaId){
+  const s=gS(siswaId); if(!s||!s.id) return '';
+  const items=getUnpaidItemsForSiswa(s, getWAFilterJenis());
+  const total=items.reduce((sum,it)=>sum+Number(it.nominal||0),0);
+  const tpl=document.getElementById('wa-template')?.value || '';
+  return tpl
+    .replaceAll('{WALI}', s.wali||'Bapak/Ibu Wali Murid')
+    .replaceAll('{NAMA}', s.nama||'-')
+    .replaceAll('{KELAS}', s.kelas||'-')
+    .replaceAll('{NIS}', s.nis||'-')
+    .replaceAll('{DETAIL_TUNGGAK}', formatWADetail(items)||'-')
+    .replaceAll('{TOTAL}', rp(total))
+    .replaceAll('{SEKOLAH}', db.sekolah.nama||'SD Muhammadiyah 6 Samarinda');
+}
+function buildWAPaymentMsg(p){
+  const s=gS(p.siswaId), t=gT(p.tagihanId);
+  return `Assalamu'alaikum Bapak/Ibu ${s.wali||'Wali Murid'},\n\nPembayaran ananda berikut sudah kami catat:\n\nNama  : ${s.nama||'-'}\nKelas : ${s.kelas||'-'}\nNIS   : ${s.nis||'-'}\nTagihan: ${t.nama||'-'}${p.bulan?' bulan '+p.bulan:''}\nNominal: ${rp(Number(p.nominal||0))}\nMetode : ${p.metode||'-'}\nTanggal: ${p.tgl||'-'}\n\nTerima kasih.\n${db.sekolah.nama||'SD Muhammadiyah 6 Samarinda'}`;
+}
+function openWAForPhone(hp,msg){
+  const no=normalizePhone(hp);
+  if(!no){ alert('Nomor HP wali murid masih kosong atau tidak valid.'); return false; }
+  window.open(`https://wa.me/${no}?text=${waEncode(msg)}`,'_blank');
+  return true;
+}
+function previewWA(){
+  const sid=document.getElementById('wa-siswa')?.value;
+  const box=document.getElementById('wa-preview-box');
+  if(!sid){ if(box) box.textContent='Pilih siswa untuk melihat preview pesan...'; return; }
+  if(box) box.textContent=buildWAMsg(sid);
+}
+function kirimWA(){
+  const sid=document.getElementById('wa-siswa')?.value;
+  if(!sid){ alert('Pilih siswa terlebih dahulu.'); return; }
+  kirimWASatu(sid);
+}
+function kirimWASatu(siswaId){
+  const s=gS(siswaId); if(!s||!s.id){ alert('Data siswa tidak ditemukan.'); return; }
+  if(!normalizePhone(s.hp)){ alert(`Nomor HP wali untuk ${s.nama} belum diisi. Edit Data Siswa dulu.`); return; }
+  openWAForPhone(s.hp, buildWAMsg(siswaId));
+}
+function getCheckedWAIds(){
+  const boxes=[...document.querySelectorAll('.wa-row-check:checked')];
+  return boxes.map(cb=>cb.value);
+}
+function kirimWASemuaTunggakan(){
+  const ids=getCheckedWAIds();
+  if(!ids.length){ alert('Tidak ada siswa yang dicentang atau nomor HP belum tersedia.'); return; }
+  if(!confirm(`Buka WhatsApp untuk ${ids.length} siswa? Browser akan membuka tab satu per satu. Setelah terbuka, tetap klik Kirim di WhatsApp.`)) return;
+  ids.forEach((id,i)=>setTimeout(()=>kirimWASatu(id), i*1200));
+}
+function kirimWATunggakanTerpilih(){
+  const ids=[...tgSelected];
+  if(!ids.length){ alert('Centang siswa di tabel tunggakan terlebih dahulu.'); return; }
+  const valid=ids.filter(id=>normalizePhone(gS(id).hp));
+  const kosong=ids.length-valid.length;
+  if(!valid.length){ alert('Siswa yang dipilih belum memiliki nomor HP wali.'); return; }
+  if(!confirm(`Buka WhatsApp untuk ${valid.length} siswa terpilih?${kosong?` ${kosong} siswa dilewati karena nomor HP kosong.`:''}`)) return;
+  valid.forEach((id,i)=>setTimeout(()=>kirimWASatu(id), i*1200));
+}
+
+// Override Tunggakan: aktifkan tombol WA per siswa
+function renderTunggakan(){
+  populateTgFilter();
+  const kl=document.getElementById('fil-tg-kelas')?.value||'';
+  const tid=document.getElementById('fil-tg-jenis')?.value||'';
+  const q=(document.getElementById('src-tg')?.value||'').toLowerCase();
+  let list=getTunggakanList(tid);
+  if(kl) list=list.filter(r=>r.s.kelas===kl);
+  if(q) list=list.filter(r=>(r.s.nama||'').toLowerCase().includes(q)||(r.s.nis||'').includes(q));
+  const totalNom=list.reduce((sum,r)=>sum+r.total,0);
+  const totalItem=list.reduce((sum,r)=>sum+r.items.length,0);
+  const totalSiswa=list.length;
+  const sppItem=list.reduce((sum,r)=>sum+r.items.filter(it=>it.tagihan.tipe==='SPP').length,0);
+  const sumBox=document.getElementById('tg-summary');
+  if(sumBox) sumBox.innerHTML=`<div class="tg-summary-card"><div>Siswa Menunggak</div><strong>${totalSiswa}</strong></div><div class="tg-summary-card"><div>Total Item Tunggakan</div><strong>${totalItem}</strong></div><div class="tg-summary-card"><div>Item SPP</div><strong>${sppItem}</strong></div><div class="tg-summary-card"><div>Estimasi Tunggakan</div><strong>${rp(totalNom)}</strong></div>`;
+  const all=document.getElementById('tg-check-all'); if(all) all.checked=false;
+  document.getElementById('tg-tbody').innerHTML=list.length
+    ? list.map(r=>{ const adaHP=!!normalizePhone(r.s.hp); return `<tr><td><input type="checkbox" class="tg-row-check" value="${r.s.id}" ${tgSelected.has(r.s.id)?'checked':''} onchange="toggleTgSelected('${r.s.id}',this.checked)"></td><td style="font-family:monospace">${esc(r.s.nis)}</td><td style="font-weight:500">${esc(r.s.nama)}</td><td><span class="badge badge-blue">${esc(r.s.kelas)}</span></td><td>${esc(r.s.wali||'-')}<div style="font-size:11px;color:var(--g500)">${esc(r.s.hp||'HP belum diisi')}</div></td><td class="tg-detail">${esc(r.detail)}</td><td style="font-weight:700;color:var(--danger)">${rp(r.total)}</td><td><span class="badge badge-danger">${r.items.length} item</span></td><td><div class="abtns"><button class="btn btn-primary btn-sm" onclick="openMassalBayar(['${r.s.id}'])">Bayar</button><button class="btn btn-whatsapp btn-sm" onclick="kirimWASatu('${r.s.id}')" ${adaHP?'':'disabled'}>WA</button></div></td></tr>`; }).join('')
+    : '<tr><td colspan="9" class="empty-state"><p>🎉 Tidak ada tunggakan sesuai filter!</p></td></tr>';
+  if(document.getElementById('page-whatsapp')?.classList.contains('active')) populateWA();
+}
+
+// Override pembayaran manual: tetap cetak + bunyi + buka WhatsApp wali jika dicentang
+function savePembayaran(){
+  const hargaAwal=Number(document.getElementById('b-nominal')?.dataset.harga||0)||getTagihanNominal(document.getElementById('b-jenis').value,document.getElementById('b-siswa').value);
+  const diskon=Number(document.getElementById('b-diskon')?.value||0)||0;
+  const data={siswaId:document.getElementById('b-siswa').value,tagihanId:document.getElementById('b-jenis').value,tgl:document.getElementById('b-tgl').value,bulan:document.getElementById('b-bulan').value,nominal:Number(document.getElementById('b-nominal').value)||0,metode:document.getElementById('b-metode').value,kasir:document.getElementById('b-kasir').value,ket:document.getElementById('b-ket').value,hargaAwal,diskon};
+  if(!data.siswaId||!data.tagihanId||!data.tgl){alert('Siswa, jenis tagihan, dan tanggal wajib diisi!');return;}
+  if(data.nominal<0){alert('Nominal tidak boleh minus!');return;}
+  if(data.hargaAwal<=0 && data.nominal<=0){alert('Nominal tagihan belum diisi. Buka Jenis Tagihan lalu isi harga/SPP per kelas terlebih dahulu.');return;}
+  const id=uid(); db.pembayaran.push({id,...data}); save(); closeModal('m-bayar');
+  const s=gS(data.siswaId), t=gT(data.tagihanId);
+  notify(`Pembayaran ${t.nama||'tagihan'}${data.bulan?' bulan '+data.bulan:''} atas nama ${s.nama||'siswa'} sebesar ${rp(data.nominal)} berhasil disimpan${data.diskon?` (potongan ${rp(data.diskon)})`:''}.`, 'success');
+  renderPembayaran(); populateBayarFilters(); renderDashboard(); renderTunggakan(); renderRekap();
+  if(document.getElementById('b-cetak')?.checked) cetakNota(id);
+  if(document.getElementById('b-wa-notif')?.checked){
+    setTimeout(()=>{
+      if(normalizePhone(s.hp)) openWAForPhone(s.hp, buildWAPaymentMsg({id,...data}));
+      else notify(`WhatsApp tidak dibuka karena nomor HP wali ${s.nama||'siswa'} belum diisi.`, 'warning');
+    }, 500);
+  }
+}
+
+// Override QRIS: setelah konfirmasi bisa buka WhatsApp wali
+function konfirmasiQris(){
+  const sid=document.getElementById('qris-siswa').value,tid=document.getElementById('qris-jenis').value,nominal=Number(document.getElementById('qris-nominal').value)||0,bulan=document.getElementById('qris-bulan').value;
+  const hargaAwal=Number(document.getElementById('qris-nominal')?.dataset.harga||0)||getTagihanNominal(tid,sid);
+  const diskon=Number(document.getElementById('qris-diskon')?.value||0)||0;
+  if(!db.sekolah.qrisImage && !confirm('Gambar QRIS asli belum diupload. Tetap catat pembayaran QRIS?')) return;
+  if(!sid||!tid){alert('Lengkapi data pembayaran QRIS!');return;}
+  if(hargaAwal<=0 && nominal<=0){alert('Nominal tagihan belum diisi. Buka Jenis Tagihan lalu isi harga/SPP per kelas terlebih dahulu.');return;}
+  if(!confirm('Pastikan dana QRIS sudah masuk di mutasi rekening/e-wallet. Konfirmasi pembayaran ini?')) return;
+  const data={id:uid(),siswaId:sid,tagihanId:tid,tgl:new Date().toISOString().split('T')[0],bulan,nominal,metode:'QRIS',kasir:db.sekolah.kasir,ket:'via QRIS',hargaAwal,diskon};
+  db.pembayaran.push(data); save();
+  const s=gS(sid), t=gT(tid); notify(`Pembayaran QRIS ${t.nama||'tagihan'}${bulan?' bulan '+bulan:''} atas nama ${s.nama||'siswa'} sebesar ${rp(nominal)} berhasil dicatat${diskon?` (potongan ${rp(diskon)})`:''}.`, 'success');
+  renderDashboard(); renderPembayaran(); renderTunggakan(); renderRekap(); cetakNota(data.id);
+  if(confirm('Buka WhatsApp wali untuk mengirim pemberitahuan pembayaran ini?')){
+    if(normalizePhone(s.hp)) openWAForPhone(s.hp, buildWAPaymentMsg(data));
+    else notify(`WhatsApp tidak dibuka karena nomor HP wali ${s.nama||'siswa'} belum diisi.`, 'warning');
+  }
 }
 
 // ========== INIT ==========

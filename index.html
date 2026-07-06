@@ -1,1729 +1,2750 @@
-  <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="id">
 <head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Website resmi SD Muhammadiyah 6 Samarinda - Sekolah Kreatif, Islami, Berilmu, Beramal, dan Cinta Lingkungan." />
+  <title>SD Muhammadiyah 6 Samarinda</title>
 
-     <title>SD MUHAMMADIYAH 6 </title>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-<!-- 
+  <style>
+    :root {
+      --primary: #0b7a3b;
+      --primary-2: #14a455;
+      --primary-soft: #e8f7ee;
+      --accent: #f5b301;
+      --accent-2: #ffcf4d;
+      --dark: #102018;
+      --muted: #68776f;
+      --line: rgba(16, 32, 24, 0.10);
+      --white: #ffffff;
+      --soft: #f7faf8;
+      --shadow: 0 18px 45px rgba(16, 32, 24, 0.12);
+      --shadow-soft: 0 10px 30px rgba(16, 32, 24, 0.08);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --container: 1180px;
+    }
 
-Known Template 
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--dark);
+      background:
+        radial-gradient(circle at top left, rgba(20, 164, 85, 0.12), transparent 34rem),
+        radial-gradient(circle at top right, rgba(245, 179, 1, 0.14), transparent 30rem),
+        #fbfdfb;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(var(--container), calc(100% - 36px));
+      margin-inline: auto;
+    }
+
+    .section {
+      padding: 92px 0;
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+      line-height: 1.13;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 84px);
+      letter-spacing: -0.06em;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4.4vw, 52px);
+      letter-spacing: -0.04em;
+      margin-top: 14px;
+    }
+
+    h3 { font-size: 22px; letter-spacing: -0.02em; }
+
+    .section-desc {
+      max-width: 640px;
+      color: var(--muted);
+      margin: 14px 0 0;
+      font-size: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 0;
+      cursor: pointer;
+      padding: 14px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 14px 28px rgba(11, 122, 59, 0.25);
+    }
+
+    .btn-secondary {
+      color: var(--dark);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.65);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn-ghost {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    /* Navbar */
+    .site-header {
+      position: fixed;
+      top: 16px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .nav-wrap {
+      pointer-events: auto;
+      width: min(1240px, calc(100% - 32px));
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 26px;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 50px rgba(16, 32, 24, 0.13);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 280px;
+    }
+
+    .brand img {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .brand span {
+      display: block;
+      max-width: 270px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex: 1;
+    }
+
+    .nav-links a {
+      display: inline-flex;
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: #394a42;
+      font-size: 13px;
+      font-weight: 800;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .clock-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--dark);
+      font-size: 18px;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      padding: 132px 0 58px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, rgba(11,122,59,0.08), transparent 45%),
+        radial-gradient(circle at 88% 22%, rgba(245,179,1,0.22), transparent 22rem);
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .hero-copy p {
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--muted);
+      max-width: 660px;
+      margin: 22px 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .hero-badges {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 36px;
+      max-width: 640px;
+    }
+
+    .hero-badge {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-badge strong {
+      display: block;
+      font-size: 24px;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .hero-badge span {
+      color: var(--muted);
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      background: rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.72);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -80px;
+      top: -90px;
+      border-radius: 999px;
+      background: rgba(245,179,1,0.24);
+    }
+
+    .hero-photo {
+      position: relative;
+      min-height: 510px;
+      border-radius: 26px;
+      background:
+        linear-gradient(135deg, rgba(11,122,59,0.78), rgba(20,164,85,0.28)),
+        url('images/Bangunan Sekolah.jpg') center/cover no-repeat,
+        url('images/Lapangan Sekolah.jpeg') center/cover no-repeat;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 26px;
+      color: #fff;
+    }
+
+    .hero-floating {
+      position: absolute;
+      top: 26px;
+      left: 26px;
+      right: 26px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .glass-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.24);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .hero-photo h3 { font-size: 30px; max-width: 420px; }
+    .hero-photo p { margin: 12px 0 0; color: rgba(255,255,255,0.85); }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .info-card,
+    .profile-card,
+    .media-card,
+    .mission-card,
+    .contact-card {
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(16,32,24,0.08);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .info-card:hover,
+    .profile-card:hover,
+    .media-card:hover,
+    .mission-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+      border-color: rgba(20,164,85,0.22);
+    }
+
+    .info-card {
+      padding: 28px;
+      min-height: 250px;
+    }
+
+    .number-chip {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .info-card p,
+    .mission-card p,
+    .media-card p,
+    .profile-card span {
+      color: var(--muted);
+      margin: 12px 0 0;
+    }
+
+    .program-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 26px;
+    }
+
+    .program-item {
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #f8fcf9);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .program-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .program-item h3 { font-size: 18px; }
+    .program-item p { color: var(--muted); margin: 8px 0 0; font-size: 14px; }
+
+    /* Horizontal Scroll Collections */
+    .scroll-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(260px, 310px);
+      gap: 20px;
+      overflow-x: auto;
+      padding: 4px 4px 22px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+
+    .scroll-row > * { scroll-snap-align: start; }
+
+    .profile-card { padding: 12px; }
+    .profile-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: contain;
+      object-position: center bottom;
+      border-radius: 20px;
+      background: #e8ebf5;
+    }
+
+    .profile-info { padding: 18px 12px 14px; }
+    .profile-info h3 { font-size: 18px; }
+    .profile-info span { display: block; font-weight: 700; color: var(--primary); }
+
+    .mission-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mission-card {
+      padding: 26px;
+      cursor: pointer;
+    }
+
+    .mission-card .mission-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      border-radius: 18px;
+      margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .mission-detail {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      display: none;
+    }
+
+    .mission-card.open .mission-detail { display: block; animation: fadeUp 0.25s ease; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .media-card { min-height: 100%; }
+    .media-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      background: #eef4f0;
+    }
+
+    .media-body { padding: 22px; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .media-body h3 { font-size: 20px; }
+
+    /* PPDB */
+    .ppdb-card {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 28px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(11,122,59,0.96), rgba(20,164,85,0.84));
+      color: #fff;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ppdb-card::after {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      right: -120px;
+      bottom: -160px;
+      background: rgba(245,179,1,0.24);
+      border-radius: 999px;
+    }
+
+    .ppdb-content { position: relative; z-index: 1; padding: 12px; }
+    .ppdb-content p { color: rgba(255,255,255,0.82); max-width: 560px; }
+
+    /* PPDB satu gambar untuk desktop dan HP */
+    .ppdb-image {
+      position: relative;
+      z-index: 1;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 20px 55px rgba(0,0,0,0.25);
+      background: #ffffff;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ppdb-image img {
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      object-fit: contain;
+      border-radius: 18px;
+      background: #ffffff;
+    }
 
 
 
+    /* Bangunan Sekolah */
+    .building-showcase {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: stretch;
+      padding: 24px;
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(16,32,24,0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .building-showcase::before {
+      content: "";
+      position: absolute;
+      inset: auto -120px -160px auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      background: rgba(20,164,85,0.12);
+      pointer-events: none;
+    }
+
+    .building-media {
+      position: relative;
+      min-height: 460px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0b7a3b, #14a455);
+      box-shadow: 0 18px 42px rgba(16, 32, 24, 0.18);
+    }
+
+    .building-media img {
+      width: 100%;
+      height: 100%;
+      min-height: 460px;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
+
+    .building-showcase:hover .building-media img { transform: scale(1.035); }
+
+    .building-label {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      color: #fff;
+      background: rgba(11, 122, 59, 0.74);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(12px);
+      font-weight: 800;
+    }
+
+    .building-copy {
+      position: relative;
+      z-index: 1;
+      padding: 20px 10px 20px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .building-copy p { color: var(--muted); margin: 16px 0 22px; }
+
+    .building-points {
+      display: grid;
+      gap: 12px;
+      margin: 4px 0 24px;
+    }
+
+    .building-point {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 18px;
+      background: #f7fbf8;
+      border: 1px solid var(--line);
+    }
+
+    .building-point i {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      flex: 0 0 34px;
+    }
+
+    .building-point strong { display: block; margin-bottom: 2px; }
+    .building-point span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+
+    .building-gallery-intro {
+      margin-top: 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 22px;
+    }
+
+    .building-gallery-intro h3 {
+      font-size: clamp(24px, 3vw, 36px);
+      max-width: 680px;
+      margin-top: 12px;
+    }
+
+    .building-gallery-intro p {
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0;
+    }
+
+    .building-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .building-gallery-card {
+      position: relative;
+      min-height: 245px;
+      border-radius: 26px;
+      overflow: hidden;
+      background: #e8f1eb;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(16, 32, 24, 0.08);
+      isolation: isolate;
+    }
+
+    .building-gallery-card:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+      min-height: 508px;
+    }
+
+    .building-gallery-card img {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      object-fit: cover;
+      transition: transform 0.55s ease, filter 0.55s ease;
+    }
+
+    .building-gallery-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 35%, rgba(4, 25, 14, 0.88) 100%),
+        linear-gradient(135deg, rgba(11,122,59,0.12), transparent 55%);
+      z-index: 1;
+    }
+
+    .building-gallery-card:hover img {
+      transform: scale(1.06);
+      filter: saturate(1.08);
+    }
+
+    .building-gallery-body {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      z-index: 2;
+      color: #fff;
+    }
+
+    .building-gallery-body span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .building-gallery-body h3 {
+      font-size: 20px;
+      margin-bottom: 6px;
+      letter-spacing: -0.03em;
+    }
+
+    .building-gallery-card:first-child .building-gallery-body h3 {
+      font-size: clamp(26px, 3vw, 34px);
+    }
+
+    .building-gallery-body p {
+      margin: 0;
+      color: rgba(255,255,255,0.82);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .building-note {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid rgba(11,122,59,0.12);
+    }
 
 
 
-http://www.templatemo.com/tm-516-known
+    /* Bangunan Slider Atas */
+    .building-slider-shell {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(16,32,24,0.08);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      margin-top: 10px;
+    }
 
--->
+    .building-slider {
+      position: relative;
+      min-height: 560px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: #e8f1eb;
+      isolation: isolate;
+    }
 
-     <style>
-          .container {
-          width: 90%;
-          margin: 0 auto;
-          }
+    .building-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.02);
+      transition: opacity 0.55s ease, visibility 0.55s ease, transform 0.55s ease;
+    }
 
-          .about-info {
-          text-align: center;
-          font-size: 20px; /* Adjust the base text size as needed */
-          }
+    .building-slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      z-index: 2;
+    }
 
-          .about-info h2 {
-          text-align: center;
-          margin-bottom: 20px;
-          font-size: 28px; /* Adjust the h2 text size as needed */
-          }
+    .building-slide img {
+      width: 100%;
+      height: 100%;
+      min-height: 560px;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(1.04) contrast(1.02);
+    }
+
+    .building-slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(4,25,14,0.74) 0%, rgba(4,25,14,0.28) 46%, rgba(4,25,14,0.08) 100%),
+        linear-gradient(180deg, transparent 42%, rgba(4,25,14,0.68) 100%);
+      z-index: 1;
+    }
+
+    .building-slide-caption {
+      position: absolute;
+      left: clamp(22px, 5vw, 56px);
+      bottom: clamp(24px, 5vw, 56px);
+      z-index: 2;
+      max-width: 620px;
+      color: #fff;
+    }
+
+    .building-slide-caption span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .building-slide-caption h3 {
+      font-size: clamp(32px, 5vw, 58px);
+      letter-spacing: -0.05em;
+      max-width: 720px;
+    }
+
+    .building-slide-caption p {
+      color: rgba(255,255,255,0.86);
+      font-size: clamp(15px, 2vw, 18px);
+      margin: 14px 0 0;
+      max-width: 560px;
+    }
+
+    .building-slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 6;
+      width: 54px;
+      height: 54px;
+      border: 0;
+      border-radius: 18px;
+      color: var(--primary);
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 16px 35px rgba(16,32,24,0.18);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      font-size: 30px;
+      transition: transform 0.22s ease, background 0.22s ease;
+    }
+
+    .building-slider-btn:hover {
+      background: #fff;
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    .building-slider-btn.prev { left: 28px; }
+    .building-slider-btn.next { right: 28px; }
+
+    .building-slider-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      z-index: 7;
+      display: flex;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .building-slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      background: rgba(255,255,255,0.64);
+      transition: width 0.22s ease, background 0.22s ease;
+    }
+
+    .building-slider-dot.active {
+      width: 30px;
+      background: #fff;
+    }
+
+    .building-info-after {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .building-copy-card,
+    .building-points-card {
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(16,32,24,0.08);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .building-copy-card p {
+      color: var(--muted);
+      margin: 16px 0 22px;
+    }
+
+    .building-points-card {
+      display: grid;
+      gap: 12px;
+      align-content: center;
+    }
+
+    /* Instagram */
+    .instagram-showcase {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .instagram-panel,
+    .instagram-copy {
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(16,32,24,0.08);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .instagram-panel { padding: 18px; }
+
+    .ig-browser {
+      border-radius: 28px;
+      overflow: hidden;
+      background: #111;
+      min-height: 520px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ig-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 16px;
+      color: #fff;
+      background: linear-gradient(135deg, #0b7a3b, #14a455);
+      font-weight: 800;
+    }
+
+    .ig-dot { width: 10px; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.72); }
+
+    .ig-frame-wrap { position: relative; background: #fff; min-height: 480px; }
+    .ig-frame-wrap iframe { width: 100%; height: 480px; border: 0; display: block; background: #fff; }
+
+    .ig-fallback-note {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
+    .instagram-copy {
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top right, rgba(245,179,1,0.16), transparent 17rem),
+        rgba(255,255,255,0.88);
+    }
+
+    .ig-handle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .instagram-copy p { color: var(--muted); margin: 16px 0 24px; }
+
+    .ig-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .ig-mini-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #f8fbf9;
+    }
+
+    .ig-mini-card i { color: var(--primary); font-size: 22px; margin-bottom: 10px; }
+    .ig-mini-card strong { display: block; font-size: 14px; line-height: 1.35; }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .contact-card { padding: 28px; }
+
+    .form-grid { display: grid; gap: 14px; margin-top: 18px; }
+
+    .form-control {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #f9fcfa;
+      border-radius: 17px;
+      padding: 15px 16px;
+      font: inherit;
+      outline: 0;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: rgba(20,164,85,0.45);
+      box-shadow: 0 0 0 4px rgba(20,164,85,0.12);
+      background: #fff;
+    }
+
+    textarea.form-control { min-height: 150px; resize: vertical; }
+
+    .video-box {
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: #0a160f;
+      min-height: 360px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .video-box iframe { width: 100%; height: 100%; min-height: 360px; border: 0; display: block; }
+
+    /* Footer */
+    .site-footer {
+      background: #0c1711;
+      color: rgba(255,255,255,0.76);
+      padding: 70px 0 28px;
+      margin-top: 54px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .site-footer::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      top: -210px;
+      left: -150px;
+      border-radius: 999px;
+      background: rgba(20,164,85,0.22);
+    }
+
+    .footer-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 0.82fr 1.05fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .footer-card h3 { color: #fff; font-size: 18px; margin-bottom: 16px; }
+    .footer-card a { color: var(--accent-2); }
+    .footer-card p { margin: 0 0 10px; }
+    .footer-map { border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .footer-map iframe { display: block; width: 100%; height: 210px; border: 0; }
+    .socials { display: flex; gap: 10px; margin-top: 16px; }
+    .socials a {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      color: var(--accent-2);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .socials a:hover { transform: translateY(-2px); background: rgba(255,255,255,0.14); }
+    .copyright {
+      position: relative;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 36px;
+      padding-top: 22px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Audio Player */
+    .audio-dock {
+      position: fixed;
+      z-index: 1100;
+      right: 18px;
+      bottom: 18px;
+      width: min(360px, calc(100% - 36px));
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .audio-cover {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .audio-info strong { display: block; font-size: 13px; line-height: 1.2; }
+    .audio-info small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .audio-controls { display: flex; gap: 6px; }
+    .audio-controls button {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      cursor: pointer;
+    }
+
+    audio { display: none; }
+
+    .back-top {
+      position: fixed;
+      right: 18px;
+      bottom: 94px;
+      z-index: 1090;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 16px;
+      color: #fff;
+      background: var(--primary);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      display: none;
+    }
+
+    .back-top.show { display: grid; place-items: center; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .clock-pill { display: none; }
+      .brand { min-width: 250px; }
+      .nav-links a { padding: 9px 9px; font-size: 12px; }
+      .hero-grid, .ppdb-card, .contact-grid, .building-showcase, .instagram-showcase { grid-template-columns: 1fr; }
+      .hero-photo { min-height: 430px; }
+      .building-media, .building-media img { min-height: 380px; }
+      .building-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .building-gallery-card:first-child { grid-column: span 2; min-height: 420px; }
+      .building-gallery-intro { align-items: flex-start; flex-direction: column; }
+      .building-gallery-intro p { max-width: 100%; }
+    }
+
+    @media (max-width: 860px) {
+      .site-header { top: 10px; }
+      .nav-wrap { border-radius: 22px; }
+      .menu-toggle { display: inline-grid; place-items: center; }
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+        border-radius: 22px;
+        background: rgba(255,255,255,0.96);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(16,32,24,0.08);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { width: 100%; justify-content: center; padding: 12px; }
+      .nav-actions .btn { display: none; }
+      .hero { padding-top: 124px; }
+      .hero-grid { gap: 28px; }
+      .hero-badges, .card-grid, .mission-tabs, .program-strip, .footer-grid, .ig-mini-grid { grid-template-columns: 1fr; }
+      .section { padding: 72px 0; }
+      .section-header { align-items: start; flex-direction: column; }
+      .ppdb-image img { max-height: 460px; }
+      .audio-dock { grid-template-columns: auto 1fr; }
+      .audio-controls { grid-column: 1 / -1; justify-content: center; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(100% - 26px, var(--container)); }
+      .brand { min-width: 0; }
+      .brand img { width: 48px; height: 48px; }
+      .brand span { display: none; }
+      .hero-photo { min-height: 360px; padding: 20px; }
+      .hero-photo h3 { font-size: 24px; }
+      .scroll-row { grid-auto-columns: minmax(240px, 84vw); }
+      .profile-card img, .media-card img { height: 220px; }
+      .ppdb-card { padding: 18px; border-radius: 26px; }
+      .building-showcase, .instagram-panel, .instagram-copy { padding: 18px; border-radius: 26px; }
+      .building-media, .building-media img { min-height: 300px; }
+      .building-label { position: static; border-radius: 18px; margin-top: -76px; margin-left: 14px; margin-right: 14px; flex-direction: column; align-items: flex-start; }
+      .building-gallery { grid-template-columns: 1fr; }
+      .building-gallery-card,
+      .building-gallery-card:first-child { grid-column: auto; grid-row: auto; min-height: 300px; }
+      .building-gallery-intro h3 { font-size: 25px; }
+      .ig-frame-wrap iframe { height: 420px; }
+      .audio-dock { right: 12px; bottom: 12px; width: calc(100% - 24px); }
+      .back-top { bottom: 124px; }
+    }
 
 
-          figure {
-          display: inline-block;
-          width: 30%;
-          margin: 10px;
-          cursor: pointer;
-          transition: transform 0.3s;
-          }
+    @media (max-width: 1100px) {
+      .building-info-after { grid-template-columns: 1fr; }
+      .building-slider, .building-slide img { min-height: 470px; }
+    }
 
-          figure:hover {
-          transform: scale(1);
-          }
+    @media (max-width: 560px) {
+      .building-slider-shell { padding: 10px; border-radius: 26px; }
+      .building-slider, .building-slide img { min-height: 380px; border-radius: 22px; }
+      .building-slide::after {
+        background: linear-gradient(180deg, rgba(4,25,14,0.08) 0%, rgba(4,25,14,0.84) 100%);
+      }
+      .building-slide-caption { left: 20px; right: 20px; bottom: 54px; }
+      .building-slider-btn { width: 44px; height: 44px; border-radius: 15px; font-size: 24px; top: 46%; }
+      .building-slider-btn.prev { left: 16px; }
+      .building-slider-btn.next { right: 16px; }
+      .building-slider-dots { bottom: 16px; }
+      .building-copy-card, .building-points-card { padding: 20px; }
+    }
+  
 
-          figure span {
-          font-size: 40px;
-          display: block;
-          }
+    /* =====================================================
+       ELFSIGHT INSTAGRAM FEED + RESPONSIVE HP
+       Widget Elfsight aktif: elfsight-app-dc2a1441-2ac9-448d-b438-6f7d84538c08.
+    ====================================================== */
+    #kegiatan {
+      overflow: hidden;
+    }
 
-          figcaption h3 {
-          font-size: 24px;
-          margin: 10px 0;
-          }
+    .instagram-showcase.elfsight-layout {
+      grid-template-columns: minmax(0, 1.22fr) minmax(320px, 0.78fr);
+      align-items: stretch;
+    }
 
-          .content {
-          display: none;
-          text-align: left;
-          padding: 15px;
-          border: 2px solid green;
-          border-radius: 5px;
-          margin-top: 10px;
-          animation: fadeIn 0.5s;
-          }
+    .instagram-panel.elfsight-panel {
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,249,0.92));
+    }
 
-          @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-          }
+    .ig-browser.elfsight-browser {
+      min-height: 690px;
+      background: #ffffff;
+      border: 1px solid rgba(16,32,24,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
 
-          .show {
-          display: block;
-          animation: fadeIn 0.5s;
-          }
+    .ig-topbar.elfsight-topbar {
+      color: var(--dark);
+      background: #ffffff;
+      border-bottom: 1px solid rgba(16,32,24,0.08);
+      justify-content: center;
+      padding: 18px 16px;
+      gap: 12px;
+    }
 
-     
+    .ig-topbar.elfsight-topbar .ig-dot {
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+    }
 
-     </style>
+    .ig-topbar-title {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .ig-topbar-title strong {
+      font-size: 15px;
+      color: var(--dark);
+    }
+
+    .ig-topbar-title span {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .ig-frame-wrap.elfsight-frame {
+      min-height: 630px;
+      background: #ffffff;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .elfsight-widget-box {
+      width: 100%;
+      min-height: 610px;
+      background: #ffffff;
+      position: relative;
+    }
+
+    .elfsight-widget-box > [class^="elfsight-app-"] {
+      width: 100%;
+      min-height: 610px;
+    }
+
+    .elfsight-helper-card {
+      margin: 16px;
+      padding: 22px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top left, rgba(20,164,85,0.12), transparent 18rem),
+        #f8fbf9;
+      border: 1px dashed rgba(11,122,59,0.35);
+      color: var(--dark);
+    }
+
+    .elfsight-helper-card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .elfsight-helper-card p,
+    .elfsight-helper-card li {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .elfsight-helper-card code {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 8px;
+      background: rgba(11,122,59,0.10);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .elfsight-copy-note {
+      padding: 13px 16px;
+      background: #fff;
+      border-top: 1px solid rgba(16,32,24,0.08);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .instagram-copy.elfsight-copy {
+      background:
+        radial-gradient(circle at top right, rgba(245,179,1,0.18), transparent 18rem),
+        radial-gradient(circle at bottom left, rgba(20,164,85,0.12), transparent 16rem),
+        rgba(255,255,255,0.9);
+    }
+
+    .ig-status-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 4px 0 24px;
+    }
+
+    .ig-status-card {
+      padding: 15px;
+      border-radius: 18px;
+      background: #f7fbf8;
+      border: 1px solid rgba(16,32,24,0.08);
+    }
+
+    .ig-status-card strong {
+      display: block;
+      font-size: 19px;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+
+    .ig-status-card span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+      .instagram-showcase.elfsight-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .instagram-copy.elfsight-copy {
+        order: -1;
+      }
+
+      .ig-browser.elfsight-browser {
+        min-height: 650px;
+      }
+
+      .ig-frame-wrap.elfsight-frame,
+      .elfsight-widget-box,
+      .elfsight-widget-box > [class^="elfsight-app-"] {
+        min-height: 590px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      #kegiatan .section-header {
+        text-align: center;
+        align-items: center;
+      }
+
+      #kegiatan .section-header .btn {
+        width: 100%;
+        max-width: 330px;
+      }
+
+      .instagram-panel.elfsight-panel {
+        padding: 10px;
+        border-radius: 26px;
+      }
+
+      .ig-browser.elfsight-browser {
+        min-height: 620px;
+        border-radius: 24px;
+      }
+
+      .ig-topbar.elfsight-topbar {
+        padding: 14px 12px;
+      }
+
+      .ig-frame-wrap.elfsight-frame,
+      .elfsight-widget-box,
+      .elfsight-widget-box > [class^="elfsight-app-"] {
+        min-height: 560px;
+      }
+
+      .instagram-copy.elfsight-copy {
+        padding: 24px;
+        text-align: center;
+      }
+
+      .instagram-copy.elfsight-copy .ig-handle {
+        margin-inline: auto;
+      }
+
+      .ig-status-row,
+      .ig-mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .instagram-copy.elfsight-copy .hero-actions {
+        justify-content: center;
+      }
+
+      .instagram-copy.elfsight-copy .hero-actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 560px) {
+      #kegiatan {
+        padding-top: 58px;
+      }
+
+      .instagram-panel.elfsight-panel {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .ig-browser.elfsight-browser {
+        border-radius: 22px;
+        min-height: 590px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .ig-topbar.elfsight-topbar {
+        justify-content: flex-start;
+      }
+
+      .ig-frame-wrap.elfsight-frame,
+      .elfsight-widget-box,
+      .elfsight-widget-box > [class^="elfsight-app-"] {
+        min-height: 520px;
+      }
+
+      .elfsight-helper-card {
+        margin: 10px;
+        padding: 18px;
+        border-radius: 18px;
+        text-align: left;
+      }
+
+      .elfsight-copy-note {
+        font-size: 12px;
+        padding: 12px 14px;
+      }
+    }
+
+  
+
+    /* =====================================================
+       FINAL MOBILE POLISH - HP VERSION
+       Fokus: Instagram lebih rapi, slider tidak terlalu tinggi,
+       tombol tidak kepotong, dan card lebih enak dilihat di HP.
+    ====================================================== */
+    @media (max-width: 760px) {
+      body {
+        background: #fbfdfb;
+      }
+
+      .container {
+        width: min(100% - 24px, var(--container));
+      }
+
+      .section {
+        padding: 56px 0;
+      }
+
+      .section-header {
+        margin-bottom: 24px;
+        gap: 14px;
+      }
+
+      .section-header h2,
+      .building-copy-card h2,
+      .instagram-copy h2 {
+        font-size: 29px;
+        line-height: 1.12;
+        letter-spacing: -0.045em;
+      }
+
+      .section-desc,
+      .hero-copy p,
+      .instagram-copy p,
+      .building-copy-card p {
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .site-header {
+        top: 8px;
+      }
+
+      .nav-wrap {
+        width: calc(100% - 18px);
+        padding: 9px 10px;
+        border-radius: 20px;
+      }
+
+      .brand strong {
+        font-size: 12px;
+      }
+
+      .brand img {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+      }
+
+      .menu-toggle {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 108px 0 38px;
+      }
+
+      h1 {
+        font-size: 39px;
+        letter-spacing: -0.055em;
+      }
+
+      .hero-actions {
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .hero-actions .btn,
+      .section-header > .btn {
+        width: 100%;
+      }
+
+      .hero-badges {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 22px;
+      }
+
+      .hero-badge {
+        padding: 12px 10px;
+        border-radius: 16px;
+        text-align: center;
+      }
+
+      .hero-badge strong {
+        font-size: 19px;
+      }
+
+      .hero-badge span {
+        font-size: 11px;
+        line-height: 1.25;
+      }
+
+      .hero-card {
+        padding: 9px;
+        border-radius: 24px;
+      }
+
+      .hero-photo {
+        min-height: 310px;
+        border-radius: 20px;
+        padding: 18px;
+      }
+
+      .glass-chip {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .ppdb-card,
+      .building-slider-shell,
+      .building-copy-card,
+      .building-points-card,
+      .contact-card,
+      .video-box {
+        border-radius: 22px;
+      }
+
+      .ppdb-card {
+        padding: 15px;
+      }
+
+      .ppdb-image {
+        padding: 8px;
+      }
+
+      .ppdb-image img {
+        height: auto;
+        max-height: none;
+        object-fit: contain;
+        background: #fff;
+      }
+
+      .building-slider-shell {
+        padding: 8px;
+        margin-top: 0;
+      }
+
+      .building-slider,
+      .building-slide img {
+        min-height: 315px;
+        border-radius: 18px;
+      }
+
+      .building-slide-caption {
+        left: 16px;
+        right: 16px;
+        bottom: 46px;
+      }
+
+      .building-slide-caption span {
+        padding: 7px 10px;
+        font-size: 11px;
+        margin-bottom: 9px;
+      }
+
+      .building-slide-caption h3 {
+        font-size: 27px;
+      }
+
+      .building-slide-caption p {
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .building-slider-btn {
+        display: none;
+      }
+
+      .building-slider-dots {
+        bottom: 12px;
+        padding: 7px 10px;
+      }
+
+      .building-slider-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      .building-slider-dot.active {
+        width: 24px;
+      }
+
+      .building-info-after {
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .building-copy-card,
+      .building-points-card {
+        padding: 18px;
+      }
+
+      .building-note {
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 16px;
+      }
+
+      .program-strip,
+      .card-grid,
+      .mission-tabs,
+      .contact-grid,
+      .footer-grid {
+        gap: 14px;
+      }
+
+      .program-item,
+      .info-card,
+      .mission-card,
+      .media-card,
+      .profile-card {
+        border-radius: 20px;
+      }
+
+      .scroll-row {
+        grid-auto-columns: minmax(230px, 82vw);
+        gap: 14px;
+        padding-bottom: 16px;
+      }
+
+      .profile-card img {
+        height: 300px;
+        object-fit: contain;
+        object-position: center bottom;
+        background: #e8ebf5;
+      }
+
+      .media-card img {
+        height: 210px;
+      }
+
+      /* Instagram HP dibuat simpel: feed dulu, card penjelasan diperkecil */
+      #kegiatan {
+        padding-top: 56px;
+      }
+
+      #kegiatan .section-header {
+        text-align: left;
+        align-items: stretch;
+      }
+
+      #kegiatan .section-header .btn {
+        max-width: none;
+      }
+
+      .instagram-showcase.elfsight-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .instagram-panel.elfsight-panel {
+        order: 1;
+        padding: 0;
+        border: 0;
+        border-radius: 22px;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+      }
+
+      .instagram-copy.elfsight-copy {
+        order: 2;
+        padding: 18px;
+        border-radius: 22px;
+        text-align: left;
+      }
+
+      .instagram-copy.elfsight-copy .ig-handle {
+        margin-inline: 0;
+      }
+
+      .instagram-copy.elfsight-copy h2 {
+        font-size: 24px;
+      }
+
+      .ig-status-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .ig-status-card {
+        padding: 10px 8px;
+        text-align: center;
+        border-radius: 14px;
+      }
+
+      .ig-status-card strong {
+        font-size: 15px;
+      }
+
+      .ig-status-card span {
+        font-size: 10px;
+        line-height: 1.25;
+      }
+
+      .ig-mini-grid {
+        display: none;
+      }
+
+      .ig-browser.elfsight-browser {
+        min-height: auto;
+        border-radius: 22px;
+        overflow: visible;
+        box-shadow: 0 14px 34px rgba(16,32,24,0.11);
+      }
+
+      .ig-topbar.elfsight-topbar {
+        justify-content: flex-start;
+        padding: 12px 13px;
+        border-radius: 22px 22px 0 0;
+      }
+
+      .ig-topbar-title strong {
+        font-size: 13px;
+      }
+
+      .ig-topbar-title span {
+        font-size: 11px;
+      }
+
+      .ig-frame-wrap.elfsight-frame {
+        min-height: 0;
+        overflow: visible;
+        border-radius: 0 0 22px 22px;
+      }
+
+      .elfsight-widget-box,
+      .elfsight-widget-box > [class^="elfsight-app-"] {
+        min-height: 430px;
+        width: 100%;
+        overflow: visible;
+      }
+
+      .elfsight-copy-note {
+        font-size: 11px;
+        padding: 10px 12px;
+        border-radius: 0 0 22px 22px;
+      }
+
+      .instagram-copy.elfsight-copy .hero-actions {
+        justify-content: stretch;
+        margin-top: 16px;
+      }
+
+      .instagram-copy.elfsight-copy .hero-actions .btn {
+        width: 100%;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .video-box,
+      .video-box iframe {
+        min-height: 230px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .audio-dock {
+        transform: translateY(calc(100% - 18px));
+        opacity: .55;
+        transition: .25s ease;
+      }
+
+      .audio-dock:hover,
+      .audio-dock:focus-within {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 390px) {
+      h1 { font-size: 35px; }
+      .section-header h2,
+      .building-copy-card h2 { font-size: 26px; }
+      .building-slider,
+      .building-slide img { min-height: 285px; }
+      .building-slide-caption h3 { font-size: 24px; }
+      .building-slide-caption p { display: none; }
+      .hero-badges { grid-template-columns: 1fr; }
+      .ig-status-row { grid-template-columns: 1fr; }
+    }
+
+
+    /* =====================================================
+       INSTAGRAM CLEAN FINAL
+       Feed dibuat full width, tombol Setting Elfsight dihapus,
+       dan layout HP tetap satu kolom rapi.
+    ====================================================== */
+    .instagram-clean-header {
+      align-items: center;
+      text-align: center;
+    }
+
+    .instagram-clean-header > div {
+      margin-inline: auto;
+    }
+
+    .instagram-clean-header .section-desc {
+      margin-inline: auto;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .instagram-showcase.elfsight-layout.instagram-clean-layout {
+      display: block;
+      max-width: 1080px;
+      margin-inline: auto;
+    }
+
+    .instagram-panel.elfsight-panel.instagram-clean-panel {
+      padding: 14px;
+      border-radius: 28px;
+    }
+
+    .ig-browser.elfsight-browser.instagram-clean-browser {
+      min-height: 690px;
+      border-radius: 24px;
+      background: #fff;
+    }
+
+    .ig-frame-wrap.elfsight-frame.instagram-clean-frame,
+    .instagram-clean-frame .elfsight-widget-box,
+    .instagram-clean-frame .elfsight-widget-box > [class^="elfsight-app-"] {
+      min-height: 620px;
+    }
+
+    @media (max-width: 760px) {
+      .instagram-clean-header {
+        text-align: center !important;
+        align-items: center !important;
+      }
+
+      .instagram-clean-header .btn {
+        width: 100%;
+        max-width: 330px;
+      }
+
+      .instagram-panel.elfsight-panel.instagram-clean-panel {
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+        background: transparent;
+      }
+
+      .ig-browser.elfsight-browser.instagram-clean-browser {
+        min-height: auto;
+        border-radius: 20px;
+        overflow: visible;
+      }
+
+      .ig-frame-wrap.elfsight-frame.instagram-clean-frame,
+      .instagram-clean-frame .elfsight-widget-box,
+      .instagram-clean-frame .elfsight-widget-box > [class^="elfsight-app-"] {
+        min-height: 480px;
+      }
+
+      .elfsight-copy-note {
+        font-size: 11px;
+        line-height: 1.45;
+      }
+    }
 
 
 
+    /* Revisi ringan: setelah info bangunan dihapus, slider tetap punya jarak bawah yang rapi */
+    #bangunan .building-slider-shell {
+      margin-bottom: 0;
+    }
 
-
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-     <meta name="description" content="SD Muhammadiyah 6 Samarinda Memiliki Motto GEMILANG Generasi Muslim Berilmu Beramal dan Cinta Lingkungan">
-     <meta name="keywords" content="SD Muhammadiyah 6, SD Muhammadiyah 6 Samarinda, Sekolah Dasar Islam Samarinda, Muhammadiyah, Kalimantan Timur, Samarinda, SD, Sekolah, Sekolah Muhammadiyah, Sdmuh6, Sekolah Kreatif, Sekolah Dasar Muhammadiyah 6, Sekolah Dasar Muhammadiyah 6">
-     <meta name="author" content="SD Muhammadiyah 6 Samarinda">
-     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-     <link rel="stylesheet" href="css/bootstrap.min.css">
-     <link rel="stylesheet" href="css/font-awesome.min.css">
-     <link rel="stylesheet" href="css/owl.carousel.css">
-     <link rel="stylesheet" href="css/owl.theme.default.min.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-
-
-     <!-- MAIN CSS -->
-      
-     <link rel="stylesheet" href="css/templatemo-style.css">
-
+  </style>
 </head>
- <style>
-        body {
-            font-family: "Barlow Condensed", sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        
+<body>
+  <header class="site-header">
+    <nav class="nav-wrap" aria-label="Navigasi utama">
+      <a href="#beranda" class="brand">
+        <img src="images/logo.jpg" alt="Logo SD Muhammadiyah 6 Samarinda" />
+        <span>
+          <strong>SD Muhammadiyah 6 Samarinda</strong>
+          <span>Generasi Muslim Berilmu, Beramal & Cinta Lingkungan</span>
+        </span>
+      </a>
 
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#ppdb">PPDB</a></li>
+        <li><a href="#profil">Profil</a></li>
+        <li><a href="#bangunan">Bangunan</a></li>
+        <li><a href="#visi-misi">Visi Misi</a></li>
+        <li><a href="#fasilitas">Fasilitas</a></li>
+        <li><a href="#prestasi">Prestasi</a></li>
+        <li><a href="#kegiatan">Instagram</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
 
-     /*------AUDIO-----*/
+      <div class="nav-actions">
+        <span class="clock-pill"><i class="fa fa-clock-o"></i> <span id="dateTime">--:--</span></span>
+        <a class="btn btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=sdmuhammadiyah6smd@gmail.com" target="_blank" rel="noopener"><i class="fa fa-envelope"></i> Email</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu"><i class="fa fa-bars"></i></button>
+      </div>
+    </nav>
+  </header>
 
-
-        audio {
-    position: fixed; /* Position the audio player fixed */
-    bottom: 20px; /* Distance from the bottom of the viewport */
-    right: 20px; /* Distance from the right of the viewport */
-    width: 300px; /* Width of the audio player */
-    border-radius: 25px; /* Rounded corners */
-    border: 1px solid #ddd; /* Border color */
-    background: #2c3e50; /* Background color */
-    z-index: 9999; /* Ensure the audio player is on top of all other content */ 
-}
-
-        /* Custom styling for the audio controls */
-        audio::-webkit-media-controls-panel {
-            background-color: #34495e; /* Background color */
-            border-radius: 10px; /* Rounded corners */
-            border: 1px solid #ecf0f1; /* Border color */
-        }
-
-        audio::-webkit-media-controls-play-button,
-        audio::-webkit-media-controls-pause-button,
-        audio::-webkit-media-controls-mute-button {
-            color: #ecf0f1; /* Icon color */
-        }
-
-        audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-time-remaining-display {
-            color: #ecf0f1; /* Time display color */
-        }
-    </style>
-</head>
-<head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Fixed Audio Player</title>
-     <style>
-         /* Posisi tetap di bawah kanan */
-         #audio-player {
-             position: fixed;
-             bottom: 0;  /* Jarak dari bagian bawah halaman */
-             right: 0;   /* Jarak dari sisi kanan halaman */
-             width: 20%; /* Lebar untuk desktop */
-         }
- 
-         /* Responsif untuk perangkat mobile */
-         @media only screen and (max-width: 600px) {
-             #audio-player {
-                 margin-right: 100px;
-                 width: 50%;  /* Lebar penuh untuk layar kecil */
-                 height: 40px; /* Sesuaikan tinggi untuk layar kecil */
-             }
-         }
-     </style>
- </head>
- <body>
-     <audio id="audio-player" controls>
-         <source id="audio-source" src="audio/Sekolah Kreatif SD Muhammadiyah 6.mp3" type="audio/mpeg">
-         Your browser does not support the audio element.
-     </audio>
- 
-     <script>
-         // Dapatkan elemen audio
-         const audioPlayer = document.getElementById('audio-player');
- 
-         // Tambahkan event listener untuk mendeteksi tombol ditekan
-         document.addEventListener('keydown', function(event) {
-             // Cek jika tombol "M" ditekan
-             if (event.key === 'M' || event.key === 'm') {
-                 // Toggle mute/unmute audio
-                 audioPlayer.muted = !audioPlayer.muted;
-             }
-         });
-     </script>
- </body>
-
-    <button onclick="playNext()">Play Next</button>
-    <button onclick="playPrevious()">Play Previous</button>
-
-    <script>
-        // Daftar file audio
-        var playlist = [
-            'audio/Sekolah Kreatif SD Muhammadiyah 6.mp3',
-            'audio/Bersama kita bersinar (2).mp3',
-            'audio/sang surya.mp3'
-        ];
-
-        var currentIndex = 0; // Index file audio yang sedang diputar
-
-        // Fungsi untuk memutar audio berikutnya
-        function playNext() {
-            currentIndex = (currentIndex + 1) % playlist.length; // Update index dan loop jika perlu
-            playAudio(playlist[currentIndex]);
-        }
-
-        // Fungsi untuk memutar audio sebelumnya
-        function playPrevious() {
-            currentIndex = (currentIndex - 1 + playlist.length) % playlist.length; // Update index dan loop jika perlu
-            playAudio(playlist[currentIndex]);
-        }
-
-        // Fungsi untuk memutar audio berdasarkan src
-        function playAudio(src) {
-            var audioPlayer = document.getElementById('audio-player');
-            var audioSource = document.getElementById('audio-source');
-            audioSource.src = src;
-            audioPlayer.load(); // Muat sumber baru
-            audioPlayer.play().catch(function(error) {
-                console.log("Autoplay failed:", error);
-            });
-        }
-
-        // Memutar audio pertama saat halaman dimuat
-        window.addEventListener('load', function() {
-            playAudio(playlist[currentIndex]);
-        });
-
-        // Memindahkan ke lagu berikutnya setelah selesai
-        document.getElementById('audio-player').addEventListener('ended', function() {
-            playNext();
-        });
-    </script>
-</body>
-
- 
- 
-
-     <!-- PRE LOADER -->
-     <section class="preloader">
-          <div class="spinner">
-
-               <span class="spinner-rotate"></span>
-               
+  <main>
+    <section class="hero" id="beranda">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow"><i class="fa fa-star"></i> Sekolah Kreatif Muhammadiyah</span>
+          <h1>SD Muhammadiyah 6 Samarinda</h1>
+          <p>
+            Website sekolah yang menampilkan informasi PPDB, profil guru, visi misi, fasilitas, prestasi siswa, dan kegiatan terbaru dengan tampilan yang lebih modern, ringan, dan nyaman dibaca.
+          </p>
+          <div class="hero-actions">
+            <a href="#ppdb" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Lihat PPDB</a>
+            <a href="#bangunan" class="btn btn-secondary"><i class="fa fa-building"></i> Lihat Sekolah</a>
           </div>
-     </section>
-
-
-     <!-- HEADER -->
-     <section class="navbar custom-navbar navbar-fixed-top" role="navigation">
-          <div class="container">
-               <div class="navbar-header">
-                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                         <span class="icon icon-bar"></span>
-                         <span class="icon icon-bar"></span>
-                         <span class="icon icon-bar"></span>
-                    </button>
-                    
-
-                    <!-- lOGO TEXT HERE -->
-
-                    <link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">
-                    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-                    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
-                    <a href="#" class="navbar-brand">
-                    <img src="images/logo.jpg" loading="lazy" alt="Logo" class="navbar-logo" style="width: 85px; height: auto;">
-                    <span class="navbar-text">
-                         <span class="text-large">SD MUHAMMADIYAH 6 SAMARINDA</span><br>
-                         <span class="text-medium">Generasi Muslim Berilmu Beramal & Cinta Lingkungan</span>
-                    </span>                       
-    </a>
-
-               <!-- MENU LINKS -->
-               <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-nav-first">
-                        <li><a href="#top" class="smoothScroll">Beranda</a></li>
-                        <li><a href="#ppdb" class="smoothScroll">PPDB</a></li>
-                        <li><a href="#team" class="smoothScroll">Profile</a></li>
-                        <li><a href="#about" class="smoothScroll">Visi Misi & Tujuan</a></li>
-                        <li><a href="#courses" class="smoothScroll">Fasilitas</a></li>
-                        <li><a href="#prestasi" class="smoothScroll">Prestasi</a></li>
-                        <li><a href="#kegiatan-sekolah" class="smoothScroll">Galeri Kegiatan</a></li>
-                        <li><a href="#contact" class="smoothScroll">Kritik & Saran</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to=sdmuhammadiyah6smd@gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right clock-nav">
-                         <li><span id="date"></span> | <span id="clock"></span></li> <!-- Real-time clock -->
-                    </ul>
-               </div>
-          </div>
-     </section>
-     <!-- HOME -->
-     <section id="home">
-          <div class="row">
-              <div class="owl-carousel owl-theme home-slider">
-                  <div class="item item-first">
-                      <div class="caption">
-                          <div class="container">
-                              <div class="col-md-6 col-sm-12">
-                                  <h1>SD MUHAMMADIYAH 6 SAMARINDA</h1>
-                                  <h3>Website ini menyajikan profil, fasilitas, program, dan kegiatan SD Muhammadiyah 6 Samarinda dengan navigasi yang mudah dan informasi yang akurat.</h3>
-                                  <a href="#feature" class="section-btn home-btn btn btn-default smoothScroll">JELAJAHI SEKARANG</a>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="item item-second">
-                      <div class="caption">
-                          <div class="container">
-                              <div class="col-md-6 col-sm-12">
-                                  <h1>DAFTARKAN ANAK ANDA KE SD MUHAMMADIYAH 6 SAMARINDA</h1>
-                                 <h3>FASILITAS RUANG BELAJAR NYAMAN DAN MEMADAI</h3>
-                                  <a href="#ppdb" class="section-btn home-btn btn btn-default smoothScroll">DAFTARKAN SEKARANG</a>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="item item-third">
-                      <div class="caption">
-                          <div class="container">
-                              <div class="col-md-6 col-sm-12">
-                                  <h1>SEKOLAH KREATIF <br>SD MUHAMMADIYAH 6 SAMARINDA</h1>
-                                  <h3>GEMILANG Generasi Muslim Berilmu Beramal dan Cinta Lingkungan</h3>
-                                  <a href="#contact" class="section-btn home-btn btn btn-default smoothScroll">CLICK UNTUK MEMULAI</a>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>      
-     <!-- OVERLAY -->
-     <!-- PPDB -->
-     <br>
-     <br>
-     <section id="ppdb">
-          <div class="container">
-            <div class="row">
-              <!-- Kolom untuk Gambar -->
-              <div class="col-md-6">
-                <div class="image-highlight" style="position: relative;">
-                  <!-- Gambar untuk Desktop -->
-                  <img id="image-display-desktop" src="images/Ppdb-desktop.jpg" loading="lazy" alt="Descriptive Text" class="img-fluid desktop-img">
-                  
-                  <!-- Gambar untuk Mobile -->
-                  <img id="image-display-mobile" src="images/Ppdb-mobile.jpg" loading="lazy" alt="Descriptive Text" class="img-fluid mobile-img">
-        
-                  <!-- Button di atas gambar -->
-                  <a href="https://forms.gle/v5gqE9z339RfLKq48" class="section-btn btn btn-default smoothScroll">
-                    DAFTAR DISINI
-                </a>
-                </div>
-              </div>
-            </div>
-          </div>
-     </section>
-        
-        
-     <!--VIDEO HIGHLIGHT SEKOLAH-->
-      
-     <!-- PROFILE -->
-     <section id="feature">
-          <div class="container">
-               <div class="row">
-
-                    <div class="col-md-4 col-sm-4">
-                         <div class="feature-thumb">
-                              <span>01</span>
-                              <h3>SEJARAH SEKOLAH</h3>
-                              <p>Berawal dari pimpinan cabang Muhammadiyah samarinda utara memperluas AUM dibidang pendidikan yang di prakarsai oleh kepala sekolah SD Muhammadiyah 4 Samarinda yang saat itu di pimpin oleh bapak Drs. H.Jarwadi, M.Si. </p>
-                         </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-4">
-                         <div class="feature-thumb">
-                              <span>02</span>
-                              <h3>AKREDITASI B</h3>
-                              <p>SD Muhammadiyah 6 Samarinda Memiliki akreditasi Grade B dengan nilai 89 sejak tahun 2018.</p>
-                         </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-4">
-                         <div class="feature-thumb">
-                              <span>03</span>
-                              <h3>KURIKULUM MERDEKA</h3>
-                              <p>Kurikulum Merdeka memberikan fleksibilitas kepada pendidik untuk menciptakan pembelajaran berkualitas sesuai kebutuhan dan lingkungan peserta didik.
-                                   Karakteristik Kurikulum Merdeka <br>
-                                   1.Pengembangan Soft Skills dan Karakter<br>
-                                   2.Fokus pada Materi Esensial<br>
-                                   3.Pembelajaran yang fleksibel <br></p>
-                              </p>
-                         </div>
-                    </div>
-
-               </div>
-          </div>
-     </section>
-
-
-    
-     <!-- Profile Kepala Sekolah, Staf Tu dan Guru -->
-     <section id="team">
-          <div class="container">
-              <div class="section-title">
-                  <h2>Profile Kepala Sekolah, Staf TU & Guru <small>Sekolah Dasar Muhammadiyah 6 Samarinda</small></h2>
-              </div>
-      
-              <div class="owl-carousel owl-theme">
-               <div class="item">
-                   <div class="team-thumb">
-                       <div class="team-image Saparwadi">
-                           <img src="images/PAK ZAINAL.jpg" loading="lazy" class="img-responsive" alt="">
-                       </div>
-                       <div class="team-info">
-                           <h3>Lutfiatul Khoiroh M.Pd</h3>
-                           <span>Kepala Sekolah</span>
-                       </div>
-                   </div>
-               </div>
-      
-                  <div class="item">
-                      <div class="team-thumb">
-                          <div class="team-image Idawati">
-                              <img src="images/BU IDA.jpg" loading="lazy" class="img-responsive" alt="">
-                          </div>
-                          <div class="team-info">
-                              <h3>Idawati, S. Pd</h3>
-                              <span>Guru Mapel & Waka Kurikulum</span>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Abdul">
-                                 <img src="images/PAK MUIS.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                                 <h3>Abdul Muis S.Pd</h3>
-                                 <span>Guru Mapel & Waka.Sapras</span>
-                             </div>
-                         </div>
-                    </div>
-
-                             <div class="item">
-                        <div class="team-thumb">
-                            <div class="team-image Fauzan">
-                                <img src="images/PAK FAUZAN.jpg" loading="lazy" class="img-responsive" alt="">
-                            </div>
-                            <div class="team-info">
-                                <h3>Fauzan Azhima, S.Pd</h3>
-                                <span>Guru Mapel & Waka Kesiswaan</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                    <div class="team-thumb">
-                        <div class="team-image Fahreza">
-                            <img src="images/PAK REZA.jpg" loading="lazy" class="img-responsive" alt="">
-                        </div>
-                        <div class="team-info">
-                            <h3>Muhammad Fahreza Hardika S.M</h3>
-                            <span>Kepala TU & Bendahara</span>
-                        </div>
-                    </div>
-                   </div>
-                
-                     <div class="item">
-                    <div class="team-thumb">
-                        <div class="team-image Ren">
-                            <img src="images/REN.jpg" loading="lazy" class="img-responsive" alt="">
-                        </div>
-                        <div class="team-info">
-                            <h3>Muhammad Rendi Herdasaputra</h3>
-                            <span>Staff Tata Usaha</span>
-                        </div>
-                    </div>
-                   </div>
-                   
-                    <div class="item">
-                      <div class="team-thumb">
-                          <div class="team-image Istiqomah">
-                              <img src="images/BU ISTI.jpg" loading="lazy" class="img-responsive" alt="">
-                          </div>
-                          <div class="team-info">
-                              <h3>Istiqomah, S.E</h3>
-                              <span>Staff Tata Usaha & OPS</span>
-                          </div>
-                      </div>
-                  </div>
-                   
-                     <div class="item">
-                    <div class="team-thumb">
-                        <div class="team-image Salsa">
-                            <img src="images/SALSA.jpg" loading="lazy" class="img-responsive" alt="">
-                        </div>
-                        <div class="team-info">
-                            <h3>Salsabilla Ivania Kimalda</h3>
-                            <span>Staff Tata Usaha</span>
-                        </div>
-                    </div>
-                   </div>
-
-                 
-      
-                  <div class="item">
-                      <div class="team-thumb">
-                          <div class="team-image Sitti">
-                              <img src="images/BU DEDE.jpg" loading="lazy" class="img-responsive" alt="">
-                          </div>
-                          <div class="team-info">
-                              <h3>Sitti Munjiyah Mardhatillah</h3>
-                              <span>Staff Tata Usaha</span>
-                          </div>
-                      </div>
-                  </div>
-
-                   <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Ika">
-                               <img src="images/BU IKA.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                               <h3>Ika Dian Purwanti S. Psi</h3>
-                               <span>Guru Kelas 1</span>
-                             </div>
-                             </div>
-                    </div>
-
-                        <div class="item">
-                        <div class="team-thumb">
-                            <div class="team-image Angela">
-                              <img src="images/BU ANGEL.jpg" loading="lazy" class="img-responsive" alt="">
-                            </div>
-                            <div class="team-info">
-                              <h3>Angela Nur Eka Royatmi, S.Sos</h3>
-                              <span>Guru Pendamping Kelas 1</span>
-                            </div>
-                            </div>
-                   </div>
-                  
-                  <div class="item">
-                      <div class="team-thumb">
-                          <div class="team-image Siti-asriyah">
-                            <img src="images/BU AS.jpg" loading="lazy" class="img-responsive" alt="">
-                          </div>
-                          <div class="team-info">
-                            <h3>Siti Asriyah, S.Si</h3>
-                            <span>Guru Kelas II</span>
-                          </div>
-                          </div>
-                    </div>
-
-                     <div class="item">
-                      <div class="team-thumb">
-                          <div class="team-image Siti-asriyah">
-                            <img src="images/BU UMMI.jpg" loading="lazy" class="img-responsive" alt="">
-                          </div>
-                          <div class="team-info">
-                            <h3>Ummi Masruroh</h3>
-                            <span>Guru Pendamping Kelas II</span>
-                          </div>
-                          </div>
-                    </div>
-
-
-                      <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Lilik">
-                               <img src="images/BU LILIK.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                               <h3>Lilik Widayati S. Pd</h3>
-                               <span>Guru Kelas Kelas 3</span>
-                             </div>
-                             </div>
-                       </div>
-
-                         <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Anggi">
-                                 <img src="images/BU ANGGI.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                                 <h3>Anggi Widyasari</h3>
-                                 <span>Guru Pendamping Kelas 3</span>
-                             </div>
-                         </div>
-                    </div>
-
-                             <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Sartika">
-                                 <img src="images/BU SARI.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                                 <h3>Sartika Sari, S.S</h3>
-                                 <span>Guru Kelas 4.1</span>
-                             </div>
-                         </div>
-                    </div>
-
-                    <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Nur">
-                                 <img src="images/BU ASRI.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                                 <h3>Nur Asri Indah Yani, S.Pd </h3>
-                                 <span>Guru Kelas 4.2</span>
-                             </div>
-                         </div>
-                    </div>
-
-                        <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Kusmiati">
-                               <img src="images/BU TUTUT.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                               <h3>Tutut Kusmiati, S.Pd</h3>
-                               <span>Guru Kelas 5</span>
-                             </div>
-                             </div>
-                    </div>
-                    
-                    <div class="item">
-                         <div class="team-thumb">
-                             <div class="team-image Ina">
-                                 <img src="images/BU INA.jpg" loading="lazy" class="img-responsive" alt="">
-                             </div>
-                             <div class="team-info">
-                                 <h3>Ina Ruviyana, S.Pd</h3>
-                                 <span>Guru Kelas 6</span>
-                             </div>
-                         </div>
-                    </div>
-                  
-           
-                    <div class="item">
-                        <div class="team-thumb">
-                            <div class="team-image Elliana">
-                                <img src="images/BU ELLY.jpg" loading="lazy" class="img-responsive" alt="">
-                            </div>
-                            <div class="team-info">
-                                <h3>Elliana Puspita Sari</h3>
-                                <span>Guru Mapel</span>
-                            </div>
-                        </div>
-                    </div>
-                  
-                    <div class="item">
-                        <div class="team-thumb">
-                            <div class="team-image Putri">
-                                <img src="images/BU PUTRI.jpg" loading="lazy" class="img-responsive" alt="">
-                            </div>
-                            <div class="team-info">
-                                <h3>Putri Mutiara</h3>
-                                <span>Guru Mapel</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">  
-                    <div class="team-thumb">
-                        <div class="team-image Dewi">
-                            <img src="images/BU DEWI.jpg" loading="lazy" class="img-responsive" alt="">
-                        </div>
-                        <div class="team-info">
-                            <h3>Dewi Kusumawati, S. Pd. i</h3>
-                            <span>Guru Mapel & Waka ISMUBA</span>
-                        </div>
-                    </div>
-               </div>
-              </div>
-          </div>
-      </section>
-      
-     <!-- APA YANG DISEDIAKAN SAMA SEKOLAHAN -->
-     <section id="about">
-          <div class="container">
-              <div class="about-info">
-                  <h2>VISI, MISI, dan Tujuan</h2>
-                  <figure onclick="toggleContent('visi-content')">
-                      <span><i class="fa fa-users"></i></span>
-                      <figcaption class="bounce-onload bounce-hover">
-                          <h3>Visi</h3>
-                          <p>Visi Sekolah Dasar Muhammadiyah 6 Samarinda</p>
-                      </figcaption>
-                      <div id="visi-content" class="content">
-                          <p>
-                              SD Muhammadiyah 6 Samarinda adalah "Mewujudkan Generasi Muslim yang Berilmu, Beramal, Cinta Lingkungan, Kreatif, dan Berprofil Pancasila."<br>
-                              Indikator Visi:<br>
-                              Peserta didik yang taqwa dan mengamalkan ajaran agama dalam kehidupan sehari-hari.
-                              Peserta didik yang mampu melaksanakan ibadah sesuai tuntunan Nabi.
-                              Peserta didik berprestasi akademik, lulus dengan standar maksimal, dan diterima di sekolah favorit.
-                              Peserta didik cerdas dan berprestasi di bidang akademik dan non-akademik.
-                              Peserta didik yang mandiri, percaya diri, dan kreatif.
-                              Lingkungan sekolah yang bersih, sehat, teduh, rapi, aman, dan nyaman.
-                              Visi ini menjadi panduan jangka panjang, menengah, dan pendek, serta menjiwai seluruh warga sekolah dalam mencapai tujuan yang berkelanjutan.
-                          </p>
-                      </div>
-                  </figure>
-  
-                  <figure onclick="toggleContent('misi-content')">
-                      <span><i class="fa fa-certificate"></i></span>
-                      <figcaption class="bounce-onload bounce-hover">
-                          <h3>Misi</h3>
-                          <p>MISI Sekolah Dasar Muhammadiyah 6 Samarinda</p>
-                      </figcaption>
-                      <div id="misi-content" class="content">
-                          <p>
-                              Mewujudkan lulusan yang beriman, bertaqwa, dan beradab Islami.
-                              Menghasilkan lulusan yang menjalankan ajaran agama sesuai Al-Quran dan As-Sunnah.
-                              Menumbuhkan karakter warga sekolah yang cerdas, disiplin, dan cinta tanah air.
-                              Mengembangkan pembelajaran yang aktif, kreatif, dan inovatif dengan memanfaatkan IPTEK.
-                              Mendorong semangat berprestasi dan kompetensi untuk menghadapi persaingan global.
-                              Menciptakan lingkungan sekolah yang sehat, bersih, hijau, dan asri. 
-                          </p>
-                      </div>
-                  </figure>
-  
-                  <figure onclick="toggleContent('tujuan-content')">
-                      <span><i class="fa fa-bar-chart-o"></i></span>
-                      <figcaption class="bounce-onload bounce-hover">
-                          <h3>Tujuan</h3>
-                          <p> Tujuan Sekolah Dasar Muhammadiyah 6 Samarinda</p>
-                      </figcaption>
-                      <div id="tujuan-content" class="content">
-                          <p>
-                              a. Agar siswa taat beribadah sesuai dengan Al-quran dan As-Sunnah baik disekolah maupun dirumah (Kontrol Ibadah)
-                              <br>
-                              b. Terbentuknya sikap yang baik, sopan dan berkarakter.
-                              <br>
-                              c. Terwujudnya siswa berprestasi baik akademik maupun non akademik.
-                              <br>
-                              d. Terciptanya suasana pembelajaran aktif, inofatif, kreatif, efektif dan menyenangkan.
-                              <br>
-                              e. Terciptanya rasa aman dan nyaman dilingkungan sekolah.
-                              <br>
-                              f. Terwujudnya sikap peduli terhadap kebersihan lingkungan.
-                              <br>
-                              g. Terwujudnya peserta didik selalu mengamalkan nilai nilai Pancasila.
-                              <br>
-                              h. Terwujudnya lingkungan yang bersih, sehat, teduh, rapi, aman dan nyaman
-                          </p>
-                      </div>
-                  </figure>
-              </div>
-          </div>
-      </section>
-  
-      <script>
-          function toggleContent(contentId) {
-              var content = document.getElementById(contentId);
-              content.classList.toggle('show');
-          }
-  
-          // Initialize all content as hidden
-          document.querySelectorAll('.content').forEach(function(content) {
-              content.style.display = 'none';
-          });
-      </script></body>
-                               </html>
-                               <title>Bounce Animation</title>
-<style>
-  /* styling dasar */
-  figcaption {
-    display: inline-block;
-    padding: 18px 24px;
-    border-radius: 12px;
-    background: #e6fafb;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    transform-origin: center bottom;
-  }
-
-  h3 { margin: 0 0 6px 0; font-size: 1.1rem; }
-  p  { margin: 0; font-size: 0.95rem; color: #333; }    
-
-  /* keyframes bounce yang halus dan natural */
-  @keyframes bounceIn {
-    0%   { transform: translateY(-40px) scale(0.9); opacity: 0; }
-    30%  { transform: translateY(10px) scale(1.02); opacity: 1; }
-    50%  { transform: translateY(-6px)  scale(0.995); }
-    70%  { transform: translateY(4px)   scale(1.00); }
-    100% { transform: translateY(0)     scale(1); }
-  }
-
-  /* jalankan sekali saat load */
-  .bounce-onload {
-    animation: bounceIn 800ms cubic-bezier(.2,.8,.25,1) both;
-  }
-
-  /* variasi: bounce berulang saat hover */
-  .bounce-hover:hover {
-    animation: bounceOnHover 700ms cubic-bezier(.2,.8,.25,1);
-  }
-
-  @keyframes bounceOnHover {
-    0%   { transform: translateY(0) scale(1); }
-    30%  { transform: translateY(-18px) scale(1.03); }
-    55%  { transform: translateY(6px)   scale(0.995); }
-    100% { transform: translateY(0)     scale(1); }
-  }
-
-  /* Hormati preferensi pengguna yang ingin mengurangi animasi */
-  @media (prefers-reduced-motion: reduce) {
-    .bounce-onload,
-    .bounce-hover:hover {
-      animation: none !important;
-      transform: none !important;
-    }
-  }
-</style>
-
-               </div>
-          </div>
-     </section>
-     </body> 
-     <!-- Fasilitas -->
-     <section id="fasilitas" class="facilities-section">
-          <div class="container">
-              <div class="row">
-                  <div class="col-md-12 col-sm-12">
-                      <div class="section-title">
-                          <h2>Fasilitas <small>Sekolah Dasar Muhammadiyah 6 Samarinda</small></h2>
-                      </div>
-      
-                      <div class="owl-carousel owl-theme owl-facilities">
-                          <!-- Fasilitas 1 -->
-                          <div class="item">
-                              <div class="facilities-thumb">
-                                  <div class="facilities-top">
-                                      <div class="facilities-image">
-                                          <!-- Multiple Images for Fasilitas 1 -->
-                                          <img src="images/Lapangan Sekolah.jpeg" loading="lazy" alt="Facility Image 1" class="active">
-                                      </div>
-                                      <div class="facilities-date">
-                                          <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                          <span><i class="fa fa-clock-o"></i> Fasilitas</span>
-                                      </div>
-                                  </div>
-                                  <div class="facilities-detail">
-                                      <h3><a href="#">Lapangan Sekolah</a></h3>
-                                      <p>Lapangan sekolah SD Muhammadiyah 6 Samarinda merupakan area terbuka yang luas dan nyaman untuk berbagai kegiatan siswa. </p>
-                                  </div>
-                              </div>
-                          </div>
-      
-                          <!-- Fasilitas 2 -->
-                          <div class="item">
-                              <div class="facilities-thumb">
-                                  <div class="facilities-top">
-                                      <div class="facilities-image">
-                                          <!-- Multiple Images for Fasilitas 2 -->
-                                          <img src="images/Koperasi.jpeg" loading="lazy" alt="Facility Image 2" class="active">
-
-                                      </div>
-                                      <div class="facilities-date">
-                                          <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                          <span><i class="fa fa-clock-o"></i> Fasilitas</span>
-                                      </div>
-                                  </div>
-                                  <div class="facilities-detail">
-                                      <h3><a href="#">Koperasi dan Kantin</a></h3>
-                                      <p>Koperasi dan kantin SD Muhammadiyah 6 Samarinda menyediakan berbagai kebutuhan siswa, mulai dari alat tulis, buku pelajaran, hingga makanan dan minuman sehat</p>
-                                  </div>
-                              </div>
-                          </div>
-      
-                          <!-- Fasilitas 3 -->
-                          <div class="item">
-                              <div class="facilities-thumb">
-                                  <div class="facilities-top">
-                                      <div class="facilities-image">
-                                          <!-- Multiple Images for Fasilitas 3 -->
-                                          <img src="images/WC.jpeg" loading="lazy" alt="Facility Image 3" class="active">
-
-                                      </div>
-                                      <div class="facilities-date">
-                                          <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                          <span><i class="fa fa-clock-o"></i> Fasilitas</span>
-                                      </div>
-                                  </div>
-                                  <div class="facilities-detail">
-                                      <h3><a href="#">Toilet</a></h3>
-                                      <p>Toilet di SD Muhammadiyah 6 Samarinda dirancang untuk menjaga kebersihan dan kenyamanan siswa serta seluruh warga sekolah. Fasilitas ini rutin dibersihkan dan dilengkapi dengan air yang mengalir, sabun cuci tangan, serta ventilasi yang baik. </p>
-                                  </div>
-                              </div>
-                          </div>
-                          <!-- Fasilitas 4 -->
-                          <div class="item">
-                            <div class="facilities-thumb">
-                                <div class="facilities-top">
-                                    <div class="facilities-image">
-                                        <!-- Multiple Images for Fasilitas 3 -->
-                                        <img src="images/Ruang Rapat.jpeg" loading="lazy" alt="Facility Image 4" class="active">
-
-                                    </div>
-                                    <div class="facilities-date">
-                                        <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                        <span><i class="fa fa-clock-o"></i> Fasilitas </span>
-                                    </div>
-                                </div>
-                                <div class="facilities-detail">
-                                    <h3><a href="#">Ruang Rapat</a></h3>
-                                    <p>Ruang rapat SD Muhammadiyah 6 Samarinda merupakan tempat yang digunakan untuk pertemuan guru, staf, dan berbagai kegiatan akademik maupun administratif.</p>
-                                </div>
-                            </div>
-                          </div> 
-                          <div class="item">
-                            <div class="facilities-thumb">
-                                <div class="facilities-top">
-                                    <div class="facilities-image">
-                                        <!-- Multiple Images for Fasilitas 3 -->
-                                        <img src="images/Ruang TU.jpeg" loading="lazy" alt="Facility Image 4" class="active">
-
-                                    </div>
-                                    <div class="facilities-date">
-                                        <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                        <span><i class="fa fa-clock-o"></i> Fasilitas </span>
-                                    </div>
-                                </div>
-                                <div class="facilities-detail">
-                                    <h3><a href="#">Ruang Tata Usaha</a></h3>
-                                    <p>Ruang Tata Usaha SD Muhammadiyah 6 Samarinda merupakan pusat administrasi sekolah yang mengelola data siswa, keuangan, arsip, dan layanan informasi bagi guru, siswa, serta orang tua.</p>
-                                </div>
-                            </div>
-                          </div>        
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>
-     <!--PRESTASI-->
-     <br>
-     <br>
-     <br>
-     <section id="prestasi" class="achievements-section">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-12 col-sm-12">
-                  <div class="section-title">
-                      <h2>Prestasi <small>Sekolah Dasar Muhammadiyah 6 Samarinda</small></h2>
-                  </div>
-  
-                  <div class="owl-carousel owl-theme owl-achievements">
-                      <!-- Prestasi 1 -->
-                      <div class="item">
-                          <div class="achievements-thumb">
-                              <div class="achievements-top">
-                                  <div class="achievements-image">
-                                      <!-- Multiple Images for Prestasi 1 -->
-                                      <img src="images/bang aiko.jpg" loading="lazy" alt="Achievement Image 1" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                      <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                      <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                              </div>
-                              <div class="achievements-detail">
-                                  <h3><a href="#">Juara 1 Sepak Bola Piala Bupati</a></h3>
-                                  <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                  <p><b>Muhammad Aiko Al Aska Baihaqi</b><br>SSA CUP V Kategori U-10 dan U-12</p>
-                              </div>
-                          </div>
-                      </div>
-  
-                      <!-- Prestasi 2 -->
-                      <div class="item">
-                          <div class="achievements-thumb">
-                              <div class="achievements-top">
-                                  <div class="achievements-image">
-                                      <!-- Multiple Images for Prestasi 2 -->
-                                      <img src="images/bang fatih.jpeg" loading="lazy" alt="Achievement Image 2" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                      <span><i class="fa fa-calendar"></i> 17 / 9 / 2024</span>
-                                      <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                              </div>
-                              <div class="achievements-detail">
-                                  <h3><a href="#">Juara 1 Pencak Silat</a></h3>
-                                  <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                  <p><b>Muhammad Al Fatih</b><br>Kejuaraan Kelas S Usia Dini 2 Putra</p>
-                              </div>
-                          </div>
-                      </div>
-  
-                      <!-- Prestasi 3 -->
-                      <div class="item">
-                          <div class="achievements-thumb">
-                              <div class="achievements-top">
-                                    <div class="achievements-image">
-                                      <!-- Multiple Images for Prestasi 3 -->
-                                      <img src="images/juara 1 taekwondo.jpeg" loading="lazy" alt="Achievement Image 3" class="active">
-                                    </div>
-                                    <div class="achievements-date">
-                                      <span><i class="fa fa-calendar"></i> 24 / 7 / 2024</span>
-                                      <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                    </div>
-                              </div>
-                              <div class="achievements-detail">
-                                  <h3><a href="#">Juara 2 Taekwondo</a></h3>
-                                  <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                  <p><b>Muhammad Adwa Budiman</b><br>Kyorugi Pra Codet Putra Pemula pada Kejuaraan Taekwondo<br>Koni Bayan Championship 2024</p>
-                              </div>
-                          </div>
-                        </div>
-                      <!-- Prestasi 4 -->
-                      <div class="item">
-                        <div class="achievements-thumb">
-                            <div class="achievements-top">
-                                  <div class="achievements-image">
-                                    <!-- Multiple Images for Prestasi 3 -->
-                                    <img src="images/Robian Al Farizzi Ikbal.jpeg" loading="lazy" alt="Achievement Image 3" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                    <span><i class="fa fa-calendar"></i> 24 / 7 / 2024</span>
-                                    <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                            </div>
-                            <div class="achievements-detail">
-                                <h3><a href="#">Juara 3 Skate Cross</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p><b>Robian Al Farizzi Ikbal</b><br>Kejuaraan Skate Cross<br>Walikota Open Tahun 2024</p>
-                            </div>
-                        </div>
-                      </div>
-                      <!--Milad Muhammadiyah-->
-                      <!-- Prestasi 5 -->
-                      <div class="item">
-                        <div class="achievements-thumb">
-                            <div class="achievements-top">
-                                  <div class="achievements-image">
-                                    <!-- Multiple Images for Prestasi 3 -->
-                                    <img src="images/Ulil.jpeg" loading="lazy" alt="Achievement Image 3" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                    <span><i class="fa fa-calendar"></i> 24 / 7 / 2024</span>
-                                    <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                            </div>
-                            <div class="achievements-detail">
-                                <h3><a href="#">Juara 1 Tahfizh</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p><b>Ulil Berkah Rizqon</b><br>Dalam Milad Muhammadiyah ke 112 M</p>
-                            </div>
-                        </div>
-                      </div>
-                      <!-- Prestasi 6 -->
-                      <div class="item">
-                        <div class="achievements-thumb">
-                            <div class="achievements-top">
-                                  <div class="achievements-image">
-                                    <!-- Multiple Images for Prestasi 3 -->
-                                    <img src="images/Tari Kreasi.jpeg" loading="lazy" alt="Achievement Image 3" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                    <span><i class="fa fa-calendar"></i> 24 / 7 / 2024</span>
-                                    <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                            </div>
-                            <div class="achievements-detail">
-                                <h3><a href="#">Juara 2 Tari Kreasi</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p><b>Khansa Zakiyyah Fitriyani<br>
-                                Shofia Humaira<br>
-                                Aleena Arsyfa Salsabila</b><br>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                Dalam Milad Muhammadiyah ke 112 M</p>
-                            </div>
-                        </div>
-                      </div>
-                      <!-- Prestasi 7 -->
-                      <div class="item">
-                        <div class="achievements-thumb">
-                            <div class="achievements-top">
-                                  <div class="achievements-image">
-                                    <!-- Multiple Images for Prestasi 3 -->
-                                    <img src="images/Aisyah.jpeg" loading="lazy" alt="Achievement Image 3" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                    <span><i class="fa fa-calendar"></i> 24 / 7 / 2024</span>
-                                    <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                            </div>
-                            <div class="achievements-detail">
-                                <h3><a href="#">Juara 1 Pidato Bahasa Arab</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p><b>Aisyah Nur Afiqa </b><br>Dalam Milad Muhammadiyah ke 112 M</p>
-                            </div>
-                        </div>
-                      </div>
-                      <!-- Prestasi 8 -->
-                      <div class="item">
-                        <div class="achievements-thumb">
-                            <div class="achievements-top">
-                                  <div class="achievements-image">
-                                    <!-- Multiple Images for Prestasi 3 -->
-                                    <img src="images/Aurelia.jpeg" loading="lazy" alt="Achievement Image 3" class="active">
-                                  </div>
-                                  <div class="achievements-date">
-                                    <span><i class="fa fa-calendar"></i> 24 / 7 / 2024</span>
-                                    <span><i class="fa fa-trophy"></i> Prestasi</span>
-                                  </div>
-                            </div>
-                            <div class="achievements-detail">
-                                <h3><a href="#">Juara 1 Vokal Tunggal</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p><b>Aurelia Pranata </b><br>Dalam Milad Muhammadiyah ke 112 M</p>
-                            </div>
-                        </div>
-                      </div>
-                 <!-- Prestasi Fatih -->
-                 <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/Fatih.jpg" loading="lazy" alt="Achievement Image 2">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 10 / 8 / 2024</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 1 Tapak Suci Kelas K Putra Usia Dini 2</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p><b>Muhammad Al Fatih</b><br>Dalam Ajang Kejuaraan Daerah Tapak Suci</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Prestasi Rifai -->
-                <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/Rifai.jpg" loading="lazy" alt="Achievement Image 3">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 10 / 8 / 2024</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 3 Tapak Suci Kelas C Putra Usia Dini 1</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p><b>Muhammad Rifai Hasan</b><br>Dalam Ajang Kejuaraan Daerah Tapak Suci</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Prestasi Robian -->
-                <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/Robian.jpg" loading="lazy" alt="Achievement Image 4">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 10 / 8 / 2024</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 3 Pemula 200m KU-K1 PUTRA</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p><b>Muhammad Al Fatih</b><br>Dalam Kejuaraan Tingkat Provinsi Kaltim</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Prestasi Rifqi -->
-                <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/Rifqi.jpg" loading="lazy" alt="Achievement Image 5">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 10 / 8 / 2024</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 3 Tapak Suci Kelas H Putra Usia Dini 1</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p><b>Muhammad Rifqi Ramdani</b><br>Dalam Ajang Kejuaraan Daerah Tapak Suci</p>
-                        </div>
-                    </div>
-                </div>
-                                <!-- Prestasi Aiko - Atletik -->
-                <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/aiko-atletik.jpg" loading="lazy" alt="Achievement Image - Aiko Atletik">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 11 / 2 / 2025</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 1 Atletik</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p><b>Aiko Al Aska Baihaqi</b><br>Dalam Olimpiade Olahraga Siswa Nasional O2SN Tingkat SD Kecamatan Samarinda Utara</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Prestasi Pantomim - Aiko & Sa'ad -->
-                <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/pantomim.jpg" loading="lazy" alt="Achievement Image - Pantomim">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 26 / 2 / 2025</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 1 Pantomim</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p>
-                                <b>Muhammad Aiko Al Aska Baihaqi<br>
-                                Muhammad Sa'ad Budiman</b><br>
-                                Dalam FLS2N Tingkat Kecamatan Samarinda Utara
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Prestasi Tari - FLS2N 2025 -->
-                <div class="item">
-                    <div class="achievements-thumb">
-                        <div class="achievements-top">
-                            <div class="achievements-image">
-                                <img src="images/tarii.jpg" loading="lazy" alt="Achievement Image - Tari FLS2N">
-                            </div>
-                            <div class="achievements-date">
-                                <span><i class="fa fa-calendar"></i> 26 / 2 / 2025</span>
-                                <span><i class="fa fa-trophy"></i> Prestasi</span>
-                            </div>
-                        </div>
-                        <div class="achievements-detail">
-                            <h3><a href="#">Juara 3 Tari</a></h3>
-                            <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                            <p>
-                                <b>Khansa Zakiyyah F<br>
-                                Aleena Arsyifa S<br>
-                                Aqela Naura R</b><br>
-                                Dalam FLS2N Tingkat Kecamatan Samarinda Utara
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-<!-- EKSTRAKURIKULER -->
-<br>
-<br>
-<br>
-<section id="ekstrakurikuler" class="extracurricular-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <div class="section-title">
-                    <h2>Ekstrakurikuler <small>Sekolah Dasar Muhammadiyah 6 Samarinda</small></h2>
-                </div>
-
-                <div class="owl-carousel owl-theme owl-extracurricular">
-                    <!-- Ekstrakurikuler 1 -->
-                    <div class="item">
-                        <div class="extracurricular-thumb">
-                            <div class="extracurricular-top">
-                                <div class="extracurricular-image">
-                                    <img src="images/HW.jpg" loading="lazy" alt="Ekstrakurikuler HW">
-                                </div>
-                            </div>
-                            <div class="extracurricular-detail">
-                                <h3><a href="#">Hizbul Wathan</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p>Hizbul Wathan adalah kegiatan kepanduan yang bertujuan membentuk karakter disiplin, kepemimpinan, dan kemandirian siswa melalui berbagai aktivitas kepramukaan Islami.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Ekstrakurikuler 2 -->
-                    <div class="item">
-                        <div class="extracurricular-thumb">
-                            <div class="extracurricular-top">
-                                <div class="extracurricular-image">
-                                    <img src="images/tapaksuci.JPG" loading="lazy" alt="Ekstrakurikuler Pencak Silat">
-                                </div>
-                            </div>
-                            <div class="extracurricular-detail">
-                                <h3><a href="#">Tapak Suci</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p>Tapak Suci adalah seni bela diri yang mengajarkan ketangkasan, disiplin, dan sportivitas. Melalui latihan rutin, siswa dibina untuk memiliki fisik yang kuat, mental yang tangguh, serta menjunjung tinggi nilai-nilai keislaman.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                   
-
-                
-
-                    <!-- Ekstrakurikuler 5 -->
-                    <div class="item">
-                        <div class="extracurricular-thumb">
-                            <div class="extracurricular-top">
-                                <div class="extracurricular-image">
-                                    <img src="images/tari.jpg" loading="lazy" alt="Ekstrakurikuler Tari">
-                                </div>
-                            </div>
-                            <div class="extracurricular-detail">
-                                <h3><a href="#">Tari Kreasi</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p>Tari Kreasi melatih siswa menari dengan gabungan unsur tradisional dan modern untuk menumbuhkan kreativitas dan rasa percaya diri.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Ekstrakurikuler 6 -->
-                    <div class="item">
-                        <div class="extracurricular-thumb">
-                            <div class="extracurricular-top">
-                                <div class="extracurricular-image">
-                                    <img src="images/Renang.jpg" loading="lazy" alt="Ekstrakurikuler Robotik">
-                                </div>
-                            </div>
-                            <div class="extracurricular-detail">
-                                <h3><a href="#">Renang</a></h3>
-                                <hr style="border: 1px solid #ccc; width: 100%; margin: 20px auto;">
-                                <p>Renang adalah kegiatan ekstrakurikuler di SD Muhammadiyah 6 Samarinda yang bertujuan untuk melatih keterampilan berenang, meningkatkan kebugaran, dan membangun rasa percaya diri siswa di dalam air.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> <!-- end owl-carousel -->
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- KEGIATAN PAGI HARI -->
-<br>
-<section id="morning-activities" class="morning-activities-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <div class="section-title">
-                    <h2>Kegiatan Pagi Hari <small>Sekolah Dasar Muhammadiyah 6 Samarinda</small></h2>
-                </div>
-
-                <div class="owl-carousel owl-theme" id="morning-activities-carousel">
-                    <!-- Kegiatan 1 -->
-                    <div class="item">
-                        <div class="activity-thumb">
-                            <div class="activity-image">
-                                <img src="images/sholat dhuha.jpg" loading="lazy" alt="Sholat Dhuha">
-                            </div>
-                            <div class="activity-detail">
-                                <h3><a href="#">Sholat Dhuha</a></h3>
-                                <p>Sholat Dhuha adalah ibadah rutin di SD Muhammadiyah 6 Samarinda untuk membiasakan siswa menjalankan sholat sunnah sebelum belajar.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Kegiatan 2 -->
-                    <div class="item">
-                        <div class="activity-thumb">
-                            <div class="activity-image">
-                                <img src="images/tahfiz.jpg" loading="lazy" alt="Tahfidz Qur'an">
-                            </div>
-                            <div class="activity-detail">
-                                <h3><a href="#">Tahfidz Qur'an</a></h3>
-                                <p>Tahfidz Qur'an adalah kegiatan rutin di SD Muhammadiyah 6 Samarinda untuk membiasakan siswa menghafal dan mengulang ayat-ayat Al-Qur'an.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Kegiatan 3 -->
-                    <div class="item">
-                        <div class="activity-thumb">
-                            <div class="activity-image">
-                                <img src="images/Senam.JPG" loading="lazy" alt="Senam Pagi">
-                            </div>
-                            <div class="activity-detail">
-                                <h3><a href="#">Senam 7 Kebiasaan Anak Indonesia Hebat</a></h3>
-                                <p>Senam 7 Kebiasaan Anak Indonesia Hebat dilakukan dua kali seminggu di SD Muhammadiyah 6 Samarinda untuk membentuk karakter positif dan menjaga kebugaran siswa.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kegiatan 4 -->
-                    <div class="item">
-                        <div class="activity-thumb">
-                            <div class="activity-image">
-                                <img src="images/upacara.JPG" loading="lazy" alt="Upacara Bendera">
-                            </div>
-                            <div class="activity-detail">
-                                <h3><a href="#">Upacara Bendera</a></h3>
-                                <p>Upacara Bendera di SD Muhammadiyah 6 Samarinda dilaksanakan setiap Senin untuk menanamkan disiplin, kebersamaan, dan rasa cinta tanah air pada siswa.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> <!-- end owl-carousel -->
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
-<br><br>
-   <section id="kegiatan-sekolah" class="activities-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <div class="section-title">
-                    <h2>Kegiatan Terbaru <small>@sdmuh6samarinda</small></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <script src="https://elfsightcdn.com/platform.js" async></script>
-                <div class="elfsight-app-dc2a1441-2ac9-448d-b438-6f7d84538c08" data-elfsight-app-lazy></div>
-            </div>
-        </div>
-    </div>
-</section>
-    
-     <!-- Youtube -->
-     <section id="contact">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <form id="contact-form" action="mailto:sdmuhammadiyah6smd@gmail.com" method="post" enctype="text/plain">
-                    <div class="section-title">
-                        <h2>Kritik dan Saran <small>we love conversations. let us talk!</small></h2>
-                    </div>
-                    
-                    <div class="col-md-12 col-sm-12">
-                        <!-- Name field -->
-                        <div class="form-group">
-                            <input type="text" 
-                                   class="form-control" 
-                                   placeholder="Enter full name" 
-                                   name="name" 
-                                   required
-                                   onchange="updateEmailBody()">
-                        </div>
-                
-                        <!-- Email field -->
-                        <div class="form-group">
-                            <input type="email" 
-                                   class="form-control" 
-                                   placeholder="Enter email address" 
-                                   name="email" 
-                                   required
-                                   onchange="updateEmailBody()">
-                        </div>
-                
-                        <!-- Message field -->
-                        <div class="form-group">
-                            <textarea class="form-control" 
-                                      rows="6" 
-                                      placeholder="Tell us about your message" 
-                                      name="message" 
-                                      required
-                                      onchange="updateEmailBody()"></textarea>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-4 col-sm-12">
-                        <input type="submit" 
-                               class="form-control" 
-                               value="Send Message">
-                    </div>
-                </form>
-                
-                <script>
-                function updateEmailBody() {
-                    const form = document.getElementById('contact-form');
-                    const name = form.elements['name'].value;
-                    const email = form.elements['email'].value;
-                    const message = form.elements['message'].value;
-                    
-                    const body = `Name: ${name}
-                Email: ${email}
-                
-                Message:
-                ${message}`;
-                    
-                    form.action = `mailto:sdmuhammadiyah6smd@gmail.com?subject=New Contact Form Message&body=${encodeURIComponent(body)}`;
-                }
-                </script>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="video-highlight">
-                  <!-- Hanya satu elemen div dengan ID yang sesuai -->
-                  <div id="video-player"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>               
-        <!--VIDEO HIGHLIGHT YOUTUBE-->   
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-    var videoIds = ['XRXYKDB2rPg']; // Ganti dengan ID video Anda
-    var currentVideoIndex = 0; // Mulai dari video pertama
-    var player;
-
-    // Fungsi ini dipanggil ketika YouTube IFrame API siap
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('video-player', {
-            height: '315',
-            width: '100%',
-            videoId: videoIds[currentVideoIndex],
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
-
-    function onPlayerReady(event) {
-        // Hapus baris di bawah ini untuk menonaktifkan autoplay
-        // event.target.playVideo(); // Memulai video saat pemain sudah siap
-    }
-
-    function onPlayerStateChange(event) {
-        // Jika video selesai diputar (status 0)
-        if (event.data === YT.PlayerState.ENDED) {
-            currentVideoIndex = (currentVideoIndex + 1) % videoIds.length; // Pindah ke video berikutnya dan loop kembali ke awal
-            player.loadVideoById(videoIds[currentVideoIndex]); // Memuat video baru
-        }
-    }
-</script>
-<!--VIDEO HIGHLIGHT YOUTUBE-->   
-<!-- Footer Section -->
-<footer id="footer" style="background-color: #333; color: white; padding: 50px 0;">
-    <div class="container">
-      <div class="row">
-  
-        <!-- Address Section -->
-        <div class="col-md-4 col-sm-6">
-          <div class="footer-info">
-            <h2 style="color: #ffcc00; margin-bottom: 25px;">ALAMAT</h2>
-            <address>
-              <p>Jl. Magelang, RT.19, Kel. Lempake, Kec. Samarinda Utara, Kota Samarinda, Prov. Kalimantan Timur<br> 
-              Kode Pos. 75112</p>
-            </address>
-            <ul class="social-icon" style="margin-top: 20px;">
-              <li style="display: inline-block; margin-right: 10px;">
-                <a href="https://www.facebook.com/profile.php?id=100063589330020" class="fa fa-facebook-square" style="font-size: 24px; color: #ffcc00;"></a>
-              </li>
-              <li style="display: inline-block; margin-right: 10px;">
-                <a href="https://www.youtube.com/@sdmuhammadiyah6gemilang43" class="fa fa-youtube" style="font-size: 24px; color: #ffcc00;"></a>
-              </li>
-              <li style="display: inline-block;">
-                <a href="https://www.instagram.com/sd_muh6_samarinda/?hl=id" class="fa fa-instagram" style="font-size: 24px; color: #ffcc00;"></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <!-- Contact Info Section with Icons -->
-        <div class="col-md-4 col-sm-6">
-          <div class="footer-info">
-            <h2 style="color: #ffcc00; margin-bottom: 25px;">Contact Info</h2>
-            <address>
-              <p style="margin-bottom: 10px;">
-                <i class="fa fa-phone" style="color: #ffcc00; margin-right: 10px;"></i>0812-5473-4412
-              </p>
-              <p>
-                <i class="fa fa-envelope" style="color: #ffcc00; margin-right: 10px;"></i>
-                <a href="mailto:sdmuhammadiyah6smd@gmail.com" style="color: #ffcc00; text-decoration: none;">sdmuhammadiyah6smd@gmail.com</a>
-              </p>
-            </address>
+          <div class="hero-badges">
+            <div class="hero-badge"><strong>B</strong><span>Akreditasi Sekolah</span></div>
+            <div class="hero-badge"><strong>89</strong><span>Nilai Akreditasi</span></div>
+            <div class="hero-badge"><strong>4+</strong><span>Program Unggulan</span></div>
           </div>
         </div>
 
-         <!-- Google Maps Section -->
-         <div class="col-md-4 col-sm-12">
-            <div class="footer-info">
-              <h2 style="color: #ffcc00; margin-bottom: 25px;"></h2>
-              
-              <!-- Google Maps Embed -->
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15958.827271900711!2d117.18563754957628!3d-0.4283552823597803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df5d7d1ec7bf031%3A0xc3a00b55042ed07a!2sSekolah%20Dasar%20Muhammadiyah%206!5e0!3m2!1sid!2sid!4v1727606908300!5m2!1sid!2sid" 
-                width="100%" height="200" style="border: 0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-              
-              <!-- Link to Google Maps Page -->
-              <p style="margin-top: 10px;">
-                <a href="https://goo.gl/maps/afMN48dav4CqPAS77" target="_blank" style="color: #ffcc00; text-decoration: none;">Lihat di Google Maps</a>
-              </p>
+        <div class="hero-card">
+          <div class="hero-photo">
+            <div class="hero-floating">
+              <span class="glass-chip"><i class="fa fa-leaf"></i> Cinta Lingkungan</span>
+              <span class="glass-chip"><i class="fa fa-book"></i> Qur'anic Life Basic</span>
             </div>
-          </div>   
+            <h3>Generasi Muslim yang berilmu, beramal, kreatif, dan berkarakter.</h3>
+            <p>Lingkungan belajar yang hangat, religius, dan mendukung tumbuh kembang siswa.</p>
+          </div>
         </div>
       </div>
-   <!-- CSS -->
-   <style>
-     #footer {
-       background-color: #333;
-       color: white;
-       padding: 50px 0;
-       font-family: 'Arial', sans-serif;
-     }
-   
-     #footer .footer-info h2 {
-       font-size: 18px;
-       color: #ffcc00;
-       text-transform: uppercase;
-       margin-bottom: 25px;
-     }
-   
-     #footer address p {
-       color: #ccc;
-       line-height: 1.8;
-     }
-   
-     #footer a {
-       color: #ffcc00;
-       text-decoration: none;
-     }
-   
-     #footer a:hover {
-       color: #fff;
-     }
-   
-     #footer .social-icon li a {
-       font-size: 24px;
-       color: #ffcc00;
-       transition: color 0.3s ease;
-     }
-   
-     #footer .social-icon li a:hover {
-       color: #fff;
-     }
-   
-     #footer .footer-nav li {
-       margin-bottom: 10px;
-     }
-   
-     #footer .footer-nav li a {
-       color: #ffcc00;
-       text-decoration: none;
-       transition: color 0.3s ease;
-     }
-   
-     #footer .footer-nav li a:hover {
-       color: #fff;
-     }
-   
-     @media (max-width: 768px) {
-       #footer .footer-info {
-         text-align: center;
-         margin-bottom: 30px;
-       }
-   
-       #footer .footer-nav li {
-         display: inline-block;
-         margin-right: 20px;
-       }
-     }
-   </style>
-   
-   <!-- FontAwesome Icon CDN -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   
-   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "School",
-      "name": "SD Muhammadiyah 6 Samarinda",
-      "description": "Sekolah Dasar Islam Unggulan di Kalimantan Timur",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Jl. Magelang, RT.19, Kel. Lempake",
-        "addressLocality": "Samarinda Utara",
-        "addressRegion": "Kalimantan Timur",
-        "postalCode": "75112",
-        "addressCountry": "ID"
-      },
-      "telephone": "0812-5473-4412",
-      "email": "sdmuhammadiyah6smd@gmail.com",
-      "url": "https://sdmuh6-smr.sch.id"
+    </section>
+
+    <section class="section" id="ppdb">
+      <div class="container">
+        <div class="ppdb-card">
+          <div class="ppdb-content">
+            <span class="eyebrow" style="background: rgba(255,255,255,0.18); color:#fff;"><i class="fa fa-bullhorn"></i> Penerimaan Peserta Didik Baru</span>
+            <h2>Daftarkan putra-putri terbaik ke SD Muhammadiyah 6 Samarinda</h2>
+            <p>
+              Informasi PPDB dibuat lebih menonjol agar pengunjung langsung menemukan informasi pendaftaran, program unggulan, serta kontak sekolah tanpa harus mencari terlalu lama.
+            </p>
+            <div class="hero-actions">
+              <a href="#kontak" class="btn btn-secondary"><i class="fa fa-phone"></i> Hubungi Sekolah</a>
+              <a href="#program" class="btn btn-ghost"><i class="fa fa-arrow-down"></i> Program Unggulan</a>
+            </div>
+          </div>
+          <div class="ppdb-image">
+            <img src="images/Ppdb.jpeg" alt="Poster PPDB SD Muhammadiyah 6 Samarinda" onerror="this.onerror=null; this.src='images/Ppdb-desktop.jpeg';" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="section" id="bangunan">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-building"></i> Bangunan Sekolah</span>
+            <h2>Kenali lingkungan SD Muhammadiyah 6 Samarinda</h2>
+            <p class="section-desc">Foto bangunan ditempatkan paling atas dalam bentuk slider agar pengunjung langsung melihat wajah sekolah sebelum membaca informasi detail.</p>
+          </div>
+        </div>
+
+        <div class="building-slider-shell">
+          <div class="building-slider" id="buildingSlider">
+            <article class="building-slide active">
+              <img src="images/Bangunan Sekolah.jpg" alt="Tampak bangunan SD Muhammadiyah 6 Samarinda" onerror="this.onerror=null; this.src='images/Lapangan Sekolah.jpeg';">
+              <div class="building-slide-caption">
+                <span><i class="fa fa-building"></i> Tampak Utama</span>
+                <h3>Bangunan SD Muhammadiyah 6 Samarinda</h3>
+                <p>Foto utama untuk memperkenalkan wajah sekolah kepada orang tua dan calon siswa.</p>
+              </div>
+            </article>
+
+            <article class="building-slide">
+              <img src="images/Gerbang Sekolah.jpg" alt="Gerbang SD Muhammadiyah 6 Samarinda" onerror="this.onerror=null; this.src='images/Lapangan Sekolah.jpeg';">
+              <div class="building-slide-caption">
+                <span><i class="fa fa-map-signs"></i> Area Masuk</span>
+                <h3>Gerbang Sekolah</h3>
+                <p>Menampilkan akses masuk dan identitas sekolah agar pengunjung mudah mengenali lokasi.</p>
+              </div>
+            </article>
+
+            <article class="building-slide">
+              <img src="images/Lapangan Sekolah.jpeg" alt="Lapangan SD Muhammadiyah 6 Samarinda">
+              <div class="building-slide-caption">
+                <span><i class="fa fa-child"></i> Area Siswa</span>
+                <h3>Lapangan Sekolah</h3>
+                <p>Area untuk upacara, olahraga, dan berbagai kegiatan siswa.</p>
+              </div>
+            </article>
+
+            <article class="building-slide">
+              <img src="images/Ruang TU.jpeg" alt="Ruang Tata Usaha SD Muhammadiyah 6 Samarinda">
+              <div class="building-slide-caption">
+                <span><i class="fa fa-briefcase"></i> Pelayanan</span>
+                <h3>Ruang Tata Usaha</h3>
+                <p>Ruang pelayanan administrasi sekolah untuk siswa, orang tua, dan warga sekolah.</p>
+              </div>
+            </article>
+
+            <article class="building-slide">
+              <img src="images/Ruang Rapat.jpeg" alt="Ruang rapat SD Muhammadiyah 6 Samarinda">
+              <div class="building-slide-caption">
+                <span><i class="fa fa-users"></i> Koordinasi</span>
+                <h3>Ruang Rapat</h3>
+                <p>Tempat koordinasi guru dan perencanaan program sekolah.</p>
+              </div>
+            </article>
+
+            <article class="building-slide">
+              <img src="images/Koperasi.jpeg" alt="Koperasi SD Muhammadiyah 6 Samarinda">
+              <div class="building-slide-caption">
+                <span><i class="fa fa-shopping-bag"></i> Fasilitas</span>
+                <h3>Koperasi Sekolah</h3>
+                <p>Fasilitas pendukung kebutuhan siswa dan warga sekolah.</p>
+              </div>
+            </article>
+          </div>
+
+          <button class="building-slider-btn prev" type="button" id="buildingPrev" aria-label="Foto sebelumnya"><i class="fa fa-angle-left"></i></button>
+          <button class="building-slider-btn next" type="button" id="buildingNext" aria-label="Foto berikutnya"><i class="fa fa-angle-right"></i></button>
+
+          <div class="building-slider-dots" id="buildingDots" aria-label="Navigasi slider bangunan"></div>
+        </div>
+</div>
+    </section>
+
+    <section class="section" id="program">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-lightbulb-o"></i> Program Unggulan</span>
+            <h2>Belajar lebih bermakna, Islami, dan menyenangkan</h2>
+            <p class="section-desc">Program unggulan sekolah ditampilkan dalam kartu ringkas agar terlihat lebih profesional dan mudah dipahami orang tua.</p>
+          </div>
+        </div>
+        <div class="program-strip">
+          <div class="program-item">
+            <div class="program-icon"><i class="fa fa-book"></i></div>
+            <h3>Tahfidz 2 Juz</h3>
+            <p>Pembiasaan hafalan Al-Qur'an secara bertahap dan terarah.</p>
+          </div>
+          <div class="program-item">
+            <div class="program-icon"><i class="fa fa-heart"></i></div>
+            <h3>Penanaman Karakter</h3>
+            <p>Membentuk siswa yang santun, disiplin, mandiri, dan bertanggung jawab.</p>
+          </div>
+          <div class="program-item">
+            <div class="program-icon"><i class="fa fa-microphone"></i></div>
+            <h3>Tahsin & Tahfidz Harian</h3>
+            <p>Kegiatan membaca dan menghafal Al-Qur'an dilakukan secara rutin.</p>
+          </div>
+          <div class="program-item">
+            <div class="program-icon"><i class="fa fa-star"></i></div>
+            <h3>Qur'anic Life Basic</h3>
+            <p>Membiasakan nilai-nilai Qur'ani dalam kehidupan sehari-hari.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="profil">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-university"></i> Profil Sekolah</span>
+            <h2>Informasi utama sekolah</h2>
+            <p class="section-desc">Bagian profil dibuat lebih clean dengan kartu informasi yang rapi, tidak terlalu padat, dan tetap mudah dibaca.</p>
+          </div>
+        </div>
+        <div class="card-grid">
+          <article class="info-card">
+            <div class="number-chip">01</div>
+            <h3>Sejarah Sekolah</h3>
+            <p>Berawal dari Pimpinan Cabang Muhammadiyah Samarinda Utara dalam memperluas AUM bidang pendidikan yang diprakarsai oleh Kepala Sekolah SD Muhammadiyah 4 Samarinda.</p>
+          </article>
+          <article class="info-card">
+            <div class="number-chip">02</div>
+            <h3>Akreditasi B</h3>
+            <p>SD Muhammadiyah 6 Samarinda memiliki akreditasi Grade B dengan nilai 89 sejak tahun 2018.</p>
+          </article>
+          <article class="info-card">
+            <div class="number-chip">03</div>
+            <h3>Kurikulum Merdeka</h3>
+            <p>Kurikulum Merdeka memberi fleksibilitas pembelajaran melalui pengembangan karakter, fokus materi esensial, dan pembelajaran yang lebih aktif.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="guru">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-users"></i> Tenaga Pendidik</span>
+            <h2>Kepala Sekolah, Staf TU & Guru</h2>
+            <p class="section-desc">Data tenaga pendidik disesuaikan dengan daftar terbaru, tanpa menampilkan nama yang sudah diminta dihapus.</p>
+          </div>
+        </div>
+        <div class="scroll-row">
+          <article class="profile-card"><img src="images/PAK ZAINAL.jpg" alt="Lutfiatul Khoiroh M.Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Lutfiatul Khoiroh M.Pd</h3><span>Kepala Sekolah</span></div></article>
+          <article class="profile-card"><img src="images/BU IDA.jpg" alt="Idawati, S. Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Idawati, S. Pd</h3><span>Guru Mapel & Waka Kurikulum</span></div></article>
+          <article class="profile-card"><img src="images/PAK MUIS.jpg" alt="Abdul Muis S.Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Abdul Muis S.Pd</h3><span>Guru Mapel & Waka.Sapras</span></div></article>
+          <article class="profile-card"><img src="images/PAK FAUZAN.jpg" alt="Fauzan Azhima, S.Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Fauzan Azhima, S.Pd</h3><span>Guru Mapel & Waka Kesiswaan</span></div></article>
+          <article class="profile-card"><img src="images/REN.jpg" alt="Muhammad Rendi Herdasaputra" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Muhammad Rendi Herdasaputra</h3><span>Staff Tata Usaha</span></div></article>
+          <article class="profile-card"><img src="images/BU ISTI.jpg" alt="Istiqomah, S.E" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Istiqomah, S.E</h3><span>Staff Tata Usaha & OPS</span></div></article>
+          <article class="profile-card"><img src="images/SALSA.jpg" alt="Salsabilla Ivania Kimalda" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Salsabilla Ivania Kimalda</h3><span>Staff Tata Usaha</span></div></article>
+          <article class="profile-card"><img src="images/BU DEDE.jpg" alt="Sitti Munjiyah Mardhatillah" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Sitti Munjiyah Mardhatillah</h3><span>Staff Tata Usaha</span></div></article>
+          <article class="profile-card"><img src="images/BU IKA.jpg" alt="Ika Dian Purwanti S. Psi" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Ika Dian Purwanti S. Psi</h3><span>Guru Kelas 1</span></div></article>
+          <article class="profile-card"><img src="images/BU ANGEL.jpg" alt="Angela Nur Eka Royatmi, S.Sos" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Angela Nur Eka Royatmi, S.Sos</h3><span>Guru Pendamping Kelas 1</span></div></article>
+          <article class="profile-card"><img src="images/BU AS.jpg" alt="Siti Asriyah, S.Si" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Siti Asriyah, S.Si</h3><span>Guru Kelas II</span></div></article>
+          <article class="profile-card"><img src="images/BU UMMI.jpg" alt="Ummi Masruroh" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Ummi Masruroh</h3><span>Guru Pendamping Kelas II</span></div></article>
+          <article class="profile-card"><img src="images/BU LILIK.jpg" alt="Lilik Widayati S. Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Lilik Widayati S. Pd</h3><span>Guru Kelas Kelas 3</span></div></article>
+          <article class="profile-card"><img src="images/BU ANGGI.jpg" alt="Anggi Widyasari" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Anggi Widyasari</h3><span>Guru Pendamping Kelas 3</span></div></article>
+          <article class="profile-card"><img src="images/BU SARI.jpg" alt="Sartika Sari, S.S" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Sartika Sari, S.S</h3><span>Guru Kelas 4.1</span></div></article>
+          <article class="profile-card"><img src="images/BU ASRI.jpg" alt="Nur Asri Indah Yani, S.Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Nur Asri Indah Yani, S.Pd</h3><span>Guru Kelas 4.2</span></div></article>
+          <article class="profile-card"><img src="images/BU TUTUT.jpg" alt="Tutut Kusmiati, S.Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Tutut Kusmiati, S.Pd</h3><span>Guru Kelas 5</span></div></article>
+          <article class="profile-card"><img src="images/BU INA.jpg" alt="Ina Ruviyana, S.Pd" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Ina Ruviyana, S.Pd</h3><span>Guru Kelas 6</span></div></article>
+          <article class="profile-card"><img src="images/BU ELLY.jpg" alt="Elliana Puspita Sari" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Elliana Puspita Sari</h3><span>Guru Mapel</span></div></article>
+          <article class="profile-card"><img src="images/BU PUTRI.jpg" alt="Putri Mutiara" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Putri Mutiara</h3><span>Guru Mapel</span></div></article>
+          <article class="profile-card"><img src="images/BU DEWI.jpg" alt="Dewi Kusumawati, S. Pd. i" onerror="this.onerror=null; this.src='images/logo.jpg';"><div class="profile-info"><h3>Dewi Kusumawati, S. Pd. i</h3><span>Guru Mapel & Waka ISMUBA</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="visi-misi">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-compass"></i> Arah Sekolah</span>
+            <h2>Visi, Misi, dan Tujuan</h2>
+            <p class="section-desc">Klik setiap kartu untuk membuka isi detail. Tampilannya dibuat seperti accordion modern agar tidak terlihat kaku.</p>
+          </div>
+        </div>
+        <div class="mission-tabs">
+          <article class="mission-card open">
+            <div class="mission-icon"><i class="fa fa-eye"></i></div>
+            <h3>Visi</h3>
+            <p>Mewujudkan generasi muslim yang berilmu, beramal, cinta lingkungan, kreatif, dan berprofil Pancasila.</p>
+            <div class="mission-detail">
+              Peserta didik diharapkan taqwa, mampu melaksanakan ibadah sesuai tuntunan Nabi, berprestasi akademik dan non-akademik, mandiri, percaya diri, kreatif, serta berada dalam lingkungan sekolah yang bersih, sehat, teduh, rapi, aman, dan nyaman.
+            </div>
+          </article>
+          <article class="mission-card">
+            <div class="mission-icon"><i class="fa fa-flag"></i></div>
+            <h3>Misi</h3>
+            <p>Membangun lulusan beriman, bertaqwa, beradab Islami, cerdas, disiplin, dan cinta tanah air.</p>
+            <div class="mission-detail">
+              Sekolah mengembangkan pembelajaran aktif, kreatif, inovatif, memanfaatkan IPTEK, menumbuhkan semangat berprestasi, serta menciptakan lingkungan yang sehat, bersih, hijau, dan asri.
+            </div>
+          </article>
+          <article class="mission-card">
+            <div class="mission-icon"><i class="fa fa-bullseye"></i></div>
+            <h3>Tujuan</h3>
+            <p>Membentuk siswa yang taat beribadah, sopan, berkarakter, berprestasi, dan peduli lingkungan.</p>
+            <div class="mission-detail">
+              Tujuan sekolah meliputi pembiasaan ibadah, pembentukan sikap baik, pencapaian prestasi akademik dan non-akademik, pembelajaran aktif dan menyenangkan, lingkungan aman, serta pengamalan nilai-nilai Pancasila.
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fasilitas">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-building"></i> Fasilitas</span>
+            <h2>Sarana pendukung pembelajaran</h2>
+            <p class="section-desc">Fasilitas ditampilkan dalam kartu gambar yang lebih elegan dan konsisten.</p>
+          </div>
+        </div>
+        <div class="scroll-row">
+          <article class="media-card"><img src="images/Lapangan Sekolah.jpeg" alt="Lapangan Sekolah"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-clock-o"></i> Fasilitas</span></div><h3>Lapangan Sekolah</h3><p>Area sekolah untuk aktivitas olahraga, upacara, dan kegiatan siswa.</p></div></article>
+          <article class="media-card"><img src="images/Koperasi.jpeg" alt="Koperasi"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-clock-o"></i> Fasilitas</span></div><h3>Koperasi</h3><p>Fasilitas pendukung kebutuhan siswa dan warga sekolah.</p></div></article>
+          <article class="media-card"><img src="images/WC.jpeg" alt="WC"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-clock-o"></i> Fasilitas</span></div><h3>WC</h3><p>Fasilitas kebersihan untuk mendukung kenyamanan lingkungan sekolah.</p></div></article>
+          <article class="media-card"><img src="images/Ruang Rapat.jpeg" alt="Ruang Rapat"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-clock-o"></i> Fasilitas</span></div><h3>Ruang Rapat</h3><p>Ruang koordinasi kegiatan dan pengembangan program sekolah.</p></div></article>
+          <article class="media-card"><img src="images/Ruang TU.jpeg" alt="Ruang Tata Usaha"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-clock-o"></i> Fasilitas</span></div><h3>Ruang Tata Usaha</h3><p>Pusat pelayanan administrasi sekolah yang lebih tertata.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="prestasi">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-trophy"></i> Prestasi</span>
+            <h2>Capaian siswa SD Muhammadiyah 6</h2>
+            <p class="section-desc">Bagian prestasi dibuat lebih menonjol agar siswa yang berprestasi terlihat lebih membanggakan.</p>
+          </div>
+        </div>
+        <div class="scroll-row">
+          <article class="media-card"><img src="images/bang aiko.jpg" alt="Aiko"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 1 Sepak Bola Piala Bupati</h3><p><strong>Muhammad Aiko Al Aska Baihaqi</strong><br>SSA CUP V Kategori U-10 dan U-12.</p></div></article>
+          <article class="media-card"><img src="images/bang fatih.jpeg" alt="Al Fatih"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 17/9/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 1 Pencak Silat</h3><p><strong>Muhammad Al Fatih</strong><br>Kejuaraan Kelas S Usia Dini 2 Putra.</p></div></article>
+          <article class="media-card"><img src="images/juara 1 taekwondo.jpeg" alt="Taekwondo"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 24/7/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 2 Taekwondo</h3><p><strong>Muhammad Adwa Budiman</strong><br>Kyorugi Pra Cadet Putra Pemula pada Kejuaraan Taekwondo Koni Bayan Championship 2024.</p></div></article>
+          <article class="media-card"><img src="images/Robian Al Farizzi Ikbal.jpeg" alt="Robian"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 24/7/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 3 Skate Cross</h3><p><strong>Robian Al Farizzi Ikbal</strong><br>Kejuaraan Skate Cross Walikota Open Tahun 2024.</p></div></article>
+          <article class="media-card"><img src="images/Ulil.jpeg" alt="Ulil"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 24/7/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 1 Tahfizh</h3><p><strong>Ulil Berkah Rizqon</strong><br>Dalam Milad Muhammadiyah ke-112 M.</p></div></article>
+          <article class="media-card"><img src="images/Tari Kreasi.jpeg" alt="Tari Kreasi"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 24/7/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 2 Tari Kreasi</h3><p><strong>Khansa Zakiyyah Fitriyani, Shofia Humaira, Aleena Arsyfa Salsabila</strong><br>Dalam Milad Muhammadiyah ke-112 M.</p></div></article>
+          <article class="media-card"><img src="images/Aisyah.jpeg" alt="Aisyah"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 24/7/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 1 Pidato Bahasa Arab</h3><p><strong>Aisyah Nur Afiqa</strong><br>Dalam Milad Muhammadiyah ke-112 M.</p></div></article>
+          <article class="media-card"><img src="images/Aurelia.jpeg" alt="Aurelia"><div class="media-body"><div class="meta"><span><i class="fa fa-calendar"></i> 24/7/2024</span><span><i class="fa fa-trophy"></i> Prestasi</span></div><h3>Juara 1 Vokal Tunggal</h3><p><strong>Aurelia Pranata</strong><br>Dalam Milad Muhammadiyah ke-112 M.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="kegiatan">
+      <div class="container">
+        <div class="section-header instagram-clean-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-instagram"></i> Galeri Kegiatan</span>
+            <h2>Kegiatan Terbaru</h2>
+            <p class="section-desc">@sd_muh6_samarinda</p>
+          </div>
+          <a href="https://www.instagram.com/sd_muh6_samarinda/" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa fa-instagram"></i> Buka Instagram</a>
+        </div>
+
+        <div class="instagram-showcase elfsight-layout instagram-clean-layout">
+          <div class="instagram-panel elfsight-panel instagram-clean-panel">
+            <div class="ig-browser elfsight-browser instagram-clean-browser">
+              <div class="ig-topbar elfsight-topbar instagram-clean-topbar">
+                <span class="ig-dot"></span>
+                <div class="ig-topbar-title">
+                  <strong>SD Muhammadiyah 6 Samarinda</strong>
+                  <span>@sd_muh6_samarinda</span>
+                </div>
+              </div>
+              <div class="ig-frame-wrap elfsight-frame instagram-clean-frame">
+                <div class="elfsight-widget-box">
+                  <!-- Elfsight Instagram Feed | SD Muhammadiyah 6 Samarinda -->
+                  <script src="https://elfsightcdn.com/platform.js" async></script>
+                  <div class="elfsight-app-dc2a1441-2ac9-448d-b438-6f7d84538c08" data-elfsight-app-lazy></div>
+
+                  <noscript>
+                    <div class="elfsight-helper-card">
+                      <h3>Instagram Feed membutuhkan JavaScript</h3>
+                      <p>Aktifkan JavaScript di browser untuk menampilkan feed Instagram sekolah.</p>
+                    </div>
+                  </noscript>
+                </div>
+                <div class="elfsight-copy-note">Feed otomatis dari Instagram resmi sekolah. Jika jumlah postingan awal belum 6, atur jumlah post awal di dashboard Elfsight.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="kontak">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow"><i class="fa fa-comments"></i> Kritik & Saran</span>
+            <h2>Hubungi sekolah</h2>
+            <p class="section-desc">Form dan video dibuat berdampingan agar halaman kontak terlihat lebih profesional.</p>
+          </div>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Kirim kritik dan saran</h3>
+            <p class="section-desc">Masukan Anda membantu sekolah terus berkembang lebih baik.</p>
+            <form class="form-grid" id="contactForm">
+              <input type="text" class="form-control" placeholder="Nama lengkap" name="name" required>
+              <input type="email" class="form-control" placeholder="Alamat email" name="email" required>
+              <textarea class="form-control" placeholder="Tulis pesan Anda" name="message" required></textarea>
+              <button class="btn btn-primary" type="submit"><i class="fa fa-paper-plane"></i> Kirim Pesan</button>
+            </form>
+          </div>
+          <div class="video-box">
+            <iframe src="https://www.youtube.com/embed/XRXYKDB2rPg" title="Video SD Muhammadiyah 6 Samarinda" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <h3>SD Muhammadiyah 6 Samarinda</h3>
+          <p>Jl. Magelang, RT.19, Kel. Lempake, Kec. Samarinda Utara, Kota Samarinda, Kalimantan Timur 75112.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook-square"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.instagram.com/sd_muh6_samarinda/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-card">
+          <h3>Kontak</h3>
+          <p><i class="fa fa-phone"></i> 081254734412</p>
+          <p><i class="fa fa-envelope"></i> <a href="mailto:sdmuhammadiyah6smd@gmail.com">sdmuhammadiyah6smd@gmail.com</a></p>
+          <p><i class="fa fa-map-marker"></i> Samarinda Utara</p>
+        </div>
+        <div class="footer-card">
+          <h3>Lokasi Sekolah</h3>
+          <div class="footer-map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15958.827271900711!2d117.18563754957628!3d-0.4283552823597803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df5d7d1ec7bf031%3A0xc3a00b55042ed07a!2sSekolah%20Dasar%20Muhammadiyah%206!5e0!3m2!1sid!2sid!4v1727606908300!5m2!1sid!2sid" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <p style="margin-top:12px;"><a href="https://goo.gl/maps/afMN48dav4CqPAS77" target="_blank" rel="noopener">Lihat di Google Maps</a></p>
+        </div>
+      </div>
+      <div class="copyright">
+        <span>© <span id="year"></span> SD Muhammadiyah 6 Samarinda. All rights reserved.</span>
+        <span>Website sekolah modern, responsive, dan lebih rapi.</span>
+      </div>
+    </div>
+  </footer>
+
+  <audio id="audioPlayer" preload="metadata">
+    <source id="audioSource" src="audio/Sekolah Kreatif SD Muhammadiyah 6.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="audio-dock" aria-label="Pemutar audio sekolah">
+    <div class="audio-cover"><i class="fa fa-music"></i></div>
+    <div class="audio-info">
+      <strong id="audioTitle">Sekolah Kreatif SD Muhammadiyah 6</strong>
+      <small>Tekan M untuk mute/unmute</small>
+    </div>
+    <div class="audio-controls">
+      <button type="button" id="prevAudio" aria-label="Lagu sebelumnya"><i class="fa fa-step-backward"></i></button>
+      <button type="button" id="playAudio" aria-label="Putar audio"><i class="fa fa-play"></i></button>
+      <button type="button" id="nextAudio" aria-label="Lagu berikutnya"><i class="fa fa-step-forward"></i></button>
+    </div>
+  </div>
+
+  <button class="back-top" id="backTop" aria-label="Kembali ke atas"><i class="fa fa-arrow-up"></i></button>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const dateTime = document.getElementById('dateTime');
+    const backTop = document.getElementById('backTop');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      menuToggle.innerHTML = navLinks.classList.contains('open') ? '<i class="fa fa-times"></i>' : '<i class="fa fa-bars"></i>';
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+      });
+    });
+
+    function updateDateTime() {
+      const now = new Date();
+      dateTime.textContent = now.toLocaleString('id-ID', {
+        weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+      });
     }
-    </script>
-      
+    updateDateTime();
+    setInterval(updateDateTime, 1000 * 30);
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const sections = [...document.querySelectorAll('main section[id]')];
+    const navItems = [...document.querySelectorAll('.nav-links a')];
+    const highlightNav = () => {
+      const y = window.scrollY + 140;
+      let current = sections[0].id;
+      sections.forEach(section => {
+        if (y >= section.offsetTop) current = section.id;
+      });
+      navItems.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+      backTop.classList.toggle('show', window.scrollY > 650);
+    };
+    window.addEventListener('scroll', highlightNav, { passive: true });
+    highlightNav();
+
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    document.querySelectorAll('.mission-card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('open'));
+    });
+
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audioSource = document.getElementById('audioSource');
+    const audioTitle = document.getElementById('audioTitle');
+    const playBtn = document.getElementById('playAudio');
+    const playlist = [
+      { title: 'Sekolah Kreatif SD Muhammadiyah 6', src: 'audio/Sekolah Kreatif SD Muhammadiyah 6.mp3' },
+      { title: 'Bersama Kita Bersinar', src: 'audio/Bersama kita bersinar (2).mp3' },
+      { title: 'Sang Surya', src: 'audio/sang surya.mp3' }
+    ];
+    let currentAudio = 0;
+
+    function loadAudio(index, shouldPlay = false) {
+      currentAudio = (index + playlist.length) % playlist.length;
+      audioSource.src = playlist[currentAudio].src;
+      audioTitle.textContent = playlist[currentAudio].title;
+      audioPlayer.load();
+      if (shouldPlay) audioPlayer.play().catch(() => {});
+      playBtn.innerHTML = '<i class="fa fa-play"></i>';
+    }
+
+    document.getElementById('nextAudio').addEventListener('click', () => loadAudio(currentAudio + 1, true));
+    document.getElementById('prevAudio').addEventListener('click', () => loadAudio(currentAudio - 1, true));
+    playBtn.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play().then(() => playBtn.innerHTML = '<i class="fa fa-pause"></i>').catch(() => {});
+      } else {
+        audioPlayer.pause();
+        playBtn.innerHTML = '<i class="fa fa-play"></i>';
+      }
+    });
+    audioPlayer.addEventListener('ended', () => loadAudio(currentAudio + 1, true));
+    document.addEventListener('keydown', event => {
+      if (event.key.toLowerCase() === 'm') audioPlayer.muted = !audioPlayer.muted;
+    });
 
 
-     <!-- SCRIPTS -->
-     <script src="js/jquery.js"></script>
-     <script src="js/bootstrap.min.js"></script>
-     <script src="js/owl.carousel.min.js"></script>
-     <script src="js/smoothscroll.js"></script>
-     <script src="js/custom.js"></script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    const buildingSlides = [...document.querySelectorAll('.building-slide')];
+    const buildingDotsWrap = document.getElementById('buildingDots');
+    const buildingPrev = document.getElementById('buildingPrev');
+    const buildingNext = document.getElementById('buildingNext');
+    let currentBuildingSlide = 0;
+    let buildingSliderTimer;
 
+    function showBuildingSlide(index) {
+      if (!buildingSlides.length) return;
+      currentBuildingSlide = (index + buildingSlides.length) % buildingSlides.length;
+      buildingSlides.forEach((slide, i) => slide.classList.toggle('active', i === currentBuildingSlide));
+      document.querySelectorAll('.building-slider-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentBuildingSlide));
+    }
+
+    function startBuildingSlider() {
+      clearInterval(buildingSliderTimer);
+      buildingSliderTimer = setInterval(() => showBuildingSlide(currentBuildingSlide + 1), 4500);
+    }
+
+    if (buildingSlides.length && buildingDotsWrap) {
+      buildingSlides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'building-slider-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Tampilkan foto bangunan ' + (i + 1));
+        dot.addEventListener('click', () => {
+          showBuildingSlide(i);
+          startBuildingSlider();
+        });
+        buildingDotsWrap.appendChild(dot);
+      });
+
+      buildingPrev.addEventListener('click', () => {
+        showBuildingSlide(currentBuildingSlide - 1);
+        startBuildingSlider();
+      });
+
+      buildingNext.addEventListener('click', () => {
+        showBuildingSlide(currentBuildingSlide + 1);
+        startBuildingSlider();
+      });
+
+      startBuildingSlider();
+    }
+
+
+
+    // Cadangan lama: sembunyikan kartu bantuan jika masih ada dan widget Elfsight berhasil dimuat.
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const elfsightApp = document.querySelector('.elfsight-widget-box [class^="elfsight-app-"]');
+        const helper = document.getElementById('elfsightHelperCard');
+        if (elfsightApp && helper && elfsightApp.children.length > 0) {
+          helper.style.display = 'none';
+        }
+      }, 2500);
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', event => {
+      event.preventDefault();
+      alert('Terima kasih, pesan Anda sudah tercatat di halaman ini. Hubungkan form ke backend/email agar pesan bisa terkirim otomatis.');
+    });
+  </script>
 </body>
 </html>

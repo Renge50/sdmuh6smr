@@ -534,31 +534,45 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
     <div class="page" id="page-whatsapp">
       <div class="two-col">
         <div class="card">
-          <div class="card-header"><span class="card-title">WhatsApp Tunggakan Otomatis</span></div>
+          <div class="card-header">
+            <span class="card-title">WhatsApp Tunggakan Otomatis</span>
+            <button class="btn btn-outline btn-sm" type="button" onclick="downloadTemplateNomorOrtu()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Template Nomor Ortu
+            </button>
+            <button class="btn btn-success btn-sm" type="button" onclick="document.getElementById('wa-import-file').click()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Import Nomor Ortu
+            </button>
+            <input type="file" id="wa-import-file" accept=".xlsx,.xls,.csv" hidden onchange="importNomorOrtu(this)">
+          </div>
           <div style="padding:18px">
             <div class="alert alert-info"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Sistem akan membuka WhatsApp Web/App dengan pesan otomatis. Pengiriman tetap perlu klik <strong>Send/Kirim</strong> di WhatsApp karena browser tidak boleh mengirim pesan diam-diam.</div></div>
+            <div class="alert alert-warning"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div>Nomor orang tua dapat diimport langsung di tab ini. Sistem mencocokkan data berdasarkan <strong>NIS</strong> terlebih dahulu, kemudian <strong>Nama Siswa</strong>. Kolom yang dikenali antara lain NIS, Nama Siswa, Nama Orang Tua/Wali, dan Nomor HP/WhatsApp Orang Tua.</div></div>
             <div class="form-grid" style="margin-bottom:14px">
               <div class="fg"><label>Filter Kelas</label><select id="wa-kelas" onchange="populateWA()"><option value="">Semua Kelas</option></select></div>
               <div class="fg"><label>Filter Tagihan</label><select id="wa-jenis" onchange="populateWA()"><option value="">Semua Tagihan</option></select></div>
               <div class="fg full"><label>Pilih Siswa Tunggakan</label><select id="wa-siswa" onchange="previewWA()"><option value="">-- Pilih Siswa --</option></select></div>
               <div class="fg full"><label>Template Pesan</label>
-                <textarea id="wa-template" rows="10" style="resize:vertical;font-size:12px;line-height:1.6">Assalamu'alaikum Bapak/Ibu {WALI},
+                <textarea id="wa-template" rows="18" style="resize:vertical;font-size:12px;line-height:1.6">Assalamu'alaikum Warahmatullahi Wabarakatuh,
 
-Kami dari {SEKOLAH} menginformasikan bahwa ananda:
+Yth. Ayah/Bunda Ananda {NAMA}
+Kelas {KELAS}
 
-Nama  : {NAMA}
-Kelas : {KELAS}
-NIS   : {NIS}
+Informasi administrasi yang belum terselesaikan sebagai berikut: 
 
-Masih memiliki tunggakan pembayaran:
 {DETAIL_TUNGGAK}
 
-Total tunggakan: {TOTAL}
+Total Tagihan : {TOTAL}
 
-Mohon agar dapat segera diselesaikan. Apabila sudah melakukan pembayaran, mohon abaikan pesan ini atau konfirmasi ke bendahara/kasir sekolah.
+Apabila pembayaran telah dilakukan, mohon berkenan mengirimkan bukti pembayaran kepada Staf administrasi. 
 
-Terima kasih.
-Wassalamu'alaikum.</textarea>
+Nashrun Minallah wa Fathun Qarib
+Wassalamu'alaikum Warahmatullahi Wabarakatuh.
+
+SEKOLAH KREATIF
+SD Muhammadiyah 6 Samarinda
+Islami, Kreatif, Berkemajuan</textarea>
               </div>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -2381,6 +2395,113 @@ function normalizePhone(hp){
   return n;
 }
 function waEncode(text){ return encodeURIComponent(text||''); }
+
+function normalizeStudentNameKey(value){
+  return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+}
+function formatPhoneForStorage(value){
+  let n=String(value??'').replace(/[^0-9]/g,'');
+  if(!n) return '';
+  if(n.startsWith('620')) n='0'+n.slice(3);
+  else if(n.startsWith('62')) n='0'+n.slice(2);
+  else if(n.startsWith('8')) n='0'+n;
+  return n;
+}
+function normalizeImportHeader(value){
+  return String(value||'').toLowerCase().replace(/[._/\\()-]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function findImportColumn(headers, aliases){
+  const normalized=headers.map(normalizeImportHeader);
+  for(const alias of aliases){
+    const exact=normalized.indexOf(normalizeImportHeader(alias));
+    if(exact>=0) return exact;
+  }
+  return -1;
+}
+function formatWARupiah(value){ return 'Rp'+Number(value||0).toLocaleString('id-ID'); }
+function titleCaseStudentName(value){
+  return String(value||'').toLocaleLowerCase('id-ID').split(/(\s+|-|')/).map(part=>{
+    if(!part || /^(\s+|-|')$/.test(part)) return part;
+    return part.charAt(0).toLocaleUpperCase('id-ID')+part.slice(1);
+  }).join('');
+}
+function downloadTemplateNomorOrtu(){
+  const rows=[['NIS','Nama Siswa','Kelas','Nama Orang Tua/Wali','Nomor HP/WhatsApp Orang Tua']];
+  getActiveSiswa().slice().sort((a,b)=>String(a.kelas||'').localeCompare(String(b.kelas||''),'id',{numeric:true}) || String(a.nama||'').localeCompare(String(b.nama||''),'id')).forEach(s=>{
+    rows.push([String(s.nis||''),s.nama||'',s.kelas||'',s.wali||'',s.hp||'']);
+  });
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols']=[{wch:16},{wch:34},{wch:12},{wch:34},{wch:28}];
+  XLSX.utils.book_append_sheet(wb,ws,'Nomor Orang Tua');
+  const petunjuk=XLSX.utils.aoa_to_sheet([
+    ['PETUNJUK IMPORT NOMOR ORANG TUA'],
+    ['1. Jangan mengubah NIS atau Nama Siswa agar pencocokan tetap akurat.'],
+    ['2. Isi kolom Nomor HP/WhatsApp Orang Tua. Format 08..., 628..., atau +628... dapat digunakan.'],
+    ['3. Nama Orang Tua/Wali boleh diperbarui bila diperlukan.'],
+    ['4. Simpan file, lalu klik Import Nomor Ortu pada tab WhatsApp Tunggakan.']
+  ]);
+  petunjuk['!cols']=[{wch:100}];
+  XLSX.utils.book_append_sheet(wb,petunjuk,'Petunjuk');
+  XLSX.writeFile(wb,'Template_Import_Nomor_Orang_Tua.xlsx');
+}
+function importNomorOrtu(input){
+  const file=input?.files?.[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
+      if(rows.length<2) throw new Error('File tidak memiliki baris data.');
+      const headers=rows[0];
+      const idxNis=findImportColumn(headers,['NIS','NISN','Nomor Induk','Nomor Induk Siswa']);
+      const idxNama=findImportColumn(headers,['Nama','Nama Siswa','Nama Peserta Didik']);
+      const idxWali=findImportColumn(headers,['Wali','Wali Murid','Nama Wali','Orang Tua','Nama Orang Tua','Nama Orang Tua/Wali','Ayah/Bunda']);
+      const idxHp=findImportColumn(headers,['HP','No HP','Nomor HP','No HP Wali','Nomor HP Wali','No WA','Nomor WA','WhatsApp','Nomor WhatsApp','Nomor HP/WhatsApp Orang Tua','Nomor Orang Tua','Nomor Ortu','HP Orang Tua','HP Ortu']);
+      if(idxHp<0 || (idxNis<0 && idxNama<0)){
+        throw new Error('Kolom tidak dikenali. Minimal harus ada NIS atau Nama Siswa, serta Nomor HP/WhatsApp Orang Tua.');
+      }
+      const byNis=new Map(db.siswa.map(s=>[String(s.nis||'').replace(/\D/g,''),s]));
+      const byName=new Map(db.siswa.map(s=>[normalizeStudentNameKey(s.nama),s]));
+      let updated=0, unchanged=0, invalid=0, empty=0;
+      const notFound=[];
+      rows.slice(1).forEach((r,rowIndex)=>{
+        if(!r || !r.some(v=>String(v).trim()!=='')) return;
+        const nis=idxNis>=0?String(r[idxNis]||'').replace(/\D/g,''):'';
+        const nama=idxNama>=0?String(r[idxNama]||'').trim():'';
+        const rawHp=String(r[idxHp]||'').trim();
+        if(!rawHp){ empty++; return; }
+        const hp=formatPhoneForStorage(rawHp);
+        if(!normalizePhone(hp)){ invalid++; return; }
+        const s=(nis&&byNis.get(nis)) || (nama&&byName.get(normalizeStudentNameKey(nama)));
+        if(!s){ notFound.push(nama||nis||`Baris ${rowIndex+2}`); return; }
+        const wali=idxWali>=0?String(r[idxWali]||'').trim():'';
+        const before=`${s.hp||''}|${s.wali||''}`;
+        s.hp=hp;
+        if(wali) s.wali=wali;
+        const after=`${s.hp||''}|${s.wali||''}`;
+        before===after?unchanged++:updated++;
+      });
+      save();
+      renderSiswa();
+      renderTunggakan();
+      populateWA();
+      updateDbInfo();
+      notify(`Import nomor orang tua selesai: ${updated} data diperbarui, ${unchanged} tetap.`,updated?'success':'warning');
+      let msg=`IMPORT NOMOR ORANG TUA SELESAI\n\nDiperbarui: ${updated}\nTidak berubah: ${unchanged}\nNomor kosong: ${empty}\nNomor tidak valid: ${invalid}\nTidak ditemukan: ${notFound.length}`;
+      if(notFound.length) msg+=`\n\nData tidak ditemukan (maksimal 15):\n- ${notFound.slice(0,15).join('\n- ')}`;
+      alert(msg);
+    }catch(err){
+      alert('Import gagal: '+(err?.message||err));
+    }finally{
+      input.value='';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
 function getWAFilterJenis(){ const waActive=document.getElementById('page-whatsapp')?.classList.contains('active'); return (waActive?document.getElementById('wa-jenis')?.value:document.getElementById('fil-tg-jenis')?.value)||''; }
 function getWAFilterKelas(){ return document.getElementById('page-whatsapp')?.classList.contains('active')?(document.getElementById('wa-kelas')?.value||''):''; }
 function getWAList(){
@@ -2391,16 +2512,11 @@ function getWAList(){
   return list;
 }
 function formatWADetail(items){
-  const grouped={};
-  items.forEach(it=>{
+  const tahun=now.getFullYear();
+  return items.map(it=>{
     const nama=it.tagihan?.nama||'Tagihan';
-    if(!grouped[nama]) grouped[nama]=[];
-    grouped[nama].push({bulan:it.bulan||'', nominal:Number(it.nominal||0)});
-  });
-  return Object.entries(grouped).map(([nama,arr])=>{
-    const ket=arr.map(x=>x.bulan?`${x.bulan} (${rp(x.nominal)})`:rp(x.nominal)).join(', ');
-    const subtotal=arr.reduce((a,b)=>a+b.nominal,0);
-    return `- ${nama}: ${ket} = ${rp(subtotal)}`;
+    const periode=it.bulan?` ${it.bulan} ${tahun}`:'';
+    return `• ${nama}${periode} : ${formatWARupiah(Number(it.nominal||0))}`;
   }).join('\n');
 }
 function populateWA(){
@@ -2426,7 +2542,8 @@ function renderWAList(list=getWAList()){
   if(!box) return;
   box.innerHTML=list.length?list.map(r=>{
     const no=normalizePhone(r.s.hp);
-    return `<label class="bulk-student-row" style="align-items:flex-start"><input type="checkbox" class="wa-row-check" value="${r.s.id}" ${no?'checked':''} ${no?'':'disabled'}><div style="flex:1"><div><strong>${esc(r.s.nama)}</strong> <span class="badge badge-blue">${esc(r.s.kelas)}</span> <span class="badge ${no?'badge-success':'badge-danger'}">${no?'HP ada':'HP kosong'}</span> <span class="badge badge-warning">${r.items.length} item</span></div><div class="bulk-student-meta">NIS: ${esc(r.s.nis||'-')} · Wali: ${esc(r.s.wali||'-')} · HP: ${esc(r.s.hp||'-')} · Total: ${rp(r.total)}</div><div style="margin-top:6px"><button type="button" class="btn btn-whatsapp btn-sm" onclick="event.preventDefault();kirimWASatu('${r.s.id}')" ${no?'':'disabled'}>Buka WA</button></div></div></label>`;
+    const detail=formatWADetail(r.items).replace(/\n/g,'<br>');
+    return `<label class="bulk-student-row" style="align-items:flex-start"><input type="checkbox" class="wa-row-check" value="${r.s.id}" ${no?'checked':''} ${no?'':'disabled'}><div style="flex:1"><div><strong>${esc(r.s.nama)}</strong> <span class="badge badge-blue">${esc(r.s.kelas)}</span> <span class="badge ${no?'badge-success':'badge-danger'}">${no?'HP ada':'HP kosong'}</span> <span class="badge badge-warning">${r.items.length} item</span></div><div class="bulk-student-meta">NIS: ${esc(r.s.nis||'-')} · Wali: ${esc(r.s.wali||'-')} · HP: ${esc(r.s.hp||'-')}</div><div class="bulk-student-meta" style="margin-top:5px;line-height:1.7"><strong>Administrasi belum selesai:</strong><br>${detail}<br><strong>Total: ${rp(r.total)}</strong></div><div style="margin-top:7px"><button type="button" class="btn btn-whatsapp btn-sm" onclick="event.preventDefault();kirimWASatu('${r.s.id}')" ${no?'':'disabled'}>Buka WA</button></div></div></label>`;
   }).join(''):'<div class="empty-state"><p>Tidak ada tunggakan sesuai filter.</p></div>';
 }
 function buildWAMsg(siswaId){
@@ -2436,11 +2553,11 @@ function buildWAMsg(siswaId){
   const tpl=document.getElementById('wa-template')?.value || '';
   return tpl
     .replaceAll('{WALI}', s.wali||'Bapak/Ibu Wali Murid')
-    .replaceAll('{NAMA}', s.nama||'-')
+    .replaceAll('{NAMA}', titleCaseStudentName(s.nama||'-'))
     .replaceAll('{KELAS}', s.kelas||'-')
     .replaceAll('{NIS}', s.nis||'-')
     .replaceAll('{DETAIL_TUNGGAK}', formatWADetail(items)||'-')
-    .replaceAll('{TOTAL}', rp(total))
+    .replaceAll('{TOTAL}', formatWARupiah(total))
     .replaceAll('{SEKOLAH}', db.sekolah.nama||'SD Muhammadiyah 6 Samarinda');
 }
 function buildWAPaymentMsg(p){

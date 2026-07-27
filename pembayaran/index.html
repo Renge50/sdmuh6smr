@@ -130,6 +130,39 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
 .import-drop svg{width:36px;height:36px;color:var(--g400);margin:0 auto 10px;display:block}
 .import-drop p{font-size:13px;color:var(--g500)}
 .import-drop input{display:none}
+
+.payment-category-list{border:1px solid var(--g200);border-radius:10px;overflow:hidden;background:#fff}
+.payment-category-head,.payment-category-row{display:grid;grid-template-columns:34px minmax(150px,1.6fr) minmax(125px,1fr) 115px 110px 120px;gap:8px;align-items:center;padding:9px 10px}
+.payment-category-head{background:var(--g50);border-bottom:1px solid var(--g200);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--g500)}
+.payment-category-row{border-bottom:1px solid var(--g100)}
+.payment-category-row:last-child{border-bottom:none}
+.payment-category-row:hover{background:var(--g50)}
+.payment-category-row.is-selected{background:var(--primary-light)}
+.payment-category-row.is-paid{box-shadow:inset 3px 0 0 var(--warning)}
+.payment-category-row.is-disabled{opacity:.58;background:var(--g50)}
+.payment-category-row input[type=checkbox]{width:17px;height:17px;margin:auto}
+.payment-category-row input,.payment-category-row select{min-height:36px;padding:6px 8px;font-size:12px}
+.payment-category-name{min-width:0}
+.payment-category-name strong{display:block;color:var(--g900);font-size:13px;line-height:1.3}
+.payment-category-name small{display:block;color:var(--g500);font-size:10px;line-height:1.4;margin-top:2px}
+.payment-category-status{display:inline-flex;margin-top:4px;padding:2px 6px;border-radius:12px;background:var(--warning-light);color:#92400e;font-size:9px;font-weight:800}
+.payment-summary-box{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 15px;border:1px solid #bfdbfe;background:var(--primary-light);border-radius:9px}
+.payment-summary-box small{display:block;color:var(--g600);margin-top:3px}
+.payment-summary-total{text-align:right}
+.payment-summary-total span{display:block;font-size:11px;color:var(--g500);font-weight:700;text-transform:uppercase}
+.payment-summary-total strong{display:block;font-size:22px;color:var(--primary);margin-top:2px}
+.payment-category-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.payment-category-toolbar .btn{width:auto}
+@media(max-width:900px){
+  .payment-category-head{display:none}
+  .payment-category-row{grid-template-columns:32px 1fr;gap:8px;padding:12px}
+  .payment-category-row>div:not(.payment-category-name){grid-column:2}
+  .payment-category-row .b-item-period,.payment-category-row .b-item-base,.payment-category-row .b-item-discount,.payment-category-row .b-item-total{width:100%}
+  .payment-category-row>div[data-mobile-label]::before{content:attr(data-mobile-label);display:block;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--g500);margin-bottom:4px}
+  .payment-summary-box{align-items:flex-start;flex-direction:column}
+  .payment-summary-total{text-align:left}
+}
+
 @page{size:landscape;margin:7mm}
 
 #toast-container{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:3000;pointer-events:none}
@@ -794,24 +827,65 @@ Islami, Kreatif, Berkemajuan</textarea>
 
 <!-- Modal Pembayaran -->
 <div class="modal-overlay" id="m-bayar">
-  <div class="modal" style="width:560px">
-    <div class="modal-header"><div class="modal-title">Input Pembayaran</div><button class="modal-close" onclick="closeModal('m-bayar')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="modal" style="width:980px">
+    <div class="modal-header">
+      <div class="modal-title">Input Pembayaran Per Siswa</div>
+      <button class="modal-close" onclick="closeModal('m-bayar')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="fg"><label>Siswa *</label><select id="b-siswa" onchange="updateBayarInfo()"><option value="">-- Pilih Siswa --</option></select></div>
+        <div class="fg"><label>Siswa *</label><select id="b-siswa" onchange="renderBayarKategori();updateBayarInfo()"><option value="">-- Pilih Siswa --</option></select></div>
         <div class="fg"><label>Tanggal *</label><input type="date" id="b-tgl"></div>
-        <div class="fg"><label>Jenis Tagihan *</label><select id="b-jenis" onchange="updateBayarNominal()"><option value="">-- Pilih Jenis --</option></select></div>
-        <div class="fg"><label>Bulan Tagihan</label><select id="b-bulan"><option value="">-- Bulan (SPP/IPP) --</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
-        <div class="fg"><label>Nominal *</label><input type="number" id="b-nominal" placeholder="0"></div>
+
+        <div class="fg full">
+          <label>Kategori Pembayaran *</label>
+          <div class="payment-category-toolbar">
+            <div style="font-size:12px;color:var(--g500)">Centang kategori yang dibayar. Hanya kategori terpilih yang disimpan dan dicetak pada nota.</div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-outline btn-sm" onclick="setAllBayarKategori(true)">Centang Semua</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="setAllBayarKategori(false)">Kosongkan</button>
+            </div>
+          </div>
+          <div class="payment-category-list">
+            <div class="payment-category-head">
+              <div>Pilih</div><div>Kategori</div><div>Periode/Keterangan</div><div>Harga</div><div>Potongan</div><div>Dibayar</div>
+            </div>
+            <div id="b-kategori-list">
+              <div class="empty-state"><p>Pilih siswa untuk menampilkan kategori pembayaran.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fg full">
+          <div class="payment-summary-box">
+            <div>
+              <strong id="b-selected-count">0 kategori dipilih</strong>
+              <small id="b-summary-note">Belum ada pembayaran yang dipilih.</small>
+            </div>
+            <div class="payment-summary-total">
+              <span>Total Pembayaran</span>
+              <strong id="b-grand-total">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+
         <div class="fg"><label>Metode Bayar</label><select id="b-metode"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>Kartu Debit</option></select></div>
         <div class="fg"><label>Kasir</label><input id="b-kasir" placeholder="Nama petugas"></div>
-        <div class="fg"><label>Keterangan</label><input id="b-ket" placeholder="Keterangan tambahan"></div>
-        <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-cetak" checked> Cetak nota setelah simpan</label></div>
-        <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-wa-notif" checked> Buka WhatsApp wali setelah simpan pembayaran</label></div>
+        <div class="fg full"><label>Catatan Umum</label><input id="b-ket" placeholder="Keterangan tambahan untuk seluruh pembayaran (opsional)"></div>
+        <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-cetak" checked> Cetak satu nota gabungan setelah disimpan</label></div>
+        <div class="fg full"><label class="cb-item"><input type="checkbox" id="b-wa-notif" checked> Buka WhatsApp wali setelah pembayaran disimpan</label></div>
       </div>
-      <div id="b-info" class="alert alert-warning" style="display:none;margin-top:12px"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="b-info-text"></span></div>
+      <div id="b-info" class="alert alert-warning" style="display:none;margin-top:12px">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="b-info-text"></span>
+      </div>
     </div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('m-bayar')">Batal</button><button class="btn btn-primary" onclick="savePembayaran()">Simpan &amp; Cetak Nota</button></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('m-bayar')">Batal</button>
+      <button class="btn btn-primary" onclick="savePembayaran()">Simpan &amp; Cetak Nota</button>
+    </div>
   </div>
 </div>
 
@@ -2667,6 +2741,309 @@ function konfirmasiQris(){
     else notify(`WhatsApp tidak dibuka karena nomor HP wali ${s.nama||'siswa'} belum diisi.`, 'warning');
   }
 }
+
+
+// ========== REVISI CHECKLIST KATEGORI PEMBAYARAN + NOTA GABUNGAN ==========
+function getNotaPayments(pid){
+  const first=db.pembayaran.find(x=>x.id===pid);
+  if(!first) return [];
+  const groupId=first.groupId||first.notaGroup||'';
+  const rows=groupId
+    ? db.pembayaran.filter(x=>(x.groupId||x.notaGroup)===groupId && x.siswaId===first.siswaId)
+    : [first];
+  return rows.sort((a,b)=>Number(a.itemUrut||0)-Number(b.itemUrut||0));
+}
+function getNotaNumber(p){
+  const key=(p?.groupId||p?.notaGroup||p?.id||'NOTA').toString().replace(/[^a-zA-Z0-9]/g,'');
+  return 'NO-'+key.slice(-10).toUpperCase();
+}
+function getBayarRowElements(row){
+  return {
+    check:row.querySelector('.b-item-check'),
+    period:row.querySelector('.b-item-period'),
+    base:row.querySelector('.b-item-base'),
+    discount:row.querySelector('.b-item-discount'),
+    total:row.querySelector('.b-item-total'),
+    status:row.querySelector('.payment-category-status')
+  };
+}
+function populateBayarSelects(){
+  const siswaEl=document.getElementById('b-siswa');
+  if(!siswaEl) return;
+  const current=siswaEl.value;
+  siswaEl.innerHTML='<option value="">-- Pilih Siswa --</option>'+getActiveSiswa().map(s=>`<option value="${s.id}">${esc(s.nis)} - ${esc(s.nama)} (${esc(s.kelas)})</option>`).join('');
+  if(current && getActiveSiswa().some(s=>s.id===current)) siswaEl.value=current;
+  renderBayarKategori();
+}
+function renderBayarKategori(){
+  const box=document.getElementById('b-kategori-list');
+  if(!box) return;
+  const sid=document.getElementById('b-siswa')?.value||'';
+  if(!sid){
+    box.innerHTML='<div class="empty-state"><p>Pilih siswa untuk menampilkan kategori pembayaran.</p></div>';
+    updateBayarGrandTotal();
+    return;
+  }
+  const s=gS(sid);
+  const bulanDefault=BLAN[now.getMonth()];
+  box.innerHTML=db.tagihan.length ? db.tagihan.map((t,idx)=>{
+    const base=getTagihanNominal(t,s);
+    const discount=Math.min(base,Math.max(0,getSiswaPotongan(s,t)));
+    const total=Math.max(0,base-discount);
+    const monthly=isTagihanBulanan(t);
+    const disabled=base<=0;
+    const periodHtml=monthly
+      ? `<select class="b-item-period" disabled onchange="updateBayarItemStatus(this.closest('.payment-category-row'))">${BLAN.map(b=>`<option value="${b}"${b===bulanDefault?' selected':''}>${b}</option>`).join('')}</select>`
+      : `<input class="b-item-period" type="text" placeholder="Opsional" value="" disabled>`;
+    return `<div class="payment-category-row${disabled?' is-disabled':''}" data-tid="${esc(t.id)}" data-index="${idx}">
+      <div><input type="checkbox" class="b-item-check" ${disabled?'disabled':''} onchange="toggleBayarItem(this)"></div>
+      <div class="payment-category-name">
+        <strong>${esc(t.nama)}</strong>
+        <small>${esc(t.tipe||'Tagihan')}${disabled?' · nominal belum diisi':(t.ket?' · '+esc(t.ket):'')}</small>
+        <span class="payment-category-status" style="display:none"></span>
+      </div>
+      <div data-mobile-label="Periode/Keterangan">${periodHtml}</div>
+      <div data-mobile-label="Harga"><input type="number" class="b-item-base" value="${base}" readonly></div>
+      <div data-mobile-label="Potongan"><input type="number" class="b-item-discount" min="0" max="${base}" value="${discount}" disabled oninput="recalcBayarItem(this.closest('.payment-category-row'))"></div>
+      <div data-mobile-label="Dibayar"><input type="number" class="b-item-total" min="0" value="${total}" disabled oninput="updateBayarGrandTotal()"></div>
+    </div>`;
+  }).join('') : '<div class="empty-state"><p>Belum ada kategori pada menu Jenis Tagihan.</p></div>';
+  box.querySelectorAll('.payment-category-row').forEach(updateBayarItemStatus);
+  updateBayarGrandTotal();
+}
+function updateBayarItemStatus(row){
+  if(!row) return;
+  const sid=document.getElementById('b-siswa')?.value||'';
+  const tid=row.dataset.tid||'';
+  const t=gT(tid);
+  const el=getBayarRowElements(row);
+  const period=isTagihanBulanan(t)?(el.period?.value||''):'';
+  const paid=sid && tid ? isPembayaranAda(sid,tid,period) : false;
+  row.classList.toggle('is-paid',!!paid);
+  if(el.status){
+    el.status.style.display=paid?'inline-flex':'none';
+    el.status.textContent=paid ? (period?`Sudah tercatat: ${period}`:'Sudah pernah dibayar') : '';
+  }
+}
+function toggleBayarItem(check){
+  const row=check?.closest('.payment-category-row');
+  if(!row) return;
+  const el=getBayarRowElements(row);
+  row.classList.toggle('is-selected',!!check.checked);
+  if(el.discount) el.discount.disabled=!check.checked;
+  if(el.total) el.total.disabled=!check.checked;
+  if(el.period) el.period.disabled=!check.checked;
+  updateBayarItemStatus(row);
+  updateBayarGrandTotal();
+}
+function recalcBayarItem(row){
+  if(!row) return;
+  const el=getBayarRowElements(row);
+  const base=Math.max(0,Number(el.base?.value||0));
+  let discount=Math.max(0,Number(el.discount?.value||0));
+  if(discount>base){ discount=base; if(el.discount) el.discount.value=base; }
+  if(el.total) el.total.value=Math.max(0,base-discount);
+  updateBayarGrandTotal();
+}
+function setAllBayarKategori(checked){
+  document.querySelectorAll('#b-kategori-list .b-item-check:not(:disabled)').forEach(cb=>{
+    cb.checked=checked;
+    toggleBayarItem(cb);
+  });
+}
+function getSelectedBayarItems(){
+  return [...document.querySelectorAll('#b-kategori-list .payment-category-row')].filter(row=>row.querySelector('.b-item-check')?.checked).map((row,index)=>{
+    const el=getBayarRowElements(row);
+    const t=gT(row.dataset.tid);
+    const period=(el.period?.value||'').trim();
+    return {
+      tagihanId:row.dataset.tid,
+      bulan:isTagihanBulanan(t)?period:'',
+      itemKet:isTagihanBulanan(t)?'':period,
+      hargaAwal:Math.max(0,Number(el.base?.value||0)),
+      diskon:Math.max(0,Number(el.discount?.value||0)),
+      nominal:Math.max(0,Number(el.total?.value||0)),
+      itemUrut:index+1
+    };
+  });
+}
+function updateBayarGrandTotal(){
+  const items=getSelectedBayarItems();
+  const total=items.reduce((sum,it)=>sum+Number(it.nominal||0),0);
+  const count=document.getElementById('b-selected-count');
+  const note=document.getElementById('b-summary-note');
+  const grand=document.getElementById('b-grand-total');
+  if(count) count.textContent=`${items.length} kategori dipilih`;
+  if(note) note.textContent=items.length?'Nota akan memuat seluruh kategori yang dicentang.':'Belum ada pembayaran yang dipilih.';
+  if(grand) grand.textContent=rp(total);
+}
+function updateBayarNominal(){ renderBayarKategori(); }
+function updateBayarInfo(){
+  const sid=document.getElementById('b-siswa')?.value||'';
+  const box=document.getElementById('b-info');
+  const textEl=document.getElementById('b-info-text');
+  if(!box||!textEl||!sid){ if(box) box.style.display='none'; return; }
+  const s=gS(sid);
+  const items=getUnpaidItemsForSiswa(s);
+  if(items.length){
+    box.style.display='flex';
+    textEl.textContent=`${s.nama} masih memiliki ${items.length} item administrasi yang belum tercatat lunas dengan estimasi ${rp(items.reduce((sum,it)=>sum+Number(it.nominal||0),0))}. Centang hanya kategori yang benar-benar dibayar saat ini.`;
+  }else{
+    box.style.display='flex';
+    textEl.textContent=`Tidak ada tunggakan lain yang terdeteksi untuk ${s.nama}. Pembayaran baru tetap dapat dicatat melalui kategori yang dipilih.`;
+  }
+}
+function savePembayaran(){
+  const siswaId=document.getElementById('b-siswa')?.value||'';
+  const tgl=document.getElementById('b-tgl')?.value||'';
+  const metode=document.getElementById('b-metode')?.value||'Tunai';
+  const kasir=(document.getElementById('b-kasir')?.value||db.sekolah.kasir||'').trim();
+  const catatan=(document.getElementById('b-ket')?.value||'').trim();
+  const cetak=document.getElementById('b-cetak')?.checked;
+  const bukaWA=document.getElementById('b-wa-notif')?.checked;
+  const items=getSelectedBayarItems();
+
+  if(!siswaId||!tgl){ alert('Siswa dan tanggal pembayaran wajib diisi!'); return; }
+  if(!items.length){ alert('Centang minimal satu kategori pembayaran!'); return; }
+  const invalid=items.filter(it=>it.hargaAwal<=0 && it.nominal<=0);
+  if(invalid.length){ alert('Ada kategori terpilih yang nominalnya belum diisi pada menu Jenis Tagihan.'); return; }
+
+  const duplicateNames=items.filter(it=>isPembayaranAda(siswaId,it.tagihanId,it.bulan)).map(it=>{
+    const t=gT(it.tagihanId); return `${t.nama||'Tagihan'}${it.bulan?' '+it.bulan:''}`;
+  });
+  if(duplicateNames.length && !confirm(`Pembayaran berikut sudah pernah tercatat:\n\n- ${duplicateNames.join('\n- ')}\n\nTetap simpan sebagai transaksi baru?`)) return;
+
+  const groupId='NOTA_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,6);
+  const saved=items.map((it,index)=>({
+    id:uid(),
+    groupId,
+    siswaId,
+    tagihanId:it.tagihanId,
+    tgl,
+    bulan:it.bulan,
+    nominal:it.nominal,
+    metode,
+    kasir,
+    ket:it.itemKet||catatan,
+    itemKet:it.itemKet,
+    catatan,
+    hargaAwal:it.hargaAwal,
+    diskon:Math.min(it.hargaAwal,it.diskon),
+    itemUrut:index+1
+  }));
+  db.pembayaran.push(...saved);
+  save();
+  closeModal('m-bayar');
+
+  const s=gS(siswaId);
+  const total=saved.reduce((sum,p)=>sum+Number(p.nominal||0),0);
+  notify(`${saved.length} kategori pembayaran atas nama ${s.nama||'siswa'} berhasil disimpan dengan total ${rp(total)}.`, 'success');
+  renderPembayaran(); populateBayarFilters(); renderDashboard(); renderTunggakan(); renderRekap();
+
+  if(cetak) cetakNota(saved[0].id);
+  if(bukaWA){
+    setTimeout(()=>{
+      if(normalizePhone(s.hp)) openWAForPhone(s.hp,buildWAPaymentMsg(saved[0]));
+      else notify(`WhatsApp tidak dibuka karena nomor HP wali ${s.nama||'siswa'} belum diisi.`, 'warning');
+    },500);
+  }
+}
+function buildWAPaymentMsg(p){
+  const rows=getNotaPayments(p.id);
+  if(!rows.length) return '';
+  const first=rows[0], s=gS(first.siswaId);
+  const detail=rows.map((x,i)=>{
+    const t=gT(x.tagihanId);
+    const period=x.bulan||x.itemKet||'';
+    return `${i+1}. ${t.nama||'Tagihan'}${period?' ('+period+')':''}: ${rp(Number(x.nominal||0))}`;
+  }).join('\n');
+  const total=rows.reduce((sum,x)=>sum+Number(x.nominal||0),0);
+  return `Assalamu'alaikum Bapak/Ibu ${s.wali||'Wali Murid'},\n\nPembayaran ananda berikut sudah kami catat:\n\nNama  : ${s.nama||'-'}\nKelas : ${s.kelas||'-'}\nNIS   : ${s.nis||'-'}\nNo. Nota: ${getNotaNumber(first)}\n\nRincian:\n${detail}\n\nTotal  : ${rp(total)}\nMetode : ${first.metode||'-'}\nTanggal: ${first.tgl||'-'}\n\nTerima kasih.\n${db.sekolah.nama||'SD Muhammadiyah 6 Samarinda'}`;
+}
+function buildNotaLandscape(pid){
+  const rows=getNotaPayments(pid);
+  if(!rows.length) return '';
+  const p=rows[0], s=gS(p.siswaId);
+  const w=132, ln='-'.repeat(w);
+  const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+  const noNota=getNotaNumber(p);
+  const wali=s.wali||'Wali Murid', hp=s.hp||'-';
+  const widths=[4,12,46,18,8,14,12,15], aligns=['left','left','left','left','right','right','right','right'];
+  const totalHarga=rows.reduce((sum,x)=>sum+Number(x.hargaAwal||x.nominal||0),0);
+  const totalDiskon=rows.reduce((sum,x)=>sum+Number(x.diskon||0),0);
+  const totalBayar=rows.reduce((sum,x)=>sum+Number(x.nominal||0),0);
+  let n='';
+  n+=centerText('NOTA PEMBAYARAN',w)+'\n\n';
+  n+=twoSide((db.sekolah.nama||'SD MUHAMMADIYAH 6 SAMARINDA'),'Tanggal   : '+tgl,w)+'\n';
+  n+=twoSide((db.sekolah.alamat||'Samarinda'),'No. Nota  : '+noNota,w)+'\n';
+  n+=twoSide('Telp: '+(db.sekolah.telp||'-'),'Metode    : '+(p.metode||'-'),w)+'\n';
+  n+=twoSide('TA: '+(db.sekolah.ta||'-'),'Kasir     : '+(p.kasir||db.sekolah.kasir||'-'),w)+'\n';
+  n+=ln+'\n';
+  n+=twoSide('Kepada : '+wali,'Siswa     : '+(s.nama||'-'),w)+'\n';
+  n+=twoSide('Telp   : '+hp,'Kelas/NIS : '+(s.kelas||'-')+' / '+(s.nis||'-'),w)+'\n';
+  n+=ln+'\n';
+  n+=tableRow(['No','Kode','Nama Tagihan / Keterangan','Periode/Ket','Qty','Harga','Diskon','Sub Total'],widths,aligns)+'\n';
+  n+=ln+'\n';
+  rows.forEach((x,i)=>{
+    const t=gT(x.tagihanId);
+    const kode=(t.tipe||t.id||'TAGIHAN').toString().toUpperCase();
+    const periode=x.bulan||x.itemKet||'-';
+    const harga=Number(x.hargaAwal||x.nominal||0), diskon=Number(x.diskon||0), total=Number(x.nominal||0);
+    n+=tableRow([String(i+1),kode,t.nama||'-',periode,'1.00',moneyPlain(harga),moneyPlain(diskon),moneyPlain(total)],widths,aligns)+'\n';
+  });
+  n+=ln+'\n';
+  const labelPad=' '.repeat(96);
+  n+=labelPad+fitText('Total Qty',12)+': '+fitText(rows.length.toFixed(2),18,'right')+'\n';
+  n+=labelPad+fitText('Sub Total',12)+': '+fitText(moneyRp(totalHarga),18,'right')+'\n';
+  n+=labelPad+fitText('Potongan',12)+': '+fitText(moneyRp(totalDiskon),18,'right')+'\n';
+  n+=labelPad+fitText('Total',12)+': '+fitText(moneyRp(totalBayar),18,'right')+'\n';
+  n+=labelPad+fitText('Terbayar',12)+': '+fitText(moneyRp(totalBayar),18,'right')+'\n';
+  n+=labelPad+fitText('Kembali',12)+': '+fitText(moneyRp(0),18,'right')+'\n';
+  if(p.catatan) n+='\nCatatan: '+p.catatan+'\n';
+  n+='\n                       Orang Tua/Wali                                      Bendahara/Kasir\n\n\n\n';
+  n+='                  (                    )                              ('+fitText(p.kasir||db.sekolah.kasir||'-',24,'center')+')\n\n';
+  n+='Terima kasih. Bukti pembayaran ini sah setelah divalidasi petugas sekolah. Simpan nota sebagai arsip pembayaran.\n';
+  return n;
+}
+function buildNotaCompact(pid,narrow){
+  const rows=getNotaPayments(pid);
+  if(!rows.length) return '';
+  const p=rows[0], s=gS(p.siswaId);
+  const w=narrow?32:42, ln='-'.repeat(w), ctr=str=>centerText(str,w), row=(l,r)=>rowCompact(l,r,w);
+  const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+  const totalHarga=rows.reduce((sum,x)=>sum+Number(x.hargaAwal||x.nominal||0),0);
+  const totalDiskon=rows.reduce((sum,x)=>sum+Number(x.diskon||0),0);
+  const totalBayar=rows.reduce((sum,x)=>sum+Number(x.nominal||0),0);
+  let n='';
+  n+=ctr(db.sekolah.kop1||db.sekolah.nama)+'\n';
+  if(db.sekolah.kop2) n+=ctr(db.sekolah.kop2)+'\n';
+  n+=ctr('TA '+db.sekolah.ta)+'\n'+ln+'\n'+ctr('BUKTI PEMBAYARAN')+'\n'+ln+'\n';
+  n+=row('No. Nota',': '+getNotaNumber(p))+'\n';
+  n+=row('Tanggal',': '+tgl)+'\n';
+  n+=row('Kasir',': '+(p.kasir||'-'))+'\n'+ln+'\n';
+  n+=row('NIS',': '+(s.nis||'-'))+'\n';
+  n+=row('Nama',': '+(s.nama||'-'))+'\n';
+  n+=row('Kelas',': '+(s.kelas||'-'))+'\n'+ln+'\n';
+  rows.forEach((x,i)=>{
+    const t=gT(x.tagihanId), period=x.bulan||x.itemKet||'';
+    n+=`${i+1}. ${t.nama||'Tagihan'}\n`;
+    if(period) n+=row('   Periode',period)+'\n';
+    n+=row('   Harga',rp(Number(x.hargaAwal||x.nominal||0)))+'\n';
+    if(Number(x.diskon||0)>0) n+=row('   Potongan',rp(Number(x.diskon||0)))+'\n';
+    n+=row('   Dibayar',rp(Number(x.nominal||0)))+'\n';
+  });
+  n+=ln+'\n';
+  n+=row('SUB TOTAL',rp(totalHarga))+'\n';
+  if(totalDiskon>0) n+=row('POTONGAN',rp(totalDiskon))+'\n';
+  n+=row('TOTAL BAYAR',rp(totalBayar))+'\n';
+  n+=row('Metode',p.metode||'-')+'\n';
+  if(p.catatan) n+=row('Catatan',p.catatan)+'\n';
+  n+=ln+'\n'+ctr('** LUNAS **')+'\n\n'+ctr('Ttd Kasir')+'\n\n\n';
+  n+=ctr('('+(p.kasir||db.sekolah.kasir||'-')+')')+'\n\n';
+  n+=ctr('Dokumen ini sah tanpa tanda tangan')+'\n';
+  return n;
+}
+
 
 // ========== INIT ==========
 document.getElementById('sb-nama').textContent=db.sekolah.nama;

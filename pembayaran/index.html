@@ -163,6 +163,25 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
   .payment-summary-total{text-align:left}
 }
 
+
+.tg-item-list{display:flex;flex-direction:column;gap:6px;min-width:285px}
+.tg-item-check-row{display:grid;grid-template-columns:18px minmax(135px,1fr) auto;gap:7px;align-items:start;padding:7px 8px;border:1px solid var(--g200);border-radius:7px;background:#fff;cursor:pointer;transition:.15s}
+.tg-item-check-row:hover{border-color:#93c5fd;background:var(--primary-light)}
+.tg-item-check-row.selected{border-color:var(--primary);background:var(--primary-light)}
+.tg-item-check-row input{width:15px;height:15px;margin-top:1px}
+.tg-item-check-row .tg-item-name{font-size:11px;font-weight:700;color:var(--g800);line-height:1.35}
+.tg-item-check-row .tg-item-meta{display:block;font-size:10px;font-weight:500;color:var(--g500);margin-top:2px}
+.tg-item-check-row .tg-item-nominal{font-size:11px;font-weight:800;color:var(--danger);white-space:nowrap}
+.tg-row-pay-summary{margin-top:7px;padding-top:7px;border-top:1px dashed var(--g300);font-size:10px;color:var(--g500);display:flex;justify-content:space-between;gap:8px}
+.tg-action-stack{display:flex;flex-direction:column;gap:5px;min-width:112px}
+.tg-action-stack .btn{width:100%;justify-content:center}
+@media(max-width:900px){
+  .tg-item-list{min-width:0;width:100%}
+  .tg-item-check-row{grid-template-columns:18px 1fr;}
+  .tg-item-check-row .tg-item-nominal{grid-column:2}
+  .tg-action-stack{width:100%;min-width:0}
+}
+
 @page{size:landscape;margin:7mm}
 
 #toast-container{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:3000;pointer-events:none}
@@ -540,13 +559,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
     <!-- TUNGGAKAN -->
     <div class="page" id="page-tunggakan">
       <div class="tg-summary" id="tg-summary"></div>
+      <div id="tg-payment-selection-info" class="alert alert-info" style="display:none"></div>
       <div class="card">
         <div class="card-header">
           <span class="card-title">Daftar Tunggakan Semua Tagihan</span>
           <div class="search-box"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Cari siswa/NIS..." id="src-tg" oninput="renderTunggakan()"></div>
           <select class="sel" id="fil-tg-kelas" onchange="renderTunggakan()"><option value="">Semua Kelas</option></select>
           <select class="sel" id="fil-tg-jenis" onchange="renderTunggakan()"><option value="">Semua Tagihan</option></select>
-          <button class="btn btn-warning" onclick="bayarTunggakanTerpilih()">
+          <button class="btn btn-warning" id="btn-tg-bayar" onclick="bayarTunggakanTerpilih()">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             Bayar Terpilih
           </button>
@@ -559,7 +579,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
             Export Excel
           </button>
         </div>
-        <table><thead><tr><th><input type="checkbox" id="tg-check-all" onchange="toggleTgSelectAll(this)"></th><th>NIS</th><th>Nama Siswa</th><th>Kelas</th><th>Wali Murid</th><th>Rincian Tunggakan</th><th>Total</th><th>Item</th><th>Aksi</th></tr></thead><tbody id="tg-tbody"></tbody></table>
+        <table><thead><tr><th><label class="cb-item" title="Pilih siswa untuk WhatsApp"><input type="checkbox" id="tg-check-all" onchange="toggleTgSelectAll(this)"> Siswa/WA</label></th><th>NIS</th><th>Nama Siswa</th><th>Kelas</th><th>Wali Murid</th><th>Rincian Tunggakan</th><th>Total</th><th>Item</th><th>Aksi</th></tr></thead><tbody id="tg-tbody"></tbody></table>
       </div>
     </div>
 
@@ -3042,6 +3062,170 @@ function buildNotaCompact(pid,narrow){
   n+=ctr('('+(p.kasir||db.sekolah.kasir||'-')+')')+'\n\n';
   n+=ctr('Dokumen ini sah tanpa tanda tangan')+'\n';
   return n;
+}
+
+
+
+// ========== REVISI CHECKLIST ITEM TUNGGAKAN ==========
+let tgPaymentSelected = new Set();
+function tgItemKey(sid,tid,bulan=''){ return `${sid}::${tid}::${bulan||''}`; }
+function getSelectedTgPaymentItems(){
+  const rows=[];
+  getActiveSiswa().forEach(s=>{
+    getUnpaidItemsForSiswa(s).forEach(it=>{
+      const key=tgItemKey(s.id,it.tagihan.id,it.bulan||'');
+      if(tgPaymentSelected.has(key)) rows.push({key,s,item:it});
+    });
+  });
+  return rows;
+}
+function cleanTgPaymentSelection(){
+  const valid=new Set();
+  getActiveSiswa().forEach(s=>getUnpaidItemsForSiswa(s).forEach(it=>valid.add(tgItemKey(s.id,it.tagihan.id,it.bulan||''))));
+  [...tgPaymentSelected].forEach(key=>{ if(!valid.has(key)) tgPaymentSelected.delete(key); });
+}
+function toggleTgPaymentItem(sid,tid,bulan,checked){
+  const key=tgItemKey(sid,tid,bulan);
+  if(checked) tgPaymentSelected.add(key); else tgPaymentSelected.delete(key);
+  renderTunggakan();
+}
+function toggleAllTgItemsForStudent(sid,checked){
+  const s=gS(sid);
+  const filterTid=document.getElementById('fil-tg-jenis')?.value||'';
+  getUnpaidItemsForSiswa(s,filterTid).forEach(it=>{
+    const key=tgItemKey(sid,it.tagihan.id,it.bulan||'');
+    if(checked) tgPaymentSelected.add(key); else tgPaymentSelected.delete(key);
+  });
+  renderTunggakan();
+}
+function updateTgPaymentSelectionInfo(){
+  const selected=getSelectedTgPaymentItems();
+  const total=selected.reduce((sum,x)=>sum+Number(x.item.nominal||0),0);
+  const siswaCount=new Set(selected.map(x=>x.s.id)).size;
+  const info=document.getElementById('tg-payment-selection-info');
+  const btn=document.getElementById('btn-tg-bayar');
+  if(btn) btn.innerHTML=`<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Bayar Terpilih${selected.length?` (${selected.length})`:''}`;
+  if(!info) return;
+  if(!selected.length){ info.style.display='none'; info.innerHTML=''; return; }
+  info.style.display='flex';
+  info.innerHTML=`<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div><strong>${selected.length} item tunggakan dipilih</strong> dari ${siswaCount} siswa dengan total ${rp(total)}. Untuk menghasilkan satu nota per orang, proses pembayaran satu siswa dalam sekali simpan.</div>`;
+}
+function renderTgItemChecklist(r){
+  const selectedCount=r.items.filter(it=>tgPaymentSelected.has(tgItemKey(r.s.id,it.tagihan.id,it.bulan||''))).length;
+  const selectedTotal=r.items.filter(it=>tgPaymentSelected.has(tgItemKey(r.s.id,it.tagihan.id,it.bulan||''))).reduce((sum,it)=>sum+Number(it.nominal||0),0);
+  return `<div class="tg-item-list">${r.items.map(it=>{
+    const key=tgItemKey(r.s.id,it.tagihan.id,it.bulan||'');
+    const checked=tgPaymentSelected.has(key);
+    const meta=[it.bulan?`Periode ${it.bulan}`:'Nonbulanan',it.diskon?`Potongan ${rp(it.diskon)}`:''].filter(Boolean).join(' · ');
+    return `<label class="tg-item-check-row${checked?' selected':''}"><input type="checkbox" class="tg-item-check" data-key="${esc(key)}" ${checked?'checked':''} onchange="toggleTgPaymentItem('${r.s.id}','${it.tagihan.id}','${it.bulan||''}',this.checked)"><span class="tg-item-name">${esc(it.tagihan.nama||'Tagihan')}<span class="tg-item-meta">${esc(meta)}</span></span><span class="tg-item-nominal">${rp(it.nominal)}</span></label>`;
+  }).join('')}<div class="tg-row-pay-summary"><span>${selectedCount} dari ${r.items.length} dipilih</span><strong>${rp(selectedTotal)}</strong></div></div>`;
+}
+function bayarTunggakanSiswa(sid){
+  const s=gS(sid);
+  let selected=getSelectedTgPaymentItems().filter(x=>x.s.id===sid);
+  if(!selected.length){
+    const filterTid=document.getElementById('fil-tg-jenis')?.value||'';
+    getUnpaidItemsForSiswa(s,filterTid).forEach(it=>tgPaymentSelected.add(tgItemKey(sid,it.tagihan.id,it.bulan||'')));
+    selected=getSelectedTgPaymentItems().filter(x=>x.s.id===sid);
+  }
+  openBayarTunggakanSelection(selected);
+}
+function bayarTunggakanTerpilih(){
+  const selected=getSelectedTgPaymentItems();
+  if(!selected.length){ alert('Centang minimal satu item pada rincian tunggakan.'); return; }
+  const siswaIds=[...new Set(selected.map(x=>x.s.id))];
+  if(siswaIds.length>1){ alert(`Item yang dipilih berasal dari ${siswaIds.length} siswa. Pilih item dari satu siswa terlebih dahulu agar nota dibuat atas satu nama.`); return; }
+  openBayarTunggakanSelection(selected);
+}
+function openBayarTunggakanSelection(selected){
+  if(!selected.length) return;
+  const sid=selected[0].s.id;
+  openModal('m-bayar');
+  const siswaEl=document.getElementById('b-siswa');
+  siswaEl.value=sid;
+  renderBayarKategori();
+  selected.forEach(x=>{
+    const row=[...document.querySelectorAll('#b-kategori-list .payment-category-row')].find(el=>el.dataset.tid===x.item.tagihan.id && (el.dataset.bulan||'')===(x.item.bulan||''));
+    if(!row) return;
+    const cb=row.querySelector('.b-item-check');
+    if(cb){ cb.checked=true; toggleBayarItem(cb); }
+  });
+  updateBayarInfo();
+  updateBayarGrandTotal();
+}
+
+// Pembayaran sekarang menampilkan setiap item tunggakan, termasuk SPP per bulan.
+function renderBayarKategori(){
+  const box=document.getElementById('b-kategori-list');
+  if(!box) return;
+  const sid=document.getElementById('b-siswa')?.value||'';
+  if(!sid){
+    box.innerHTML='<div class="empty-state"><p>Pilih siswa untuk menampilkan kategori pembayaran.</p></div>';
+    updateBayarGrandTotal(); return;
+  }
+  const s=gS(sid);
+  const items=getUnpaidItemsForSiswa(s);
+  box.innerHTML=items.length?items.map((it,idx)=>{
+    const t=it.tagihan, base=Number(it.hargaAwal??it.nominal??0), discount=Number(it.diskon||0), total=Number(it.nominal||0), disabled=base<=0&&total<=0;
+    const periode=it.bulan||'Tidak berulang';
+    return `<div class="payment-category-row${disabled?' is-disabled':''}" data-tid="${esc(t.id)}" data-bulan="${esc(it.bulan||'')}" data-index="${idx}">
+      <div><input type="checkbox" class="b-item-check" ${disabled?'disabled':''} onchange="toggleBayarItem(this)"></div>
+      <div class="payment-category-name"><strong>${esc(t.nama)}</strong><small>${esc(t.tipe||'Tagihan')}${it.diskon?` · potongan ${rp(it.diskon)}`:''}</small></div>
+      <div data-mobile-label="Periode/Keterangan"><input class="b-item-period" type="text" value="${esc(periode)}" readonly></div>
+      <div data-mobile-label="Harga"><input type="number" class="b-item-base" value="${base}" readonly></div>
+      <div data-mobile-label="Potongan"><input type="number" class="b-item-discount" min="0" max="${base}" value="${discount}" disabled oninput="recalcBayarItem(this.closest('.payment-category-row'))"></div>
+      <div data-mobile-label="Dibayar"><input type="number" class="b-item-total" min="0" value="${total}" disabled oninput="updateBayarGrandTotal()"></div>
+    </div>`;
+  }).join(''):'<div class="empty-state"><p>Semua tagihan berjalan siswa ini sudah tercatat lunas.</p></div>';
+  updateBayarGrandTotal();
+}
+function getSelectedBayarItems(){
+  return [...document.querySelectorAll('#b-kategori-list .payment-category-row')].filter(row=>row.querySelector('.b-item-check')?.checked).map((row,index)=>{
+    const el=getBayarRowElements(row);
+    const bulan=row.dataset.bulan||'';
+    return {tagihanId:row.dataset.tid,bulan,itemKet:'',hargaAwal:Math.max(0,Number(el.base?.value||0)),diskon:Math.max(0,Number(el.discount?.value||0)),nominal:Math.max(0,Number(el.total?.value||0)),itemUrut:index+1};
+  });
+}
+function toggleBayarItem(check){
+  const row=check?.closest('.payment-category-row'); if(!row) return;
+  const el=getBayarRowElements(row);
+  row.classList.toggle('is-selected',!!check.checked);
+  if(el.discount) el.discount.disabled=!check.checked;
+  if(el.total) el.total.disabled=!check.checked;
+  updateBayarGrandTotal();
+}
+
+// Render akhir tabel tunggakan dengan checklist item pembayaran.
+function renderTunggakan(){
+  populateTgFilter(); cleanTgPaymentSelection();
+  const kl=document.getElementById('fil-tg-kelas')?.value||'';
+  const tid=document.getElementById('fil-tg-jenis')?.value||'';
+  const q=(document.getElementById('src-tg')?.value||'').toLowerCase();
+  let list=getTunggakanList(tid);
+  if(kl) list=list.filter(r=>r.s.kelas===kl);
+  if(q) list=list.filter(r=>(r.s.nama||'').toLowerCase().includes(q)||(r.s.nis||'').includes(q));
+  const totalNom=list.reduce((sum,r)=>sum+r.total,0), totalItem=list.reduce((sum,r)=>sum+r.items.length,0), totalSiswa=list.length;
+  const sppItem=list.reduce((sum,r)=>sum+r.items.filter(it=>it.tagihan.tipe==='SPP').length,0);
+  const sumBox=document.getElementById('tg-summary');
+  if(sumBox) sumBox.innerHTML=`<div class="tg-summary-card"><div>Siswa Menunggak</div><strong>${totalSiswa}</strong></div><div class="tg-summary-card"><div>Total Item Tunggakan</div><strong>${totalItem}</strong></div><div class="tg-summary-card"><div>Item SPP</div><strong>${sppItem}</strong></div><div class="tg-summary-card"><div>Estimasi Tunggakan</div><strong>${rp(totalNom)}</strong></div>`;
+  const all=document.getElementById('tg-check-all'); if(all) all.checked=false;
+  document.getElementById('tg-tbody').innerHTML=list.length?list.map(r=>{
+    const adaHP=!!normalizePhone(r.s.hp);
+    const allSelected=r.items.length>0&&r.items.every(it=>tgPaymentSelected.has(tgItemKey(r.s.id,it.tagihan.id,it.bulan||'')));
+    return `<tr>
+      <td><input type="checkbox" class="tg-row-check" value="${r.s.id}" ${tgSelected.has(r.s.id)?'checked':''} onchange="toggleTgSelected('${r.s.id}',this.checked)" title="Pilih siswa untuk WhatsApp"></td>
+      <td style="font-family:monospace">${esc(r.s.nis)}</td>
+      <td style="font-weight:500">${esc(r.s.nama)}</td>
+      <td><span class="badge badge-blue">${esc(r.s.kelas)}</span></td>
+      <td>${esc(r.s.wali||'-')}<div style="font-size:11px;color:var(--g500)">${esc(r.s.hp||'HP belum diisi')}</div></td>
+      <td class="tg-detail">${renderTgItemChecklist(r)}</td>
+      <td style="font-weight:700;color:var(--danger)">${rp(r.total)}</td>
+      <td><label class="cb-item" style="font-size:11px"><input type="checkbox" ${allSelected?'checked':''} onchange="toggleAllTgItemsForStudent('${r.s.id}',this.checked)"> Semua ${r.items.length}</label></td>
+      <td><div class="tg-action-stack"><button class="btn btn-primary btn-sm" onclick="bayarTunggakanSiswa('${r.s.id}')">Bayar Dicentang</button><button class="btn btn-whatsapp btn-sm" onclick="kirimWASatu('${r.s.id}')" ${adaHP?'':'disabled'}>WhatsApp</button></div></td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="9" class="empty-state"><p>Tidak ada tunggakan sesuai filter.</p></td></tr>';
+  updateTgPaymentSelectionInfo();
+  if(document.getElementById('page-whatsapp')?.classList.contains('active')) populateWA();
 }
 
 

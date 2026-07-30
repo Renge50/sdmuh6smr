@@ -579,7 +579,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
             Export Excel
           </button>
         </div>
-        <table><thead><tr><th><label class="cb-item" title="Pilih siswa untuk WhatsApp"><input type="checkbox" id="tg-check-all" onchange="toggleTgSelectAll(this)"> Siswa/WA</label></th><th>NIS</th><th>Nama Siswa</th><th>Kelas</th><th>Wali Murid</th><th>Rincian Tunggakan</th><th>Total</th><th>Item</th><th>Aksi</th></tr></thead><tbody id="tg-tbody"></tbody></table>
+        <table><thead><tr><th><label class="cb-item" title="Pilih seluruh item tunggakan yang sedang tampil"><input type="checkbox" id="tg-check-all" onchange="toggleTgSelectAll(this)"> Semua</label></th><th>NIS</th><th>Nama Siswa</th><th>Kelas</th><th>Wali Murid</th><th>Rincian Tunggakan</th><th>Total</th><th>Dipilih</th><th>Aksi</th></tr></thead><tbody id="tg-tbody"></tbody></table>
       </div>
     </div>
 
@@ -3108,7 +3108,7 @@ function updateTgPaymentSelectionInfo(){
   if(!info) return;
   if(!selected.length){ info.style.display='none'; info.innerHTML=''; return; }
   info.style.display='flex';
-  info.innerHTML=`<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div><strong>${selected.length} item tunggakan dipilih</strong> dari ${siswaCount} siswa dengan total ${rp(total)}. Untuk menghasilkan satu nota per orang, proses pembayaran satu siswa dalam sekali simpan.</div>`;
+  info.innerHTML=`<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div><strong>${selected.length} item tunggakan dipilih</strong> dari ${siswaCount} siswa dengan total ${rp(total)}. Pilihan yang sama akan dipakai oleh tombol Bayar Terpilih dan WA Terpilih. Untuk nota pembayaran, proses satu siswa dalam sekali simpan.</div>`;
 }
 function renderTgItemChecklist(r){
   const selectedCount=r.items.filter(it=>tgPaymentSelected.has(tgItemKey(r.s.id,it.tagihan.id,it.bulan||''))).length;
@@ -3195,6 +3195,58 @@ function toggleBayarItem(check){
   updateBayarGrandTotal();
 }
 
+
+// WhatsApp dari menu Tunggakan wajib memakai item yang benar-benar dicentang.
+function buildWAMsgFromSelectedItems(siswaId,items){
+  const s=gS(siswaId); if(!s||!s.id) return '';
+  const chosen=(items||[]).filter(Boolean);
+  const total=chosen.reduce((sum,it)=>sum+Number(it.nominal||0),0);
+  const tpl=document.getElementById('wa-template')?.value || `Assalamu'alaikum Warahmatullahi Wabarakatuh,\n\nYth. Ayah/Bunda Ananda {NAMA}\nKelas {KELAS}\n\nInformasi administrasi yang belum terselesaikan sebagai berikut:\n\n{DETAIL_TUNGGAK}\n\nTotal Tagihan : {TOTAL}\n\nApabila pembayaran telah dilakukan, mohon berkenan mengirimkan bukti pembayaran kepada Staf administrasi.\n\nNashrun Minallah wa Fathun Qarib\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n{SEKOLAH}`;
+  return tpl
+    .replaceAll('{WALI}',s.wali||'Bapak/Ibu Wali Murid')
+    .replaceAll('{NAMA}',titleCaseStudentName(s.nama||'-'))
+    .replaceAll('{KELAS}',s.kelas||'-')
+    .replaceAll('{NIS}',s.nis||'-')
+    .replaceAll('{DETAIL_TUNGGAK}',formatWADetail(chosen)||'-')
+    .replaceAll('{TOTAL}',formatWARupiah(total))
+    .replaceAll('{SEKOLAH}',db.sekolah.nama||'SD Muhammadiyah 6 Samarinda');
+}
+function getSelectedTgItemsForStudent(siswaId){
+  return getSelectedTgPaymentItems().filter(x=>x.s.id===siswaId).map(x=>x.item);
+}
+function kirimWATunggakanSiswa(siswaId){
+  const s=gS(siswaId); if(!s||!s.id){ alert('Data siswa tidak ditemukan.'); return; }
+  const items=getSelectedTgItemsForStudent(siswaId);
+  if(!items.length){ alert(`Centang minimal satu rincian tunggakan milik ${s.nama} sebelum membuka WhatsApp.`); return; }
+  if(!normalizePhone(s.hp)){ alert(`Nomor HP wali untuk ${s.nama} belum diisi. Edit Data Siswa terlebih dahulu.`); return; }
+  openWAForPhone(s.hp,buildWAMsgFromSelectedItems(siswaId,items));
+}
+function kirimWATunggakanTerpilih(){
+  const selected=getSelectedTgPaymentItems();
+  if(!selected.length){ alert('Centang minimal satu rincian tunggakan yang akan dicantumkan dalam WhatsApp.'); return; }
+  const grouped=new Map();
+  selected.forEach(x=>{
+    if(!grouped.has(x.s.id)) grouped.set(x.s.id,{s:x.s,items:[]});
+    grouped.get(x.s.id).items.push(x.item);
+  });
+  const groups=[...grouped.values()];
+  const valid=groups.filter(g=>normalizePhone(g.s.hp));
+  const kosong=groups.length-valid.length;
+  if(!valid.length){ alert('Siswa pada item yang dicentang belum memiliki nomor HP wali.'); return; }
+  const itemCount=valid.reduce((sum,g)=>sum+g.items.length,0);
+  if(!confirm(`Buka WhatsApp untuk ${valid.length} siswa dengan ${itemCount} item tunggakan yang dicentang?${kosong?` ${kosong} siswa dilewati karena nomor HP kosong.`:''}`)) return;
+  valid.forEach((g,i)=>setTimeout(()=>openWAForPhone(g.s.hp,buildWAMsgFromSelectedItems(g.s.id,g.items)),i*1200));
+}
+// Checkbox paling kiri dan checkbox header sekarang memilih item, bukan daftar siswa terpisah.
+function toggleTgSelectAll(el){
+  const checks=[...document.querySelectorAll('#tg-tbody .tg-item-check')];
+  checks.forEach(cb=>{
+    const key=cb.dataset.key;
+    if(el.checked) tgPaymentSelected.add(key); else tgPaymentSelected.delete(key);
+  });
+  renderTunggakan();
+}
+
 // Render akhir tabel tunggakan dengan checklist item pembayaran.
 function renderTunggakan(){
   populateTgFilter(); cleanTgPaymentSelection();
@@ -3211,17 +3263,20 @@ function renderTunggakan(){
   const all=document.getElementById('tg-check-all'); if(all) all.checked=false;
   document.getElementById('tg-tbody').innerHTML=list.length?list.map(r=>{
     const adaHP=!!normalizePhone(r.s.hp);
-    const allSelected=r.items.length>0&&r.items.every(it=>tgPaymentSelected.has(tgItemKey(r.s.id,it.tagihan.id,it.bulan||'')));
+    const selectedItems=r.items.filter(it=>tgPaymentSelected.has(tgItemKey(r.s.id,it.tagihan.id,it.bulan||'')));
+    const selectedCount=selectedItems.length;
+    const selectedTotal=selectedItems.reduce((sum,it)=>sum+Number(it.nominal||0),0);
+    const allSelected=r.items.length>0&&selectedCount===r.items.length;
     return `<tr>
-      <td><input type="checkbox" class="tg-row-check" value="${r.s.id}" ${tgSelected.has(r.s.id)?'checked':''} onchange="toggleTgSelected('${r.s.id}',this.checked)" title="Pilih siswa untuk WhatsApp"></td>
+      <td><input type="checkbox" ${allSelected?'checked':''} onchange="toggleAllTgItemsForStudent('${r.s.id}',this.checked)" title="Pilih semua item siswa ini"></td>
       <td style="font-family:monospace">${esc(r.s.nis)}</td>
       <td style="font-weight:500">${esc(r.s.nama)}</td>
       <td><span class="badge badge-blue">${esc(r.s.kelas)}</span></td>
       <td>${esc(r.s.wali||'-')}<div style="font-size:11px;color:var(--g500)">${esc(r.s.hp||'HP belum diisi')}</div></td>
       <td class="tg-detail">${renderTgItemChecklist(r)}</td>
       <td style="font-weight:700;color:var(--danger)">${rp(r.total)}</td>
-      <td><label class="cb-item" style="font-size:11px"><input type="checkbox" ${allSelected?'checked':''} onchange="toggleAllTgItemsForStudent('${r.s.id}',this.checked)"> Semua ${r.items.length}</label></td>
-      <td><div class="tg-action-stack"><button class="btn btn-primary btn-sm" onclick="bayarTunggakanSiswa('${r.s.id}')">Bayar Dicentang</button><button class="btn btn-whatsapp btn-sm" onclick="kirimWASatu('${r.s.id}')" ${adaHP?'':'disabled'}>WhatsApp</button></div></td>
+      <td><span class="badge ${selectedCount?'badge-success':'badge-gray'}">${selectedCount}/${r.items.length} item</span><div style="font-size:11px;font-weight:700;margin-top:5px;color:${selectedCount?'var(--success)':'var(--g500)'}">${rp(selectedTotal)}</div></td>
+      <td><div class="tg-action-stack"><button class="btn btn-primary btn-sm" onclick="bayarTunggakanSiswa('${r.s.id}')">Bayar Dicentang</button><button class="btn btn-whatsapp btn-sm" onclick="kirimWATunggakanSiswa('${r.s.id}')" ${adaHP?'':'disabled'}>WA Dicentang</button></div></td>
     </tr>`;
   }).join(''):'<tr><td colspan="9" class="empty-state"><p>Tidak ada tunggakan sesuai filter.</p></td></tr>';
   updateTgPaymentSelectionInfo();
